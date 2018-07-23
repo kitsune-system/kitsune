@@ -1,0 +1,32 @@
+// Commands
+export const WRITE = 'OopQyyACUbZJrQc+uRI50cq25wOY6H50F0m54im0dHE=';
+export const READ = 'Tk6Aj8UWvn+0+nxpAcAuRgWqRRQEB92+8eFp6z3h6CQ=';
+
+// Entities
+export const SYSTEM = 'COPpYzqCBmskK9GRQG0FUdGNXxCHV3cPiQ+f97NrvVk=';
+export const COMMAND = '2thvxzmTasKTgQrlZkN4Yq4/dCTkemSadDKshbBHi/Q=';
+
+export const NODE = 'oaDEm2rDfPwCrEsTqqQUJfePH8W4r9BnljGrHF6vzIQ=';
+export const EDGE = '9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=';
+export const HEAD = 'FByHmyNol1NgefyC1V32uI0QwwMSL5vwRX1PFPeZtXc=';
+export const TAIL = 'xDig+d7ocflatwHgL/qSaSJ7cGJPMQpoClaNiTGfQXs=';
+
+export const STRING = 'fGltIkkEwj76jH2Foa9t4Yz6jQnX2ENkzHPEeJp2MAI=';
+export const RELATIVE = 'CDc2zAkpdbcQlyZ4SF+bvQRcHLkylzvKDOwGZ17oy5Y=';
+export const GROUP = 'PDfspD7WmRX0EDlRWxXHefWtaX7ndxEy4UuwS+k2G9k=';
+export const LIST = 'B0uC9VnQvcC9I7TubvULT/BV9T3gZqa/xn5HBBfZ0r0=';
+
+// Files
+export const FILE = 'hqSj5QuB7baAUPcGeQARaLxmbkD4h0SyxoZI5dtzdes=';
+export const PATH = '6/YZlp5d1hzzhvUKffEQEfULIC2UazbgscADvf8uHao=';
+
+// Unsorted
+export const ALL = 'kSUgYe1DpzxBmsESfObZnH4oWmJtWryNwP5xachR9js=';
+export const CONVERT = 'ZuGjDpuLto93UnJUWXhE5ZJTO92r0eeS+kKCly7YVo0=';
+export const DEEP = 'tvxcs1s+9jOzTRiN6bMOGAq0w7dUrfXvZI1Tm3bgmGw=';
+export const IS = 'I2zt5hg32L600dc9Kuq6msF4V5oF4SLL4fAQE80ypBs=';
+export const NAME = 'BfL0hL4AqeKYVpPxVZX/QygzPrJcUgjEHJeugMQYWPc=';
+export const SUPPORTED = 'Ih0P94qR9UTCxTb3idUieIqesp9jfoRzhbzq4bkdKhU=';
+
+// Aliases
+export const NESTED = DEEP;

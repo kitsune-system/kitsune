@@ -1,0 +1,40 @@
+root: true
+
+env:
+  mocha: true
+
+extends:
+  - xo-space/esnext
+
+rules:
+  curly:
+    - error
+    - multi-or-nest
+    - consistent
+  keyword-spacing:
+    - error
+    - overrides:
+        for:
+          after: false
+        if:
+          after: false
+        while:
+          after: false
+  new-cap:
+    - error
+    - capIsNew: false
+  no-return-assign:
+    - error
+    - except-parens
+  no-unused-expressions: off
+  object-curly-spacing:
+    - error
+    - always
+  one-var: off
+  quotes:
+    - error
+    - single
+    - avoidEscape: true
+  space-before-function-paren:
+    - error
+    - never
