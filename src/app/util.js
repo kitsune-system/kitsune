@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import stripIndent from 'strip-indent';
 
 import { hashEdge } from './hash';
 
@@ -15,3 +16,5 @@ export const eachEdge = ([head, tail], callback) => {
 
   split(head, tail);
 };
+
+export const block = str => stripIndent(str[0]).trim() + '\n';

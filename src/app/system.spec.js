@@ -42,7 +42,7 @@ describe('System', () => {
   });
 
   it('should be able to declare command dependencies on a base system', () => {
-    const baseSystem = build('edge', 'string');
+    const baseSystem = build()('edge', 'string');
     system = System({ baseSystem });
 
     system.command(ALPHA,
@@ -60,7 +60,7 @@ describe('System', () => {
 
   describe('exceptions', () => {
     it('should throw exception if user tries to call a command it doesn\'t support', () => {
-      const baseSystem = build('translate');
+      const baseSystem = build()('translate');
       system = System({ baseSystem });
 
       const node = e([READ, WRITE], [[ALL, IS], [SUPPORTED, [TAIL, STRING]]]);
@@ -75,7 +75,7 @@ describe('System', () => {
     });
 
     it('should throw exception if base system doesn\'t support command dependency', () => {
-      const baseSystem = build('string', 'translate');
+      const baseSystem = build()('string', 'translate');
       system = System({ baseSystem });
 
       const errorShould = (() => {

@@ -9,7 +9,7 @@ const [ALPHA, BETA] = _.times(2, random);
 
 describe('Names', () => {
   it('should write and read node names', () => {
-    const system = build('name');
+    const system = build()('name');
 
     system(e(WRITE, NAME), { node: ALPHA, name: 'adam' });
     system(e(WRITE, NAME), { node: ALPHA, name: 'alex' });

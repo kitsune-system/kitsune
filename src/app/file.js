@@ -1,16 +1,18 @@
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 
 import System from './system';
 import { e } from './hash-local';
-import { FILE, PATH, READ, WRITE } from './nodes';
+import { FILE, PATH, READ, SYSTEM, WRITE } from './nodes';
 import { base64ToHex, hash } from './hash';
 
 const Files = ({ path, baseSystem }) => {
   if(!fs.existsSync(path))
-    fs.mkdirSync(path);
+    mkdirp.sync(path);
 
   const system = System({ baseSystem });
 
+  system.command(e(READ, [[FILE, SYSTEM], PATH]), () => path);
   system.command(e(READ, PATH), node => `${path}/${base64ToHex(node)}`);
 
   system.command(e(WRITE, FILE),
@@ -19,7 +21,10 @@ const Files = ({ path, baseSystem }) => {
       const node = hash(string);
 
       const filePath = readPath(node);
-      fs.writeFileSync(filePath, string);
+      fs.writeFileSync(filePath, string, {
+        encoding: 'utf8',
+        mode: 0o444
+      });
 
       return node;
     }

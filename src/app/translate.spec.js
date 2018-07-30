@@ -6,7 +6,7 @@ import { translate, writeEdge } from './edge-nodes';
 describe('Translate', () => {
   let system;
   beforeEach(() => {
-    system = build('translate');
+    system = build()('translate');
   });
 
   it('should convert node to nested edge', () => {

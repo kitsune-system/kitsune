@@ -30,7 +30,8 @@ const Relatives = baseSystem => {
       if(typeof type === 'string')
         type = hashEdge(type, type);
 
-      return readTails(hashEdge(node, type));
+      const edge = hashEdge(node, type);
+      return readTails(edge);
     }
   );
 

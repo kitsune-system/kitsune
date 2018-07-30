@@ -11,7 +11,7 @@ describe('Relatives', () => {
   let system;
 
   beforeEach(() => {
-    system = build('relative');
+    system = build()('relative');
   });
 
   it('should be able to read and write bi-directional relatives', () => {

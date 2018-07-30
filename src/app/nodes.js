@@ -20,10 +20,20 @@ export const LIST = 'B0uC9VnQvcC9I7TubvULT/BV9T3gZqa/xn5HBBfZ0r0=';
 export const FILE = 'hqSj5QuB7baAUPcGeQARaLxmbkD4h0SyxoZI5dtzdes=';
 export const PATH = '6/YZlp5d1hzzhvUKffEQEfULIC2UazbgscADvf8uHao=';
 
+// Code
+export const CODE = 'uhF+vWcqzEaEGClzMoPeY+i/trB2PuICtMG7rwpK0Rk=';
+
+export const C = 'TlSY8QQkVRP6U+J778wV4gOIVC24Cy9JnHzb8UtvmTY=';
+export const ECMA_SCRIPT = 'GbSdN7llQbMJisTjPl2rhrNhICHLM9cI2+1idlpGhUI=';
+export const JAVA = 'LsS+o6tOdphqAC6MJiGaP9oV0WV9B1l1HbBXqKi2Sc0=';
+export const RUBY = 'hgjN/nAIEbqG/u2OR8zaNH8rY/4PUF5kPjDn9MdZ0Lw=';
+
 // Unsorted
 export const ALL = 'kSUgYe1DpzxBmsESfObZnH4oWmJtWryNwP5xachR9js=';
+export const BUILD = '5ChciUFUsPfQ4ECRtS+iud35ml7ZvZeeBlX8ySa/MKs=';
 export const CONVERT = 'ZuGjDpuLto93UnJUWXhE5ZJTO92r0eeS+kKCly7YVo0=';
 export const DEEP = 'tvxcs1s+9jOzTRiN6bMOGAq0w7dUrfXvZI1Tm3bgmGw=';
+export const HELLO_WORLD = '+yTE4BX8wc0uq5cIWiKDlgZAy11L2sIMaB59cfZTg18=';
 export const IS = 'I2zt5hg32L600dc9Kuq6msF4V5oF4SLL4fAQE80ypBs=';
 export const NAME = 'BfL0hL4AqeKYVpPxVZX/QygzPrJcUgjEHJeugMQYWPc=';
 export const SUPPORTED = 'Ih0P94qR9UTCxTb3idUieIqesp9jfoRzhbzq4bkdKhU=';
