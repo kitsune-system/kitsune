@@ -1,10 +1,9 @@
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 
-import System from './system';
-import { e } from './hash-local';
+import { base64ToHex, e, hash } from './hash';
 import { FILE, PATH, READ, SYSTEM, WRITE } from './nodes';
-import { base64ToHex, hash } from './hash';
+import System from './system';
 
 const Files = ({ path, baseSystem }) => {
   if(!fs.existsSync(path))
@@ -23,7 +22,7 @@ const Files = ({ path, baseSystem }) => {
       const filePath = readPath(node);
       fs.writeFileSync(filePath, string, {
         encoding: 'utf8',
-        mode: 0o444
+        mode: 0o666
       });
 
       return node;

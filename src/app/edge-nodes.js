@@ -1,5 +1,6 @@
 import { ALL, COMMAND, CONVERT, EDGE, IS, NAME, NESTED, NODE, READ, SUPPORTED, WRITE } from './nodes';
 
+// These are needed to bootstrap the local-hash system
 export const hasCommand = 'IthJ7OnLm9z7NotnB+7/DLMNf/0odYuM5nYTcIy7C/U='; // [READ, [IS, [SUPPORTED, COMMAND]]]
 export const listCommands = 'FsH9cStq47PRIp0M8+NxsHXGFxVDxjk8rCFhNlIwytY='; // [READ, [ALL, [SUPPORTED, COMMAND]]]
 

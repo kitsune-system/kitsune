@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
+import { e } from './hash';
 import { ALL, COMMAND, IS, READ, SUPPORTED } from './nodes';
 import { onNotFoundDefault } from './system';
-import { e } from './hash-local';
 
 const isSupported = e(READ, [IS, [SUPPORTED, COMMAND]]);
 const allCommands = e(READ, [ALL, [SUPPORTED, COMMAND]]);

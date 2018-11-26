@@ -1,7 +1,6 @@
+import { e, hashEdge } from './hash';
 import { DEEP, EDGE, READ, RELATIVE, SYSTEM, TAIL, WRITE } from './nodes';
 import System from './system';
-import { hashEdge } from './hash';
-import { e } from './hash-local';
 
 const Relatives = baseSystem => {
   const relatives = System({ baseSystem, id: e(RELATIVE, SYSTEM) });

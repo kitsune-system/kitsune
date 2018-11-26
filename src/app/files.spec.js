@@ -1,13 +1,16 @@
 import fs from 'fs';
+import rimraf from 'rimraf';
 
-import { e } from './hash-local';
+import Files from './files';
+import { e } from './hash';
 import { FILE, PATH, READ, WRITE } from './nodes';
-import Files from './file';
 
 const path = '/tmp/kitsune/files';
 const data = 'Hello File!\n';
 
 describe('Files', () => {
+  before(done => rimraf(path, done));
+
   it('should write and read files', () => {
     const system = Files({ path });
 

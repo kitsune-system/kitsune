@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
+import { e } from '../hash';
 import System from '../system';
 import { C, CODE, ECMA_SCRIPT, HELLO_WORLD, JAVA, NAME, NODE, READ, RUBY } from '../nodes';
-import { e } from '../hash-local';
 import { block as b } from '../util';
 
 const code = {

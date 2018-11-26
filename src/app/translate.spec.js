@@ -1,5 +1,5 @@
 import build from './builder';
-import { e } from './hash-local';
+import { e } from './hash';
 import { ALL, CONVERT, DEEP, EDGE, IS, NAME, NESTED, NODE, READ, STRING, SUPPORTED, TAIL, WRITE } from './nodes';
 import { translate, writeEdge } from './edge-nodes';
 

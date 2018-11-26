@@ -1,6 +1,6 @@
-import System from './system';
-import { e } from './hash-local';
+import { e } from './hash';
 import { NAME, NODE, READ, RELATIVE, STRING, WRITE } from './nodes';
+import System from './system';
 
 const Names = baseSystem => {
   const system = System({ baseSystem });

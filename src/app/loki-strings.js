@@ -1,8 +1,8 @@
 import Loki from 'lokijs';
-import System from './system';
+
+import { e, hash } from './hash';
 import { READ, STRING, WRITE } from './nodes';
-import { hash } from './hash';
-import { e } from './hash-local';
+import System from './system';
 
 const LokiStrings = systemId => {
   const db = new Loki();

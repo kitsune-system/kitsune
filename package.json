@@ -3,24 +3,6 @@
   "version": "1.0.0",
   "author": "Edward Nicholes Jr.",
   "license": "GPL-3.0",
-  "devDependencies": {
-    "axios": "^0.18.0",
-    "body-parser": "^1.18.3",
-    "chai": "^4.1.2",
-    "eslint": "^5.1.0",
-    "eslint-config-xo-space": "^0.19.0",
-    "eslint-loader": "^2.0.0",
-    "express": "^4.16.3",
-    "js-sha3": "^0.7.0",
-    "lokijs": "^1.5.5",
-    "mocha": "^5.2.0",
-    "mocha-webpack": "^2.0.0-beta.0",
-    "source-map-support": "^0.5.6",
-    "strip-indent": "^2.0.0",
-    "webpack": "^4.15.1",
-    "webpack-cli": "^3.0.8",
-    "webpack-node-externals": "^1.7.2"
-  },
   "scripts": {
     "build": "webpack",
     "build:watch": "NODE_ENV=development webpack --watch",
@@ -31,5 +13,25 @@
     "test:watch": "NODE_ENV=test mocha-webpack --watch src/index.spec.js",
     "test:int": "NODE_ENV=integration-test webpack && mocha dist/integration.spec.js",
     "test:int:watch": "NODE_ENV=integration-test mocha-webpack --watch src/integration.spec.js"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "eslint": "^5.9.0",
+    "eslint-config-xo-space": "^0.20.0",
+    "eslint-loader": "^2.1.1",
+    "express": "^4.16.4",
+    "js-sha3": "^0.8.0",
+    "lokijs": "^1.5.5",
+    "mkdirp": "^0.5.1",
+    "mocha": "^5.2.0",
+    "mocha-webpack": "^2.0.0-beta.0",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.9",
+    "strip-indent": "^2.0.0",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
   }
 }

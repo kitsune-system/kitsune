@@ -1,6 +1,6 @@
+import { e } from './hash';
 import LokiStrings from './loki-strings';
 import { READ, STRING, SYSTEM, WRITE } from './nodes';
-import { e } from './hash-local';
 
 describe('LokiStrings', () => {
   let system;

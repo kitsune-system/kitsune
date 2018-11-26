@@ -1,16 +1,26 @@
-import { e } from '../hash-local';
-import { BUILD, C, ECMA_SCRIPT, HELLO_WORLD, JAVA, NAME, RUBY, SYSTEM, WRITE } from '../nodes';
+import { execSync } from 'child_process';
+
 import build from '../builder';
+import { e } from '../hash';
+import { BUILD, C, ECMA_SCRIPT, HELLO_WORLD, JAVA, NAME, RUBY, SYSTEM, WRITE } from '../nodes';
 
-describe('system-builders', () => {
-  it('should work', () => {
-    const system = build({ fileSystemPath: '/tmp/kitsune/files' })('build');
+const TEST_FILE_SYSTEM_PATH = '/tmp/kitsune/files';
 
-    system(e(WRITE, NAME), { node: HELLO_WORLD, name: 'HelloWorld' });
+describe.skip('system-builders', () => {
+  before(() => {
+    execSync(`rm -rf ${TEST_FILE_SYSTEM_PATH}`);
+  });
 
-    [C, ECMA_SCRIPT, JAVA, RUBY].forEach(lang => {
-      const systemId = system(e(BUILD, [lang, SYSTEM]), HELLO_WORLD);
-      system(systemId).should.equal('Hello World\n');
+  Object.entries({ C, ECMA_SCRIPT, JAVA, RUBY }).forEach(([lang, langId]) => {
+    describe(`${lang} builder`, () => {
+      it('hello world', () => {
+        const system = build({ fileSystemPath: TEST_FILE_SYSTEM_PATH })('build');
+
+        system(e(WRITE, NAME), { node: HELLO_WORLD, name: 'YourMom' });
+
+        const systemId = system(e(BUILD, [langId, SYSTEM]), HELLO_WORLD);
+        system(systemId).should.equal('Hello World\n');
+      });
     });
   });
 });

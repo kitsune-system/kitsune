@@ -1,8 +1,10 @@
+/* eslint-disable no-warning-comments */
+
 import { execSync } from 'child_process';
 
-import System from '../system';
+import { e } from '../hash';
 import { BUILD, C, CODE, ECMA_SCRIPT, FILE, JAVA, NAME, NODE, PATH, READ, RUBY, SYSTEM, WRITE } from '../nodes';
-import { e } from '../hash-local';
+import System from '../system';
 
 const Builder = baseSystem => {
   const system = System({ baseSystem });
@@ -48,8 +50,8 @@ const Builder = baseSystem => {
     );
   });
 
-  system.command(e(BUILD, [JAVA, SYSTEM]),
-    [e(CODE, JAVA), e(WRITE, FILE), e(READ, PATH), e(READ, [[FILE, SYSTEM], PATH]), e(READ, [NODE, NAME])],
+  system.command(
+    e(BUILD, [JAVA, SYSTEM]), [e(CODE, JAVA), e(WRITE, FILE), e(READ, PATH), e(READ, [[FILE, SYSTEM], PATH]), e(READ, [NODE, NAME])],
     (codeJava, writeFile, readPath, readFileSystemPath, readNames) => systemId => {
       const newSystemId = e([JAVA, SYSTEM], systemId);
 

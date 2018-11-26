@@ -1,9 +1,8 @@
 import _ from 'lodash';
 
 import System from './system';
-import { random } from './hash';
+import { e, random, s } from './hash';
 import { ALL, COMMAND, EDGE, FILE, IS, READ, STRING, SUPPORTED, TAIL, WRITE } from './nodes';
-import { e, s } from './hash-local';
 import build from './builder';
 
 const [ALPHA, BETA] = _.times(2, random);

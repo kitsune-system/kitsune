@@ -1,14 +1,14 @@
+import Coder from './coders/coders';
+import DeepEdges from './deep-edges';
+import { edges } from './hash';
+import Files from './files';
 import LokiEdges from './loki-edges';
+import LokiStrings from './loki-strings';
 import Relatives from './relatives';
 import MultiSystem from './multi-system';
-import LokiStrings from './loki-strings';
-import DeepEdges from './deep-edges';
-import Translate from './translate';
 import Names from './names';
 import Builder from './system/builders';
-import { edges } from './hash-local';
-import Coder from './coders/coders';
-import Files from './file';
+import Translate from './translate';
 
 const defaultConfig = {
   fileSystemPath: './kitsune-files'

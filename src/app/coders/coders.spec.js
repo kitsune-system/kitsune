@@ -1,6 +1,8 @@
-import { C, CODE, ECMA_SCRIPT, HELLO_WORLD, JAVA, RUBY } from '../nodes';
-import { e } from '../hash-local';
+/* eslint-disable no-warning-comments */
+
 import build from '../builder';
+import { e } from '../hash';
+import { C, CODE, ECMA_SCRIPT, HELLO_WORLD, JAVA, RUBY } from '../nodes';
 
 describe('Coder', () => {
   it.skip('"hello world" should work', () => {

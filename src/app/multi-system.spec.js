@@ -1,11 +1,10 @@
 import _ from 'lodash';
 
-import MultiSystem from './multi-system';
+import { e, random } from './hash';
 import LokiEdges from './loki-edges';
 import LokiStrings from './loki-strings';
+import MultiSystem from './multi-system';
 import { ALL, COMMAND, EDGE, IS, READ, STRING, SUPPORTED, WRITE } from './nodes';
-import { random } from './hash';
-import { e } from './hash-local';
 
 const [ALPHA, BETA] = _.times(2, random);
 

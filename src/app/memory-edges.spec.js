@@ -1,9 +1,8 @@
 import _ from 'lodash';
 
-import MemoryEdges from './memory-edges';
+import { e, random } from './hash';
+import { MemoryEdges } from './hash';
 import { EDGE, READ, WRITE } from './nodes';
-import { random } from './hash';
-import { e } from './hash-local';
 
 const [ALPHA, BETA] = _.times(2, random);
 

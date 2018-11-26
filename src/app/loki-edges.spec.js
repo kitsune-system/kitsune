@@ -1,9 +1,8 @@
 import _ from 'lodash';
 
-import { random } from './hash';
+import { e, random } from './hash';
 import LokiEdges from './loki-edges';
 import { EDGE, GROUP, HEAD, LIST, READ, SYSTEM, TAIL, WRITE } from './nodes';
-import { e } from './hash-local';
 
 const [ALPHA, BETA, DELTA, OMEGA] = _.times(4, random);
 

@@ -1,9 +1,8 @@
 import Loki from 'lokijs';
 
-import { hashEdge } from './hash';
+import { e, hashEdge } from './hash';
 import { EDGE, HEAD, READ, TAIL, WRITE } from './nodes';
 import System from './system';
-import { e } from './hash-local';
 
 const LokiEdges = systemId => {
   const db = new Loki();

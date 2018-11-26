@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { e } from './hash-local';
+import { e } from './hash';
 import { DEEP, EDGE, WRITE } from './nodes';
 import System from './system';
 

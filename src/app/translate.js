@@ -1,10 +1,11 @@
-import System from './system';
+/* eslint-disable no-warning-comments */
+
+import { e, names } from './hash';
 import { CONVERT, DEEP, EDGE, NAME, NESTED, NODE, READ } from './nodes';
-import { e, names } from './hash-local';
+import System from './system';
 
 const deepNameMap = input => {
   const isNode = (typeof input === 'string');
-  // eslint-disable-next-line no-warning-comments
   // TODO: Replace `names[input]` with readName on a baseSystem
   return isNode ? (names[input] || input) : input.map(deepNameMap);
 };
