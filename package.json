@@ -2,7 +2,7 @@
   "name": "kitsune",
   "version": "1.0.0",
   "author": "Edward Nicholes Jr.",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-only",
   "scripts": {
     "build": "webpack",
     "build:watch": "NODE_ENV=development webpack --watch",
