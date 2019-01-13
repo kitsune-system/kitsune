@@ -1,0 +1,11 @@
+image: node:11-alpine
+
+test:
+  script:
+    - npm install
+    - npm run test
+
+build:
+  script:
+    - npm install
+    - npm run build

@@ -42,11 +42,7 @@ const config = {
       loader: 'eslint-loader',
       enforce: 'pre'
     }]
-  },
-
-  plugins: [AfterEmitPlugin(() => {
-    execSync('./bin/reload-service');
-  })]
+  }
 };
 
 if(env === 'development') {
@@ -55,7 +51,10 @@ if(env === 'development') {
     devtool: 'source-map',
     watchOptions: {
       ignored: '*.spec.js'
-    }
+    },
+    plugins: [AfterEmitPlugin(() => {
+      execSync('./bin/reload-service');
+    })]
   });
 }
 
@@ -66,7 +65,10 @@ if(env === 'test') {
     output: {
       filename: 'spec.js'
     },
-    devtool: 'source-map'
+    devtool: 'source-map',
+    plugins: [AfterEmitPlugin(() => {
+      execSync('./bin/reload-service');
+    })]
   });
 }
 
