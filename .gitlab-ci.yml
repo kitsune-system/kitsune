@@ -1,7 +1,11 @@
 image: node:11-alpine
 
+stages:
+  - build
+  - deploy
+
 test:
-  stage: test
+  stage: build
   script:
     - npm install
     - npm run test
@@ -17,4 +21,4 @@ build:
 
 examine:
   stage: deploy
-  script: ls -al 
+  script: ls -al
