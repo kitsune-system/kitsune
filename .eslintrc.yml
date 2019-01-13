@@ -14,9 +14,13 @@ rules:
   keyword-spacing:
     - error
     - overrides:
+        catch:
+          after: false
         for:
           after: false
         if:
+          after: false
+        switch:
           after: false
         while:
           after: false
@@ -26,7 +30,9 @@ rules:
   no-return-assign:
     - error
     - except-parens
-  no-unused-expressions: off
+  no-unused-expressions:
+    - error
+    - allowTernary: true
   object-curly-spacing:
     - error
     - always
