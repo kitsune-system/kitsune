@@ -14,3 +14,7 @@ build:
   artifacts:
     paths:
       - dist/main.js
+
+examine:
+  stage: deploy
+  script: ls -al 
