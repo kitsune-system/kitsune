@@ -11,7 +11,7 @@ console.log();
 
 // Config
 const { env } = process;
-const port = env.KITSUNE_PORT;
+const port = env.KITSUNE_PORT || 8080;
 const onStarted = env.KITSUNE_ON_STARTED;
 
 const listener = app.listen(port, () => {
