@@ -1,5 +1,5 @@
 {
-  "name": "kitsune",
+  "name": "@kitsune-system/kitsune",
   "version": "1.0.0",
   "author": "Edward Nicholes Jr.",
   "license": "GPL-3.0-only",
@@ -14,6 +14,12 @@
     "test:int": "NODE_ENV=integration-test webpack && mocha dist/integration.spec.js",
     "test:int:watch": "NODE_ENV=integration-test mocha-webpack --watch src/integration.spec.js"
   },
+  "dependencies": {
+    "express": "^4.16.4",
+    "js-sha3": "^0.8.0",
+    "lodash": "^4.17.11",
+    "strip-indent": "^2.0.0"
+  },
   "devDependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -21,15 +27,12 @@
     "eslint": "^5.12.0",
     "eslint-config-xo-space": "^0.20.0",
     "eslint-loader": "^2.1.1",
-    "express": "^4.16.4",
-    "js-sha3": "^0.8.0",
     "lokijs": "^1.5.6",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
     "mocha-webpack": "^2.0.0-beta.0",
     "rimraf": "^2.6.3",
     "source-map-support": "^0.5.10",
-    "strip-indent": "^2.0.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-node-externals": "^1.7.2"
