@@ -28,6 +28,6 @@ docker:
      DOCKER_HOST: tcp://docker:2375
      DOCKER_DRIVER: overlay2
   script:
-    - docker login --username "$USER" --password "$PASSWORD"
-    - docker build -t kitsunesystem/kitsune:test .
-    - docker push kitsunesystem/kitsune:test
+    - docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
+    - docker build -t "kitsunesystem/kitsune:$CI_COMMIT_SHA" .
+    - docker push "kitsunesystem/kitsune:$CI_COMMIT_SHA"
