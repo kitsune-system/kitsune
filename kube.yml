@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: kitsune
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: kitsune
+    spec:
+      containers:
+      - name: kitsune
+        image: kitsunesystem/kitsune:test
+        imagePullPolicy: Always
+        env:
+        - name: KITSUNE_PORT
+          value: '80'
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: kitsune
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app: kitsune
+  type: LoadBalancer
