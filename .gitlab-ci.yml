@@ -36,8 +36,8 @@ docker:
 kubernetes:
   stage: deploy
   image:
-    - name: lachlanevenson/k8s-kubectl
-      entrypoint: [""]
+    name: lachlanevenson/k8s-kubectl
+    entrypoint: [""]
   environment:
     name: dev
     url: http://35.232.192.68
