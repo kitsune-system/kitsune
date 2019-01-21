@@ -2,6 +2,7 @@ image: node:11-alpine
 
 stages:
   - build
+  - publish
   - deploy
 
 test:
@@ -20,7 +21,7 @@ build:
       - dist/main.js
 
 docker:
-  stage: deploy
+  stage: publish
   image: docker:stable
   services:
     - docker:dind
@@ -31,3 +32,14 @@ docker:
     - docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
     - docker build -t "kitsunesystem/kitsune:$CI_COMMIT_SHA" .
     - docker push "kitsunesystem/kitsune:$CI_COMMIT_SHA"
+
+kubernetes:
+  state: deploy
+  image:
+    - name: lachlanevenson/k8s-kubectl
+      entrypoint: [""]
+  environment:
+    name: dev
+    url: http://35.232.192.68
+  script:
+    - kubectl get pods
