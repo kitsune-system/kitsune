@@ -34,7 +34,7 @@ docker:
     - docker push "kitsunesystem/kitsune:$CI_COMMIT_SHA"
 
 kubernetes:
-  state: deploy
+  stage: deploy
   image:
     - name: lachlanevenson/k8s-kubectl
       entrypoint: [""]
