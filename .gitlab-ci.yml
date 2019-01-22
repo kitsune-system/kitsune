@@ -42,4 +42,4 @@ kubernetes:
     name: dev
     url: http://35.232.192.68
   script:
-    - kubectl apply -f ./kube.yml
+    - cat ./kube.yml | envsubst | kubectl apply -f -

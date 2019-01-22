@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: kitsune
-        image: kitsunesystem/kitsune:test
+        image: kitsunesystem/kitsune:$CI_COMMIT_SHA
         imagePullPolicy: Always
         env:
         - name: KITSUNE_PORT
