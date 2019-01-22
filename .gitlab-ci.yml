@@ -40,6 +40,6 @@ kubernetes:
     entrypoint: [""]
   environment:
     name: dev
-    url: http://35.232.192.68
+    url: http://http://35.202.123.173
   script:
     - sed "s/TAG/$CI_COMMIT_SHA/" kube.yml | kubectl apply -f -
