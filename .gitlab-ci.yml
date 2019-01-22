@@ -42,4 +42,4 @@ kubernetes:
     name: dev
     url: http://35.232.192.68
   script:
-    - cat ./kube.yml | envsubst | kubectl apply -f -
+    - sed "s/TAG/$CI_COMMIT_SHA/" kube.yml | kubectl apply -f -
