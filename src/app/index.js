@@ -1,9 +1,12 @@
-import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
+import express from 'express';
+
 import { hexToBase64, random } from './hash';
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/hex2base64/:hex', (req, res) => {
