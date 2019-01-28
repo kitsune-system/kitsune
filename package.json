@@ -15,6 +15,7 @@
     "test:int:watch": "NODE_ENV=integration-test mocha-webpack --watch src/integration.spec.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "js-sha3": "^0.8.0",
     "lodash": "^4.17.11",
@@ -24,7 +25,6 @@
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
-    "cors": "^2.8.5",
     "eslint": "^5.12.0",
     "eslint-config-xo-space": "^0.20.0",
     "eslint-loader": "^2.1.1",
