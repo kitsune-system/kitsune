@@ -39,7 +39,7 @@ kubernetes:
     name: lachlanevenson/k8s-kubectl
     entrypoint: [""]
   environment:
-    name: dev
+    name: production
     url: http://api.kitsune-system.org
   script:
     - sed "s/TAG/$CI_COMMIT_SHA/" kube.yml | kubectl apply -f -
