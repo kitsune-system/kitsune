@@ -42,4 +42,5 @@ kubernetes:
     name: production
     url: http://api.kitsune-system.org
   script:
-    - sed "s/TAG/$CI_COMMIT_SHA/" kube.yml | kubectl apply -f -
+    - apk add gettext
+    - cat kube.yml | envsubst | kubectl apply -f -

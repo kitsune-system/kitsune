@@ -14,7 +14,7 @@ while true; do
   echo "Running Kitsune..."
   echo
 
-  KITSUNE_ON_STARTED='touch ./src/integration.spec.js' KITSUNE_PORT=1126 node dist/main.js &
+  KITSUNE_ON_STARTED='touch ./src/integration.spec.js' KITSUNE_HTTP_PORT=1126 node dist/main.js &
 
   pid=$(echo $!)
   echo $pid > $pidFile

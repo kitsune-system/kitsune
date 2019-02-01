@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ -n "$KITSUNE_CERT" ]; then
+  echo "$KITSUNE_CERT" | base64 -d > "/app/kitsune.crt"
+fi
+
+if [ -n "$KITSUNE_KEY" ]; then
+  echo "$KITSUNE_KEY" | base64 -d > "/app/kitsune.key"
+fi
+
+node /app/kitsune.js

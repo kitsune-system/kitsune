@@ -5,6 +5,7 @@ WORKDIR /app
 ADD package.json .
 RUN npm install --only=production
 
+ADD docker/init /init
 ADD dist/main.js kitsune.js
 
-CMD node kitsune.js
+CMD /init
