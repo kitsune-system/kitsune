@@ -14,6 +14,8 @@ spec:
         image: kitsunesystem/kitsune:$CI_COMMIT_SHA
         imagePullPolicy: Always
         env:
+        - name: KITSUNE_SERVER_NAME
+          value: 'api.kitsune-system.org'
         - name: KITSUNE_HTTP_PORT
           value: '80'
         - name: KITSUNE_HTTPS_PORT
