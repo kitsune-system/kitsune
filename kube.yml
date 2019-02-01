@@ -15,9 +15,9 @@ spec:
         imagePullPolicy: Always
         env:
         - name: KITSUNE_HTTP_PORT
-          value: 80
+          value: '80'
         - name: KITSUNE_HTTPS_PORT
-          value: 443
+          value: '443'
         - name: KITSUNE_CERT
           value: '$KITSUNE_CERT'
         - name: KITSUNE_KEY
