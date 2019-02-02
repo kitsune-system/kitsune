@@ -36,6 +36,7 @@ export const DEEP = 'tvxcs1s+9jOzTRiN6bMOGAq0w7dUrfXvZI1Tm3bgmGw=';
 export const HELLO_WORLD = '+yTE4BX8wc0uq5cIWiKDlgZAy11L2sIMaB59cfZTg18=';
 export const IS = 'I2zt5hg32L600dc9Kuq6msF4V5oF4SLL4fAQE80ypBs=';
 export const NAME = 'BfL0hL4AqeKYVpPxVZX/QygzPrJcUgjEHJeugMQYWPc=';
+export const RANDOM = 'ijJv0As7V8Vk8kx1kL5Rm+LSDyHnfFPazUVtB/pmZiw=';
 export const SUPPORTED = 'Ih0P94qR9UTCxTb3idUieIqesp9jfoRzhbzq4bkdKhU=';
 
 // Aliases

@@ -3,28 +3,16 @@
 const { execSync } = require('child_process');
 const nodeExternals = require('webpack-node-externals');
 
-const env = process.env.NODE_ENV || 'production';
-console.log(`Webpack ENV: ${env}`);
+const { NODE_ENV, RUN_AFTER } = process.env;
 
-const isTest = () => env === 'test' || env === 'integration-test';
+const webpackEnv = NODE_ENV || 'production';
+console.log(`Webpack ENV: ${webpackEnv}`);
+
+const isTest = () => webpackEnv === 'test' || webpackEnv === 'integration-test';
 
 const AfterEmitPlugin = fn => ({
-  apply: (compiler) => {
-    compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
-      if(!isTest())
-        fn()
-    });
-  }
+  apply: compiler => compiler.hooks.afterEmit.tap('AfterEmitPlugin', fn)
 });
-
-const plainJs = string => {
-  const isJS = /.js$/.test(string);
-  const isSpec = /\.spec\.js$/.test(string);
-
-  const result = isJS && !isSpec;
-  console.log('PJS', string, result);
-  return result;
-};
 
 // default production config
 const config = {
@@ -45,34 +33,28 @@ const config = {
   }
 };
 
-if(env === 'development') {
+if(webpackEnv === 'development') {
   Object.assign(config, {
     mode: 'development',
     devtool: 'source-map',
     watchOptions: {
       ignored: '*.spec.js'
-    },
-    plugins: [AfterEmitPlugin(() => {
-      execSync('./bin/reload-service');
-    })]
+    }
   });
 }
 
-if(env === 'test') {
+if(webpackEnv === 'test') {
   Object.assign(config, {
     mode: 'development',
     entry: './src/index.spec',
     output: {
       filename: 'spec.js'
     },
-    devtool: 'source-map',
-    plugins: [AfterEmitPlugin(() => {
-      execSync('./bin/reload-service');
-    })]
+    devtool: 'source-map'
   });
 }
 
-if(env === 'integration-test') {
+if(webpackEnv === 'integration-test') {
   Object.assign(config, {
     mode: 'development',
     entry: './src/integration.spec',
@@ -81,6 +63,13 @@ if(env === 'integration-test') {
     },
     devtool: 'source-map'
   });
+}
+
+if(RUN_AFTER) {
+  config.plugins = [AfterEmitPlugin(() => {
+    console.log(`Running \`${RUN_AFTER}\``);
+    execSync(RUN_AFTER);
+  })];
 }
 
 module.exports = config;
