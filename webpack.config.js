@@ -3,7 +3,10 @@
 const { execSync } = require('child_process');
 const nodeExternals = require('webpack-node-externals');
 
-const { NODE_ENV, RUN_AFTER } = process.env;
+const {
+  NODE_ENV,
+  ON_BUILD: onBuild
+} = process.env;
 
 const webpackEnv = NODE_ENV || 'production';
 console.log(`Webpack ENV: ${webpackEnv}`);
@@ -65,10 +68,10 @@ if(webpackEnv === 'integration-test') {
   });
 }
 
-if(RUN_AFTER) {
+if(onBuild) {
   config.plugins = [AfterEmitPlugin(() => {
-    console.log(`Running \`${RUN_AFTER}\``);
-    execSync(RUN_AFTER);
+    console.log(`Running \`${onBuild}\``);
+    execSync(onBuild);
   })];
 }
 

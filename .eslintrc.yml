@@ -43,3 +43,8 @@ rules:
   space-before-function-paren:
     - error
     - never
+
+overrides:
+  files: '*.spec.js'
+  rules:
+    no-unused-expressions: off

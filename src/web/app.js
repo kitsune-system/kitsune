@@ -2,11 +2,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-import build from './builder';
-import { e, hexToBase64, random } from './hash';
-import { COMMAND, IS, READ, SUPPORTED } from './nodes';
+import { hexToBase64, random } from '../app/hash';
+import { SUPPORTS_COMMAND } from '../app/nodes';
 
-const system = build({})('misc');
+const system = () => {};
 
 const app = express();
 
@@ -17,14 +16,12 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
   const path = req.url.slice(1);
 
-  const isSupported = system(e(READ, [IS, [SUPPORTED, COMMAND]]), path);
-
+  const isSupported = system(SUPPORTS_COMMAND, path);
   if(isSupported) {
     const output = system(path);
     res.json(output);
-  } else {
+  } else
     next();
-  }
 });
 
 // Extra

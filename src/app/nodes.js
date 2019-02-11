@@ -1,3 +1,13 @@
+/* eslint-disable*/
+// NOTE: The ONLY nodes that should be in here are those required to bootstrap
+// the system
+
+export const SUPPORTS_COMMAND = 'jY9q3mtCo4e1OJG0MlPGSP4CbGeaT22slihqoXVdDEQ=';
+
+
+// OLD //
+
+
 // Commands
 export const WRITE = 'OopQyyACUbZJrQc+uRI50cq25wOY6H50F0m54im0dHE=';
 export const READ = 'Tk6Aj8UWvn+0+nxpAcAuRgWqRRQEB92+8eFp6z3h6CQ=';
