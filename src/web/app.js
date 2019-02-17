@@ -1,11 +1,15 @@
+/* eslint-disable */
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-import { hexToBase64, random } from '../app/hash';
-import { SUPPORTS_COMMAND } from '../app/nodes';
+import { bufferToBase64 as b64, base64ToBuffer as buf, random } from '../kitsune/hash';
+import { RANDOM, SUPPORTS_COMMAND } from '../kitsune/nodes';
 
-const system = () => {};
+import { CommonSystem as System } from '../system/builder';
+const system = System({
+  [b64(RANDOM)]: random,
+});
 
 const app = express();
 
@@ -14,11 +18,11 @@ app.use(bodyParser.json());
 
 // System calls
 app.use((req, res, next) => {
-  const path = req.url.slice(1);
+  const commandId = buf(req.url.slice(1));
 
-  const isSupported = system(SUPPORTS_COMMAND, path);
+  const isSupported = system(SUPPORTS_COMMAND, commandId);
   if(isSupported) {
-    const output = system(path);
+    const output = system(commandId);
     res.json(output);
   } else
     next();

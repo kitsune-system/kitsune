@@ -1,6 +1,0 @@
-#!/bin/bash
-pidFile=kitsune.pid
-
-if [ -f $pidFile ]; then
-  kill $(cat $pidFile)
-fi

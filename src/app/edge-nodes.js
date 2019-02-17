@@ -14,7 +14,7 @@ const edges = [
   [READ, [ALL, [SUPPORTED, COMMAND]]],
   [WRITE, EDGE],
   [READ, EDGE],
-  [CONVERT, [NODE, [NESTED, NAME]]]
+  [CONVERT, [NODE, [NESTED, NAME]]],
 ];
 
 export default edges;

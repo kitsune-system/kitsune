@@ -7,10 +7,12 @@ extends:
   - xo-space/esnext
 
 rules:
+  comma-dangle:
+    - error
+    - always-multiline
   curly:
     - error
     - multi-or-nest
-    - consistent
   keyword-spacing:
     - error
     - overrides:
