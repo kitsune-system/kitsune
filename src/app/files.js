@@ -22,7 +22,7 @@ const Files = ({ path, baseSystem }) => {
       const filePath = readPath(node);
       fs.writeFileSync(filePath, string, {
         encoding: 'utf8',
-        mode: 0o666
+        mode: 0o666,
       });
 
       return node;

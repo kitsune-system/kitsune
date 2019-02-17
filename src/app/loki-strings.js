@@ -8,7 +8,7 @@ const LokiStrings = systemId => {
   const db = new Loki();
   const strings = db.addCollection('string', {
     unique: ['id'],
-    indicies: ['string']
+    indicies: ['string'],
   });
 
   const system = System(systemId);

@@ -8,7 +8,7 @@ const LokiEdges = systemId => {
   const db = new Loki();
   const edges = db.addCollection('edge', {
     unique: ['id'],
-    indicies: ['head', 'tail']
+    indicies: ['head', 'tail'],
   });
 
   const system = System(systemId);

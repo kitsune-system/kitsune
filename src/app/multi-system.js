@@ -14,7 +14,7 @@ const MultiSystem = () => {
 
   const localCommands = {
     [isSupported]: (...args) => _.some(systems, system => system(isSupported, args)),
-    [allCommands]: () => _.uniq(_.flatMap(systems, system => system(allCommands)))
+    [allCommands]: () => _.uniq(_.flatMap(systems, system => system(allCommands))),
   };
 
   const result = (...args) => {

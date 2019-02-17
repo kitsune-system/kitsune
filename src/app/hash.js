@@ -29,7 +29,7 @@ export const hash = input => Buffer.from(sha256.array(input)).toString('base64')
 // eslint-disable-next-line no-warning-comments
 // TODO: Have a `hash-local` version of this so we know when we're using random nodes (and maybe their names)
 export const random = () => {
-  const bytes = crypto.randomBytes(64);
+  const bytes = crypto.randomBytes(32);
   return hash(bytes);
 };
 

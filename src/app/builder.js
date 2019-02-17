@@ -12,7 +12,7 @@ import Builder from './system/builders';
 import Translate from './translate';
 
 const defaultConfig = {
-  fileSystemPath: './kitsune-files'
+  fileSystemPath: './kitsune-files',
 };
 
 const builds = {};

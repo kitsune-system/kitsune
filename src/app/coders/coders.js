@@ -14,12 +14,12 @@ const code = {
         printf("Hello World\\n");
         return 0;
       }
-    `
+    `,
   },
   [ECMA_SCRIPT]: {
     [HELLO_WORLD]: b`
       console.log('Hello World');
-    `
+    `,
   },
   [JAVA]: {
     [HELLO_WORLD]: b`
@@ -28,13 +28,13 @@ const code = {
             System.out.println("Hello World");
         }
       }
-    `
+    `,
   },
   [RUBY]: {
     [HELLO_WORLD]: b`
       puts 'Hello World'
-    `
-  }
+    `,
+  },
 };
 
 const Coder = baseSystem => {

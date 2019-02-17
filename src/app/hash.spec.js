@@ -37,14 +37,14 @@ describe('hash', () => {
       hashList([
         WRITE,
         READ,
-        EDGE
+        EDGE,
       ]).should.equal('pnNh2P4C9sucF5ZlUz/RLQlglCykDXarDxnQg6w9yZk=');
 
       // These should all work the same
       hashList([
         'hello123',
         'world123',
-        'again123'
+        'again123',
       ]).should.equal('1+bSJVRqG8uTgzWVFmzptJBxzTXo1HZpuV0AIWRxZnU=');
 
       hashList(['hello123world123again123']).should.equal('1+bSJVRqG8uTgzWVFmzptJBxzTXo1HZpuV0AIWRxZnU=');
