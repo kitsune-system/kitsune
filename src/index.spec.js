@@ -1,4 +1,4 @@
 import './spec-common';
 
-const context = require.context('./app', true, /\.spec\.js$/);
+const context = require.context('./', true, /\.spec\.js$/);
 context.keys().forEach(context);

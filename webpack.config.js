@@ -60,9 +60,9 @@ if(webpackEnv === 'test') {
 if(webpackEnv === 'integration-test') {
   Object.assign(config, {
     mode: 'development',
-    entry: './src/integration.spec',
+    entry: './src/index.spec.int',
     output: {
-      filename: 'integration.spec.js'
+      filename: 'spec.int.js'
     },
     devtool: 'source-map'
   });

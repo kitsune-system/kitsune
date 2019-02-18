@@ -1,4 +1,3 @@
-/* eslint-disable */
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
@@ -28,17 +27,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// Extra
-app.get('/hex2base64/:hex', (req, res) => {
-  const { hex } = req.params;
-  const base64 = hexToBase64(hex);
-
-  res.json(base64);
-});
-
+// NOTE: These are here for convenience for now
 app.get('/random', (req, res) => {
   const node = random();
-  res.json(node);
+  res.json(node.toString('base64'));
 });
 
 export default app;

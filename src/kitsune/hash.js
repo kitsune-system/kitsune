@@ -10,6 +10,8 @@ export const bufferToBase64 = buffer => buffer.toString('base64');
 
 export const EDGE = base64ToBuffer('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
 
+export const hashString = string => Buffer.from(sha256.buffer(string));
+
 export const hashList = list => {
   const hash = sha256.create();
   list.forEach(item => hash.update(item));
