@@ -2,7 +2,7 @@ FROM node:11-alpine
 
 WORKDIR /app
 
-ADD package.json .
+ADD package*.json ./
 RUN npm install --only=production
 
 ADD docker/init /init

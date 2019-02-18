@@ -8,7 +8,7 @@
     "build:watch": "NODE_ENV=development webpack --watch",
     "clean": "rm -rf ./dist",
     "debug": "NODE_ENV=development webpack && node-nightly --inspect-brk dist/main",
-    "serve": "NODE_ENV=development webpack && node dist/main",
+    "serve": "NODE_ENV=development webpack && node --require=source-map-support/register dist/main",
     "test": "NODE_ENV=test webpack && mocha dist/spec.js",
     "test:watch": "NODE_ENV=test mocha-webpack --watch src/index.spec.js",
     "test:int": "NODE_ENV=integration-test webpack && mocha dist/integration.spec.js",
