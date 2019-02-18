@@ -10,9 +10,12 @@ const createAndListen = (app, { serverName, securePort, insecurePort, onStarted 
     if(onStarted) {
       console.log(`Running \`${onStarted}\``);
       exec(onStarted, (error, stdout) => {
-        console.log('=== BEGIN KITSUNE_ON_STARTED ===');
-        console.log(stdout.toString());
-        console.log('=== END KITSUNE_ON_STARTED ===');
+        if(stdout.length) {
+          console.log('=== BEGIN KITSUNE_ON_STARTED ===');
+          console.log(stdout.toString());
+          console.log('=== END KITSUNE_ON_STARTED ===');
+        } else
+          console.log('=== KITSUNE_ON_STARTED SCRIPT OUTPUT WAS EMPTY ===');
       });
     }
   };

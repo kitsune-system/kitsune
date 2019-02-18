@@ -1,6 +1,5 @@
 # files
 *.iml
-kitsune.pid
 
 # directories
 /.nyc_output
