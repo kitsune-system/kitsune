@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
-import webapp from './web/app';
+import app from './kitsune/app';
+import Webapp from './web/app';
 import createAndListen from './web/server';
 
 import * as nodes from './kitsune/nodes';
@@ -19,4 +20,5 @@ const {
 
 const insecurePort = KITSUNE_HTTP_PORT || 8080;
 
+const webapp = Webapp(app);
 createAndListen(webapp, { serverName, securePort, insecurePort, onStarted });
