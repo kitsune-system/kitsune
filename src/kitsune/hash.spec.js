@@ -1,6 +1,6 @@
 import { hashString as hash, bufferToBase64 as b64 } from './hash';
 
-describe.only('hash', () => {
+describe('hash', () => {
   describe('hash(string)', () => {
     it('should convert strings to 256-bit base64 hash', () => {
       b64(hash('')).should.equal('p//G+L8e12ZRwUdWoGHWYvWA/03kO0n6gtgKS4D4Q0o=');
