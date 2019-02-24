@@ -1,4 +1,3 @@
-/* eslint-disable */
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
@@ -17,11 +16,12 @@ const App = system => {
 
   // System calls
   app.use((req, res, next) => {
-    const commandId = buf(req.url.slice(1));
+    const { body, url } = req;
+    const commandId = buf(url.slice(1));
 
     const isSupported = system(SUPPORTS_COMMAND, commandId);
     if(isSupported) {
-      const output = system(commandId);
+      const output = system(commandId, body);
       res.json(output);
     } else
       next();
@@ -32,7 +32,7 @@ const App = system => {
     const commands = system(E(LIST, COMMAND));
 
     const commandMap = {};
-    commands.forEach(node => commandMap[b64(node)] = expand(node));
+    commands.forEach(node => (commandMap[b64(node)] = expand(node)));
 
     res.json(commandMap);
   });

@@ -6,7 +6,8 @@ import { CommonSystem as System } from '../system/builder';
 import { DB, EdgeCommands } from '../graph/edge-loki';
 
 const db = DB();
-const edgeCommands = EdgeCommands(db.edges);
+const edges = db.getCollection('edges');
+const edgeCommands = EdgeCommands(edges);
 
 const app = System({
   [b64(RANDOM)]: random,

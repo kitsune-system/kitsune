@@ -6,7 +6,7 @@ import { EDGE, READ, WRITE } from '../kitsune/nodes';
 export const DB = () => {
   const db = new Loki();
 
-  db.addCollection('edge', {
+  db.addCollection('edges', {
     unique: ['id'],
     indicies: ['head', 'tail'],
   });
@@ -16,7 +16,7 @@ export const DB = () => {
 
 export const EdgeCommands = edges => ({
   // TODO: How to bind input to args
-  [b64(E(WRITE, EDGE))]: (head, tail) => {
+  [b64(E(WRITE, EDGE))]: ([head, tail]) => {
     const node = E(head, tail);
 
     const exists = (edges.by('id', node) !== undefined);
