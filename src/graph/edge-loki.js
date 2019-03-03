@@ -14,6 +14,8 @@ export const DB = () => {
   return db;
 };
 
+const resultToEdge = result => [result.head, result.tail, result.id];
+
 // TODO: Convert to and from b64
 export const EdgeCommands = edges => ({
   // TODO: How to bind input to args
@@ -30,8 +32,8 @@ export const EdgeCommands = edges => ({
 
   [b64(E(READ, EDGE))]: node => {
     const result = edges.by('id', node);
-    return [result.head, result.tail];
+    return resultToEdge(result);
   },
 
-  [b64(E(LIST, EDGE))]: () => edges.find(),
+  [b64(E(LIST, EDGE))]: () => edges.find().map(resultToEdge),
 });

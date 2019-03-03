@@ -1,11 +1,13 @@
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
+import mkdirp from 'mkdirp';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E, random } from '../kitsune/hash';
 import { COMMAND, LIST, SUPPORTS_COMMAND } from '../kitsune/nodes';
+import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
 const App = system => {
@@ -28,7 +30,7 @@ const App = system => {
   });
 
   // NOTE: These are here for convenience for now
-  app.get('/list', (req, res) => {
+  app.get('/commands', (req, res) => {
     const commands = system(E(LIST, COMMAND));
 
     const commandMap = {};
@@ -39,7 +41,7 @@ const App = system => {
 
   app.get('/random', (req, res) => {
     const node = random();
-    res.json(node.toString('base64'));
+    res.send(node.toString('base64'));
   });
 
   const prefix = '/expand/';
@@ -47,6 +49,18 @@ const App = system => {
     const node = buf(req.url.replace(prefix, ''));
     const name = expand(node);
     res.json(name);
+  });
+
+  // TODO: Decouple Stoage
+  const basePath = `${process.env.HOME}/.kitsune`;
+  mkdirp(basePath);
+  const storagePath = `${basePath}/edges`;
+  const storage = Storage(storagePath, system);
+  app.get('/save', (req, res) => {
+    storage.save().then(() => res.send());
+  });
+  app.get('/load', (req, res) => {
+    storage.load().then(() => res.send());
   });
 
   return app;
