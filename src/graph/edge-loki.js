@@ -1,6 +1,6 @@
 import Loki from 'lokijs';
 
-import { bufferToBase64 as b64, hashEdge as E } from '../kitsune/hash';
+import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../kitsune/hash';
 import { EDGE, LIST, READ, WRITE } from '../kitsune/nodes';
 
 export const DB = () => {
@@ -14,23 +14,29 @@ export const DB = () => {
   return db;
 };
 
-const resultToEdge = result => [result.head, result.tail, result.id];
+const resultToEdge = result => [buf(result.head), buf(result.tail), buf(result.id)];
 
-// TODO: Convert to and from b64
 export const EdgeCommands = edges => ({
   // TODO: How to bind input to args
   [b64(E(WRITE, EDGE))]: ([head, tail]) => {
+    if(typeof head === 'string' || typeof tail === 'string')
+      throw new Error('`head` and `tail` must be buffers, not strings');
+
     const node = E(head, tail);
 
-    const b64Node = b64(node);
-    const exists = (edges.by('id', b64Node) !== undefined);
+    const id = b64(node);
+    console.log('INSERT ID', id);
+    const exists = (edges.by('id', id) !== undefined);
     if(!exists)
-      edges.insert({ id: b64Node, head: b64(head), tail: b64(tail) });
+      edges.insert({ id, head: b64(head), tail: b64(tail) });
 
     return node;
   },
 
   [b64(E(READ, EDGE))]: node => {
+    if(typeof node === 'string')
+      throw new Error('`node`must be a buffer, not a string');
+
     const result = edges.by('id', node);
     return resultToEdge(result);
   },

@@ -1,36 +1,48 @@
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 
-import { hashEdge as E } from '../kitsune/hash';
-import { EDGE, LIST } from '../kitsune/nodes';
+import {
+  base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E,
+} from '../kitsune/hash';
+import { EDGE, LIST, WRITE } from '../kitsune/nodes';
 
-const Storage = (path, system) => ({
-  save: () => {
-    return new Promise((resolve, reject) => {
-      const edges = system(E(LIST, EDGE));
-      const json = JSON.stringify(edges);
-      fs.writeFile(path, json, err => {
-        if(err)
-          reject(err);
-        else
-          resolve();
-      });
-    });
-  },
-  load: () => {
-    return new Promise((resolve, reject) => {
-      fs.readFile(path, (err, json) => {
-        if(err)
-          reject();
+const Storage = (path, system) => {
+  const edgePath = `${path}/edges`;
 
-        const data = JSON.parse(json);
-        data.forEach(edge => {
-          console.log('LOAD EDGE', edge);
+  return {
+    save: () => {
+      return new Promise((resolve, reject) => {
+        const edges = system(E(LIST, EDGE));
+
+        const simpleEdges = edges.map(edge => [b64(edge[0]), b64(edge[1])]);
+        const json = JSON.stringify(simpleEdges);
+
+        mkdirp(path);
+        fs.writeFile(edgePath, json, err => {
+          if(err)
+            reject(err);
+          else
+            resolve();
         });
-
-        resolve(data);
       });
-    });
-  },
-});
+    },
+    load: () => {
+      return new Promise((resolve, reject) => {
+        fs.readFile(edgePath, (err, json) => {
+          if(err)
+            reject();
+
+          const data = JSON.parse(json);
+          data.forEach(edge => {
+            console.log('LOAD EDGE', edge);
+            system(E(WRITE, EDGE), [buf(edge[0]), buf(edge[1])]);
+          });
+
+          resolve(data);
+        });
+      });
+    },
+  };
+};
 
 export default Storage;

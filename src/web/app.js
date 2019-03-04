@@ -1,7 +1,6 @@
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
-import mkdirp from 'mkdirp';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
@@ -52,16 +51,16 @@ const App = system => {
   });
 
   // TODO: Decouple Stoage
-  const basePath = `${process.env.HOME}/.kitsune`;
-  mkdirp(basePath);
-  const storagePath = `${basePath}/edges`;
-  const storage = Storage(storagePath, system);
+  const path = `${process.env.HOME}/.kitsune`;
+  const storage = Storage(path, system);
   app.get('/save', (req, res) => {
     storage.save().then(() => res.send());
   });
   app.get('/load', (req, res) => {
     storage.load().then(() => res.send());
   });
+
+  storage.load();
 
   return app;
 };
