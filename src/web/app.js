@@ -18,6 +18,11 @@ const App = system => {
   // System calls
   app.use((req, res, next) => {
     const { body, url } = req;
+    if(url === '/') {
+      next();
+      return;
+    }
+
     const commandId = buf(url.slice(1));
 
     const isSupported = system(SUPPORTS_COMMAND, commandId);

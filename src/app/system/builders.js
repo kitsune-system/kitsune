@@ -52,7 +52,7 @@ const Builder = baseSystem => {
 
   system.command(
     e(BUILD, [JAVA, SYSTEM]), [e(CODE, JAVA), e(WRITE, FILE), e(READ, PATH), e(READ, [[FILE, SYSTEM], PATH]), e(READ, [NODE, NAME])],
-    (codeJava, writeFile, readPath, readFileSystemPath, readNames) => systemId => {
+    (codeJava, writeFile, readPath, readFileSystemPath, readNames) => systemId => { // eslint-disable-line max-params
       const newSystemId = e([JAVA, SYSTEM], systemId);
 
       // Code

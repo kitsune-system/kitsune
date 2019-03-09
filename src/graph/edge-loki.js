@@ -17,7 +17,6 @@ export const DB = () => {
 const resultToEdge = result => [buf(result.head), buf(result.tail), buf(result.id)];
 
 export const EdgeCommands = edges => ({
-  // TODO: How to bind input to args
   [b64(E(WRITE, EDGE))]: ([head, tail]) => {
     if(typeof head === 'string' || typeof tail === 'string')
       throw new Error('`head` and `tail` must be buffers, not strings');
@@ -25,7 +24,6 @@ export const EdgeCommands = edges => ({
     const node = E(head, tail);
 
     const id = b64(node);
-    console.log('INSERT ID', id);
     const exists = (edges.by('id', id) !== undefined);
     if(!exists)
       edges.insert({ id, head: b64(head), tail: b64(tail) });
