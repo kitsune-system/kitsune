@@ -65,7 +65,9 @@ const App = system => {
     storage.load().then(() => res.send());
   });
 
-  storage.load();
+  storage.load().catch(err => {
+    console.error('Error: Could not load data.', err.message);
+  });
 
   return app;
 };

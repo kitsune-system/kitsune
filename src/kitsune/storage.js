@@ -29,8 +29,10 @@ const Storage = (path, system) => {
     load: () => {
       return new Promise((resolve, reject) => {
         fs.readFile(edgePath, (err, json) => {
-          if(err)
-            reject();
+          if(err) {
+            reject(err);
+            return;
+          }
 
           const data = JSON.parse(json);
           data.forEach(edge => {
