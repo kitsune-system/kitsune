@@ -18,7 +18,7 @@ const App = system => {
   // System calls
   app.use((req, res, next) => {
     const { body, url } = req;
-    if(url === '/') {
+    if(url.length < 2) {
       next();
       return;
     }
@@ -34,7 +34,7 @@ const App = system => {
   });
 
   // NOTE: These are here for convenience for now
-  app.get('/commands', (req, res) => {
+  app.use('/commands', (req, res) => {
     const commands = system(E(LIST, COMMAND));
 
     const commandMap = {};
@@ -43,13 +43,13 @@ const App = system => {
     res.json(commandMap);
   });
 
-  app.get('/random', (req, res) => {
+  app.use('/random', (req, res) => {
     const node = random();
     res.send(node.toString('base64'));
   });
 
   const prefix = '/expand/';
-  app.get(`${prefix}*`, (req, res) => {
+  app.use(`${prefix}*`, (req, res) => {
     const node = buf(req.url.replace(prefix, ''));
     const name = expand(node);
     res.json(name);
@@ -58,10 +58,10 @@ const App = system => {
   // TODO: Decouple Stoage
   const path = `${process.env.HOME}/.kitsune`;
   const storage = Storage(path, system);
-  app.get('/save', (req, res) => {
+  app.use('/save', (req, res) => {
     storage.save().then(() => res.send());
   });
-  app.get('/load', (req, res) => {
+  app.use('/load', (req, res) => {
     storage.load().then(() => res.send());
   });
 

@@ -31,7 +31,12 @@ export const hashList = list => {
   return Buffer.from(hash.buffer());
 };
 
-export const hashEdge = (head, tail) => {
+const validateHeadTail = args => {
+  if(args.length > 2)
+    throw new Error('HashEdge must take 2 arguments');
+
+  const [head, tail] = args;
+
   if(!(head && tail)) {
     throw new Error(
       '`head` and `tail` must be set: ' +
@@ -39,9 +44,26 @@ export const hashEdge = (head, tail) => {
     );
   }
 
+  return [head, tail];
+};
+
+export const hashEdge = (...args) => {
+  const [head, tail] = validateHeadTail(args);
+
   const edge = hashList([EDGE, head, tail]);
   edgeMap[bufferToBase64(edge)] = [bufferToBase64(head), bufferToBase64(tail)];
   return edge;
+};
+
+export const deepHashEdge = (...args) => {
+  let [head, tail] = validateHeadTail(args);
+
+  if(Array.isArray(head))
+    head = deepHashEdge(...head);
+  if(Array.isArray(tail))
+    tail = deepHashEdge(...tail);
+
+  return hashEdge(head, tail);
 };
 
 export const readEdge = node => edgeMap[bufferToBase64(node)];
