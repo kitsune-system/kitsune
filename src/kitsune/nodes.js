@@ -8,6 +8,7 @@ export const CONVERT = buf('CrJ0zaWBEZMVf8HEDBuBJ4R8vIFSg78szRddzl1FEXU=');
 export const EDGE = EDGE_FROM_HASH;
 export const GET = buf('VrJ1NfyNBVvnZetBWZ1wXcEDotZsSUtl4PRkuNezFVU=');
 export const LIST = buf('B0uC9VnQvcC9I7TubvULT/BV9T3gZqa/xn5HBBfZ0r0=');
+export const MAP = buf('Pj49hhtbwrg14s2nHt9QoDsquvWBm2zFoDVGKfZ4f7g=');
 export const NATIVE_NAME = buf('5XtkSqo5nMpeo1Mq4ytpeH9JbgtjBihz0LcbciZv4Ug=');
 export const PIPE = buf('BGbYmq/iTV8cUZ7WvhoeFlTgmYyGZAlPn7amkHgy4Rk=');
 export const RANDOM = buf('ijJv0As7V8Vk8kx1kL5Rm+LSDyHnfFPazUVtB/pmZiw=');

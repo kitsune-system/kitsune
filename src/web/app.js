@@ -4,7 +4,8 @@ import express from 'express';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
-  hashEdge as E, random } from '../kitsune/hash';
+  hashEdge as E
+} from '../kitsune/hash';
 import { COMMAND, LIST, SUPPORTS_COMMAND } from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
@@ -41,11 +42,6 @@ const App = system => {
     commands.forEach(node => (commandMap[b64(node)] = expand(node)));
 
     res.json(commandMap);
-  });
-
-  app.use('/random', (req, res) => {
-    const node = random();
-    res.send(node.toString('base64'));
   });
 
   const prefix = '/expand/';
