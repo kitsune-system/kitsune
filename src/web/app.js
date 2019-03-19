@@ -4,9 +4,9 @@ import express from 'express';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
-  hashEdge as E
+  hashEdge as E,
 } from '../kitsune/hash';
-import { COMMAND, LIST, SUPPORTS_COMMAND } from '../kitsune/nodes';
+import { COMMAND, EDGE, LIST, SUPPORTS_COMMAND } from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
@@ -42,6 +42,11 @@ const App = system => {
     commands.forEach(node => (commandMap[b64(node)] = expand(node)));
 
     res.json(commandMap);
+  });
+
+  app.use('/listEdge', (req, res) => {
+    const edges = system(E(LIST, EDGE)).map(edge => edge.map(b64));
+    res.send(edges);
   });
 
   const prefix = '/expand/';
