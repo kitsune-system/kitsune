@@ -6,7 +6,7 @@ import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E,
 } from '../kitsune/hash';
-import { COMMAND, EDGE, LIST, SUPPORTS_COMMAND } from '../kitsune/nodes';
+import { COMMAND, EDGE, LIST, SUPPORTS_COMMAND, WRITE } from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
@@ -44,6 +44,12 @@ const App = system => {
     res.json(commandMap);
   });
 
+  app.use('/writeEdge', (req, res) => {
+    const [head, tail] = req.body;
+    const edge = system(E(WRITE, EDGE), [buf(head), buf(tail)]);
+    res.json(b64(edge));
+  });
+
   app.use('/listEdge', (req, res) => {
     const edges = system(E(LIST, EDGE)).map(edge => edge.map(b64));
     res.send(edges);
@@ -59,12 +65,8 @@ const App = system => {
   // TODO: Decouple Stoage
   const path = `${process.env.HOME}/.kitsune`;
   const storage = Storage(path, system);
-  app.use('/save', (req, res) => {
-    storage.save().then(() => res.send());
-  });
-  app.use('/load', (req, res) => {
-    storage.load().then(() => res.send());
-  });
+  app.use('/save', (req, res) => storage.save().then(() => res.send()));
+  app.use('/load', (req, res) => storage.load().then(() => res.send()));
 
   storage.load().catch(err => {
     console.error('Error: Could not load data.', err.message);
