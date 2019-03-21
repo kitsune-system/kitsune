@@ -6,7 +6,9 @@ import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E,
 } from '../kitsune/hash';
-import { COMMAND, EDGE, LIST, SUPPORTS_COMMAND, WRITE } from '../kitsune/nodes';
+import {
+  COMMAND, EDGE, LIST, STRING, SUPPORTS_COMMAND, WRITE,
+} from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
@@ -53,6 +55,17 @@ const App = system => {
   app.use('/listEdge', (req, res) => {
     const edges = system(E(LIST, EDGE)).map(edge => edge.map(b64));
     res.send(edges);
+  });
+
+  app.use('/writeString', (req, res) => {
+    const string = JSON.parse(req.body);
+    const hash = system(E(WRITE, STRING), string);
+    res.json(b64(hash));
+  });
+
+  app.use('/listString', (req, res) => {
+    const strings = system(E(LIST, STRING)).map(row => ({ ...row, id: b64(row.id) }));
+    res.send(strings);
   });
 
   const prefix = '/expand/';

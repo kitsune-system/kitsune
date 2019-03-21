@@ -4,45 +4,69 @@ import mkdirp from 'mkdirp';
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E,
 } from '../kitsune/hash';
-import { EDGE, LIST, WRITE } from '../kitsune/nodes';
+import { EDGE, LIST, STRING, WRITE } from '../kitsune/nodes';
+
+const save = (path, data) => {
+  const json = JSON.stringify(data);
+
+  return new Promise((resolve, reject) => {
+    fs.writeFile(path, json, err => {
+      if(err)
+        reject(err);
+      else
+        resolve();
+    });
+  });
+};
+
+const load = path => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, (err, json) => {
+      if(err) {
+        reject(err);
+        return;
+      }
+
+      const data = JSON.parse(json);
+      resolve(data);
+    });
+  });
+};
 
 const Storage = (path, system) => {
   const edgePath = `${path}/edges`;
+  const stringPath = `${path}/strings`;
 
   return {
     save: () => {
-      return new Promise((resolve, reject) => {
-        const edges = system(E(LIST, EDGE));
+      const edges = system(E(LIST, EDGE));
+      const strings = system(E(LIST, STRING));
 
-        const simpleEdges = edges.map(edge => [b64(edge[0]), b64(edge[1])]);
-        const json = JSON.stringify(simpleEdges);
+      const simpleEdges = edges.map(edge => [b64(edge[0]), b64(edge[1])]);
+      const simpleStrings = strings.map(row => row.string);
 
-        mkdirp(path);
-        fs.writeFile(edgePath, json, err => {
-          if(err)
-            reject(err);
-          else
-            resolve();
-        });
-      });
+      mkdirp(path);
+      return Promise.all([
+        save(edgePath, simpleEdges),
+        save(stringPath, simpleStrings),
+      ]);
     },
     load: () => {
-      return new Promise((resolve, reject) => {
-        fs.readFile(edgePath, (err, json) => {
-          if(err) {
-            reject(err);
-            return;
-          }
-
-          const data = JSON.parse(json);
-          data.forEach(edge => {
-            console.log('LOAD EDGE', edge);
-            system(E(WRITE, EDGE), [buf(edge[0]), buf(edge[1])]);
-          });
-
-          resolve(data);
+      const edgeP = load(edgePath).then(data => {
+        data.forEach(edge => {
+          system(E(WRITE, EDGE), [buf(edge[0]), buf(edge[1])]);
         });
+        console.log('LOADED EDGES', data);
       });
+
+      const stringP = load(stringPath).then(data => {
+        data.forEach(string => {
+          system(E(WRITE, STRING), string);
+        });
+        console.log('LOADED STRINGS', data);
+      });
+
+      return Promise.all([edgeP, stringP]);
     },
   };
 };

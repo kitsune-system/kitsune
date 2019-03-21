@@ -9,10 +9,14 @@ import {
 } from '../kitsune/nodes';
 import { CommonSystem as System } from '../system/builder';
 import { DB, EdgeCommands } from '../graph/edge-loki';
+import StringCommands from '../data/string-loki';
 
 const db = DB();
-const edges = db.getCollection('edges');
+const [edges, strings] = ['edges', 'strings']
+  .map(name => db.getCollection(name));
+
 const edgeCommands = EdgeCommands(edges);
+const stringCommands = StringCommands(strings);
 
 const map = system => ({ input, mapCommand }) => input.map(item => system(buf(mapCommand), item));
 
@@ -30,6 +34,7 @@ const app = System({
   [b64(E(GET, NATIVE_NAME))]: getNativeName,
   [b64(RANDOM)]: random,
   ...edgeCommands,
+  ...stringCommands,
 });
 
 app.add(b64(MAP), map(app));

@@ -1,11 +1,15 @@
-import { base64ToBuffer as buf, EDGE as EDGE_FROM_HASH } from './hash';
+import {
+  base64ToBuffer as buf, EDGE as EDGE_FROM_HASH, STRING as STRING_FROM_HASH,
+} from './hash';
+
+export const EDGE = EDGE_FROM_HASH;
+export const STRING = STRING_FROM_HASH;
 
 // TODO: Store these in a json object
 export const BASE64 = buf('AIijUH1v1Jxo6gBDm5rwI4Or80AwPum9At1AWbzw5Lw=');
 export const BINARY = buf('ysyP7SFoE+dbewHpNFWKQi4roiTG+xVnYxcIxA2qfGA=');
 export const COMMAND = buf('2thvxzmTasKTgQrlZkN4Yq4/dCTkemSadDKshbBHi/Q=');
 export const CONVERT = buf('CrJ0zaWBEZMVf8HEDBuBJ4R8vIFSg78szRddzl1FEXU=');
-export const EDGE = EDGE_FROM_HASH;
 export const GET = buf('VrJ1NfyNBVvnZetBWZ1wXcEDotZsSUtl4PRkuNezFVU=');
 export const LIST = buf('B0uC9VnQvcC9I7TubvULT/BV9T3gZqa/xn5HBBfZ0r0=');
 export const MAP = buf('Pj49hhtbwrg14s2nHt9QoDsquvWBm2zFoDVGKfZ4f7g=');

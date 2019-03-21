@@ -31,7 +31,10 @@ const config = {
       test: /\.js$/,
       exclude: /node_modules/,
       loader: 'eslint-loader',
-      enforce: 'pre'
+      enforce: 'pre',
+      options: {
+        fix: true,
+      },
     }]
   }
 };

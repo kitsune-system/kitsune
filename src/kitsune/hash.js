@@ -22,14 +22,15 @@ export const bufferToBase64 = buffer => {
 };
 
 export const EDGE = base64ToBuffer('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
-
-export const hashString = string => Buffer.from(sha256.buffer(string));
+export const STRING = base64ToBuffer('T5ncjTd6X9U0yxKzgDqpcW4otVk6vVGZL/vfU2TlWI4=');
 
 export const hashList = list => {
   const hash = sha256.create();
   list.forEach(item => hash.update(item));
   return Buffer.from(hash.buffer());
 };
+
+export const hashString = string => hashList([STRING, string]);
 
 const validateHeadTail = args => {
   if(args.length > 2)

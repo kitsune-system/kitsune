@@ -11,6 +11,11 @@ export const DB = () => {
     indicies: ['head', 'tail'],
   });
 
+  db.addCollection('strings', {
+    unique: ['id'],
+    indicies: ['string'],
+  });
+
   return db;
 };
 
@@ -33,9 +38,9 @@ export const EdgeCommands = edges => ({
 
   [b64(E(READ, EDGE))]: node => {
     if(typeof node === 'string')
-      throw new Error('`node`must be a buffer, not a string');
+      throw new Error('`node` must be a buffer, not a string');
 
-    const result = edges.by('id', node);
+    const result = edges.by('id', b64(node));
     return resultToEdge(result);
   },
 
