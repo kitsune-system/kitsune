@@ -10,6 +10,7 @@ import {
 import { CommonSystem as System } from '../system/builder';
 import { DB, EdgeCommands } from '../graph/edge-loki';
 import StringCommands from '../data/string-loki';
+import CodeCommands from '../code/native';
 
 const db = DB();
 const [edges, strings] = ['edges', 'strings']
@@ -36,6 +37,9 @@ const app = System({
   ...edgeCommands,
   ...stringCommands,
 });
+
+const codeCommands = CodeCommands(app);
+Object.entries(codeCommands).forEach(([key, value]) => app.add(key, value));
 
 app.add(b64(MAP), map(app));
 app.add(b64(PIPE), pipe(app));

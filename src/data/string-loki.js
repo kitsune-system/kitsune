@@ -23,7 +23,7 @@ const StringCommands = strings => ({
       throw new Error('`node` must be a buffer, not a string');
 
     const result = strings.by('id', b64(node));
-    return cleanResult(result);
+    return result.string;
   },
 
   [b64(E(LIST, STRING))]: () => strings.find().map(cleanResult),

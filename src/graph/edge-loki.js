@@ -41,7 +41,7 @@ export const EdgeCommands = edges => ({
       throw new Error('`node` must be a buffer, not a string');
 
     const result = edges.by('id', b64(node));
-    return resultToEdge(result);
+    return result ? resultToEdge(result) : null;
   },
 
   [b64(E(LIST, EDGE))]: () => edges.find().map(resultToEdge),

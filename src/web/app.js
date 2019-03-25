@@ -7,7 +7,7 @@ import {
   hashEdge as E,
 } from '../kitsune/hash';
 import {
-  COMMAND, EDGE, LIST, STRING, SUPPORTS_COMMAND, WRITE,
+  CODE, COMMAND, EDGE, LIST, STRING, SUPPORTS_COMMAND, WRITE,
 } from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
@@ -17,6 +17,15 @@ const App = system => {
 
   app.use(cors());
   app.use(bodyParser.json({ strict: false }));
+
+  // NOTE: This is because `bodyParser.json` doesn't seem to handle json strings
+  // literals by themselves predictably
+  app.use((req, res, next) => {
+    if(typeof req.body === 'string')
+      req.body = JSON.parse(req.body);
+
+    next();
+  });
 
   // System calls
   app.use((req, res, next) => {
@@ -58,7 +67,7 @@ const App = system => {
   });
 
   app.use('/writeString', (req, res) => {
-    const string = JSON.parse(req.body);
+    const string = req.body;
     const hash = system(E(WRITE, STRING), string);
     res.json(b64(hash));
   });
@@ -66,6 +75,11 @@ const App = system => {
   app.use('/listString', (req, res) => {
     const strings = system(E(LIST, STRING)).map(row => ({ ...row, id: b64(row.id) }));
     res.send(strings);
+  });
+
+  app.use('/code', (req, res) => {
+    const code = system(CODE, buf(req.body));
+    res.json(code);
   });
 
   const prefix = '/expand/';
