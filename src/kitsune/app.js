@@ -5,12 +5,16 @@ import {
   hashEdge as E, random,
 } from '../kitsune/hash';
 import {
-  BASE64, BINARY, CONVERT, GET, MAP, NATIVE_NAME, PIPE, RANDOM,
+  BASE64, BINARY, CONVERT, GET, MAP_V, NATIVE_NAME,
+  PIPE, RANDOM, TO_BASE64, TO_BUFFER,
 } from '../kitsune/nodes';
 import { CommonSystem as System } from '../system/builder';
-import { DB, EdgeCommands } from '../graph/edge-loki';
-import StringCommands from '../data/string-loki';
+
 import CodeCommands from '../code/native';
+import StringCommands from '../data/string-loki';
+import { DB, EdgeCommands } from '../graph/edge-loki';
+import MapCommands from '../struct/map';
+import SetCommands from '../struct/set';
 
 const db = DB();
 const [edges, strings] = ['edges', 'strings']
@@ -34,14 +38,49 @@ const app = System({
   [b64(E(CONVERT, E(BINARY, BASE64)))]: b64,
   [b64(E(GET, NATIVE_NAME))]: getNativeName,
   [b64(RANDOM)]: random,
+
+  // TODO: Replace
+  [b64(TO_BASE64)]: nodes => {
+    let result;
+    if(Array.isArray(nodes))
+      result = nodes.map(b64);
+    else if(nodes.buffer)
+      result = b64(nodes);
+    else if(typeof nodes === 'object') {
+      result = {};
+      Object.entries(nodes).forEach(([key, value]) => (result[key] = b64(value)));
+    } else
+      throw new Error(`Can't convert ${nodes}`);
+    return result;
+  },
+
+  [b64(TO_BUFFER)]: nodes => {
+    let result;
+    if(Array.isArray(nodes))
+      result = nodes.map(buf);
+    else if(typeof nodes === 'string')
+      result = buf(nodes);
+    else if(typeof nodes === 'object') {
+      result = {};
+      Object.entries(nodes).forEach(([key, value]) => (result[key] = buf(value)));
+    } else
+      throw new Error(`Can't convert ${nodes}`);
+    return result;
+  },
+
   ...edgeCommands,
   ...stringCommands,
 });
 
-const codeCommands = CodeCommands(app);
-Object.entries(codeCommands).forEach(([key, value]) => app.add(key, value));
+const addCommands = (system, commands) => {
+  Object.entries(commands).forEach(([key, value]) => system.add(key, value));
+};
 
-app.add(b64(MAP), map(app));
+addCommands(app, CodeCommands(app));
+addCommands(app, MapCommands(app));
+addCommands(app, SetCommands(app));
+
+app.add(b64(MAP_V), map(app));
 app.add(b64(PIPE), pipe(app));
 
 export default app;

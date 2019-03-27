@@ -35,7 +35,8 @@ const App = system => {
       return;
     }
 
-    const commandId = buf(url.slice(1));
+    const b64CommandId = decodeURIComponent(url.slice(1));
+    const commandId = buf(b64CommandId);
 
     const isSupported = system(SUPPORTS_COMMAND, commandId);
     if(isSupported) {

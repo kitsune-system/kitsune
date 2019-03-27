@@ -1,7 +1,7 @@
 import Loki from 'lokijs';
 
 import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../kitsune/hash';
-import { EDGE, LIST, READ, WRITE } from '../kitsune/nodes';
+import { EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../kitsune/nodes';
 
 export const DB = () => {
   const db = new Loki();
@@ -45,4 +45,7 @@ export const EdgeCommands = edges => ({
   },
 
   [b64(E(LIST, EDGE))]: () => edges.find().map(resultToEdge),
+
+  [b64(E(LIST, HEAD))]: node => edges.find({ tail: b64(node) }).map(row => buf(row.head)),
+  [b64(E(LIST, TAIL))]: node => edges.find({ head: b64(node) }).map(row => buf(row.tail)),
 });

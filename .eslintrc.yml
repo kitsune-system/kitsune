@@ -37,6 +37,8 @@ rules:
   no-unused-expressions:
     - error
     - allowTernary: true
+  no-warning-comments:
+    - off
   object-curly-spacing:
     - error
     - always
