@@ -1,7 +1,7 @@
 import Loki from 'lokijs';
 
-import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../kitsune/hash';
-import { EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../kitsune/nodes';
+import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../common/hash';
+import { EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../common/nodes';
 
 export const DB = () => {
   const db = new Loki();

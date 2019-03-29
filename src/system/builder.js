@@ -1,7 +1,7 @@
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E,
-} from '../kitsune/hash';
-import { COMMAND, LIST, SUPPORTS_COMMAND } from '../kitsune/nodes';
+} from '../common/hash';
+import { COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
 
 export const BasicSystem = commandObj => {
   const commands = { ...commandObj };

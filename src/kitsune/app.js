@@ -3,11 +3,11 @@ import { getNativeName } from './translate';
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E, random,
-} from '../kitsune/hash';
+} from '../common/hash';
 import {
   BASE64, BINARY, CONVERT, GET, MAP_V, NATIVE_NAME,
-  PIPE, RANDOM, TO_BASE64, TO_BUFFER,
-} from '../kitsune/nodes';
+  PIPE, RANDOM, TO_BASE64, TO_BINARY,
+} from '../common/nodes';
 import { CommonSystem as System } from '../system/builder';
 
 import CodeCommands from '../code/native';
@@ -54,7 +54,7 @@ const app = System({
     return result;
   },
 
-  [b64(TO_BUFFER)]: nodes => {
+  [b64(TO_BINARY)]: nodes => {
     let result;
     if(Array.isArray(nodes))
       result = nodes.map(buf);

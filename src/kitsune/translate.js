@@ -1,5 +1,5 @@
-import { bufferToBase64 as b64, readEdge } from '../kitsune/hash';
-import * as nativeNodes from '../kitsune/nodes';
+import { bufferToBase64 as b64, readEdge } from '../common/hash';
+import * as nativeNodes from '../common/nodes';
 
 const nodeNameMap = {};
 Object.entries(nativeNodes).forEach(([name, node]) => {

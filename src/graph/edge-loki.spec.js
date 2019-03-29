@@ -1,6 +1,6 @@
 import build from '../kitsune/builder';
-import { bufferToBase64 as b64, hashEdge as E } from '../kitsune/hash';
-import { EDGE, WRITE } from '../kitsune/nodes';
+import { bufferToBase64 as b64, hashEdge as E } from '../common/hash';
+import { EDGE, WRITE } from '../common/nodes';
 
 describe('edge-loki', () => {
   it('WRITE EDGE', () => {

@@ -4,7 +4,7 @@ import app from './kitsune/app';
 import Webapp from './web/app';
 import createAndListen from './web/server';
 
-import * as nodes from './kitsune/nodes';
+import * as nodes from './common/nodes';
 _.each(nodes, (node, name) => {
   console.log(name, node.toString('base64'));
 });

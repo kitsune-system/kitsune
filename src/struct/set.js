@@ -1,5 +1,5 @@
-import { bufferToBase64 as b64, deepHashEdge as E, hashList } from '../kitsune/hash';
-import { EDGE, LIST, READ, SET, TAIL, WRITE } from '../kitsune/nodes';
+import { bufferToBase64 as b64, deepHashEdge as E, hashList } from '../common/hash';
+import { EDGE, LIST, READ, SET, TAIL, WRITE } from '../common/nodes';
 
 const hashSet = set => hashList([SET, ...set.sort()]);
 

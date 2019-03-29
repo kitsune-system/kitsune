@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import { bufferToBase64 as b64 } from '../kitsune/hash';
+import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
+import { BASE64, BINARY, CONVERT, PIPE, RANDOM } from '../common/nodes';
 
 export const KitsuneClient = request => {
   const client = (command, input) => {
@@ -12,15 +13,12 @@ export const KitsuneClient = request => {
 
   client.wrap = (command, input, before = [], after = []) => {
     const commandList = [...before, command, ...after].map(b64);
-    return client(
-      'BGbYmq/iTV8cUZ7WvhoeFlTgmYyGZAlPn7amkHgy4Rk=', // PIPE
-      { input, commandList }
-    );
+    return client(PIPE, { input, commandList });
   };
 
   client.random = () => client.wrap(
-    'ijJv0As7V8Vk8kx1kL5Rm+LSDyHnfFPazUVtB/pmZiw=', [], // RANDOM
-    [], ['4Y/SXeyS8y1YP4n+oercdBwh+FhDmhwTDWBdOsrjmQc='], // bin to b64
+    RANDOM, [],
+    [], [E(CONVERT, [BINARY, BASE64])],
   );
 
   return client;

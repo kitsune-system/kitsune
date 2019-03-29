@@ -1,7 +1,7 @@
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E, hashList,
-} from '../kitsune/hash';
-import { EDGE, LIST, READ, MAP_N, TAIL, WRITE } from '../kitsune/nodes';
+} from '../common/hash';
+import { EDGE, LIST, READ, MAP_N, TAIL, WRITE } from '../common/nodes';
 
 const hashMap = map => {
   const kvList = Object.entries(map).map(([key, value]) => [buf(key), value]).sort();

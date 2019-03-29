@@ -5,10 +5,10 @@ import express from 'express';
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E,
-} from '../kitsune/hash';
+} from '../common/hash';
 import {
   CODE, COMMAND, EDGE, LIST, STRING, SUPPORTS_COMMAND, WRITE,
-} from '../kitsune/nodes';
+} from '../common/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 

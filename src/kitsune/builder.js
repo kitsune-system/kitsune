@@ -1,7 +1,7 @@
 import { getNativeName } from './translate';
 
-import { bufferToBase64 as b64, hashEdge as E, random } from '../kitsune/hash';
-import { GET, NATIVE_NAME, RANDOM } from '../kitsune/nodes';
+import { bufferToBase64 as b64, hashEdge as E, random } from '../common/hash';
+import { GET, NATIVE_NAME, RANDOM } from '../common/nodes';
 import { CommonSystem as System } from '../system/builder';
 import { DB, EdgeCommands } from '../graph/edge-loki';
 

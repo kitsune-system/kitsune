@@ -1,5 +1,5 @@
-import { bufferToBase64 as b64, hashEdge as E, hashString } from '../kitsune/hash';
-import { LIST, READ, STRING, WRITE } from '../kitsune/nodes';
+import { bufferToBase64 as b64, hashEdge as E, hashString } from '../common/hash';
+import { LIST, READ, STRING, WRITE } from '../common/nodes';
 
 const cleanResult = result => ({ id: result.id, string: result.string });
 

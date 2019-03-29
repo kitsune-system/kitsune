@@ -1,5 +1,5 @@
-import { bufferToBase64 as b64, deepHashEdge as E } from '../kitsune/hash';
-import { CODE, EDGE, READ, STRING } from '../kitsune/nodes';
+import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
+import { CODE, EDGE, READ, STRING } from '../common/nodes';
 
 const CodeCommands = system => ({
   [b64(CODE)]: edgeNode => {

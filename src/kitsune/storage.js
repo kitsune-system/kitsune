@@ -3,8 +3,8 @@ import mkdirp from 'mkdirp';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E,
-} from '../kitsune/hash';
-import { EDGE, LIST, STRING, WRITE } from '../kitsune/nodes';
+} from '../common/hash';
+import { EDGE, LIST, STRING, WRITE } from '../common/nodes';
 
 const save = (path, data) => {
   const json = JSON.stringify(data);

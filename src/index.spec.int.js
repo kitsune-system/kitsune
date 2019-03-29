@@ -1,11 +1,11 @@
-import buildClient from './kitsune/client';
+import buildClient from './common/client';
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E,
-} from './kitsune/hash';
+} from './common/hash';
 import {
   CODE, HEAD, LIST, MAP_N, MAP_V, PIPE, RANDOM, READ,
-  SET, TAIL, TO_BASE64, TO_BUFFER, WRITE,
-} from './kitsune/nodes';
+  SET, TAIL, TO_BASE64, TO_BINARY, WRITE,
+} from './common/nodes';
 
 import './spec-common';
 
@@ -41,21 +41,21 @@ describe('integration specs', () => {
     // WRITE SET
     let node = await client.wrap(
       E(WRITE, SET), [LIST, READ, WRITE].map(b64),
-      [TO_BUFFER], [TO_BASE64],
+      [TO_BINARY], [TO_BASE64],
     );
     node.should.equal('A1AV/fWQVhsG0APSgDRnQYnnqr2wdjcJfKGfBhYLD/g=');
 
     // ORDER DOESN'T MATTER
     node = await client.wrap(
       E(WRITE, SET), [WRITE, LIST, READ].map(b64),
-      [TO_BUFFER], [TO_BASE64],
+      [TO_BINARY], [TO_BASE64],
     );
     node.should.equal('A1AV/fWQVhsG0APSgDRnQYnnqr2wdjcJfKGfBhYLD/g=');
 
     // READ SET
     const set = await client.wrap(
       E(READ, SET), node,
-      [TO_BUFFER], [TO_BASE64],
+      [TO_BINARY], [TO_BASE64],
     );
     set.sort().should.deep.equal([LIST, READ, WRITE].map(b64).sort());
   });
@@ -70,14 +70,14 @@ describe('integration specs', () => {
     // WRITE MAP_N
     const node = await client.wrap(
       E(WRITE, MAP_N), map,
-      [TO_BUFFER], [TO_BASE64],
+      [TO_BINARY], [TO_BASE64],
     );
     node.should.equal('6oypFkJKeMLFHqhF+X9XAq0k0QMq7/LVvnqYQcmU5tM=');
 
     // READ MAP_N
     map = await client.wrap(
       E(READ, MAP_N), node,
-      [TO_BUFFER], [TO_BASE64],
+      [TO_BINARY], [TO_BASE64],
     );
     map.should.deep.equal(map);
   });

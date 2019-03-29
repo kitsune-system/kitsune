@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 import sha3 from 'js-sha3';
 
+import { EDGE, STRING } from './nodes';
+
 const sha256 = sha3.sha3_256;
 
 const edgeMap = {};
@@ -20,9 +22,6 @@ export const bufferToBase64 = buffer => {
 
   return buffer.toString('base64');
 };
-
-export const EDGE = base64ToBuffer('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
-export const STRING = base64ToBuffer('T5ncjTd6X9U0yxKzgDqpcW4otVk6vVGZL/vfU2TlWI4=');
 
 export const hashList = list => {
   const hash = sha256.create();
