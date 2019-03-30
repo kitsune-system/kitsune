@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
-import { BASE64, BINARY, CONVERT, PIPE, RANDOM } from '../common/nodes';
+import {
+  BASE64, BINARY, CONVERT, EDGE, PIPE, RANDOM, STRING, TO_BINARY, WRITE,
+} from '../common/nodes';
+
+const BIN2B64 = E(CONVERT, [BINARY, BASE64]);
 
 export const KitsuneClient = request => {
   const client = (command, input) => {
@@ -17,8 +21,15 @@ export const KitsuneClient = request => {
   };
 
   client.random = () => client.wrap(
-    RANDOM, [],
-    [], [E(CONVERT, [BINARY, BASE64])],
+    RANDOM, null, [], [BIN2B64],
+  );
+
+  client.writeEdge = (head, tail) => client.wrap(
+    E(WRITE, EDGE), [head, tail], [TO_BINARY], [BIN2B64]
+  );
+
+  client.writeString = string => client.wrap(
+    E(WRITE, STRING), string, [], [BIN2B64],
   );
 
   return client;

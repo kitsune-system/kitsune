@@ -56,14 +56,12 @@ const Storage = (path, system) => {
         data.forEach(edge => {
           system(E(WRITE, EDGE), [buf(edge[0]), buf(edge[1])]);
         });
-        console.log('LOADED EDGES', data);
       });
 
       const stringP = load(stringPath).then(data => {
         data.forEach(string => {
           system(E(WRITE, STRING), string);
         });
-        console.log('LOADED STRINGS', data);
       });
 
       return Promise.all([edgeP, stringP]);

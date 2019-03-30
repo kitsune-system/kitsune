@@ -1,0 +1,3 @@
+const buf = string => Buffer.from(string, 'base64');
+
+${nodeLines}

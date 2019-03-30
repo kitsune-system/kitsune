@@ -35,6 +35,9 @@ const config = {
       options: {
         fix: true,
       },
+    }, {
+      test: /\.raw$/,
+      loader: 'raw-loader'
     }]
   }
 };

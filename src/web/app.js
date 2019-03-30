@@ -1,14 +1,21 @@
+import _ from 'lodash';
+
 import cors from 'cors';
+import fs from 'fs';
 import bodyParser from 'body-parser';
 import express from 'express';
+import mkdirp from 'mkdirp';
+import rimraf from 'rimraf';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E,
 } from '../common/hash';
 import {
-  CODE, COMMAND, EDGE, LIST, STRING, SUPPORTS_COMMAND, WRITE,
+  BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N,
+  READ, STRING, SUPPORTS_COMMAND, TAIL, TO_BASE64,
 } from '../common/nodes';
+import { KITSUNE_PATH } from '../kitsune/config';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
@@ -17,15 +24,6 @@ const App = system => {
 
   app.use(cors());
   app.use(bodyParser.json({ strict: false }));
-
-  // NOTE: This is because `bodyParser.json` doesn't seem to handle json strings
-  // literals by themselves predictably
-  app.use((req, res, next) => {
-    if(typeof req.body === 'string')
-      req.body = JSON.parse(req.body);
-
-    next();
-  });
 
   // System calls
   app.use((req, res, next) => {
@@ -46,6 +44,49 @@ const App = system => {
       next();
   });
 
+  const getBuiltInNodeMap = () => {
+    // TODO: Convert to GET variable call
+    const mapNode = system(E(LIST, TAIL), BUILT_IN_NODES)[0];
+    const map = system(E(READ, MAP_N), mapNode);
+
+    const result = {};
+    Object.entries(map).forEach(([nameNode, node]) => {
+      const name = system(E(READ, STRING), buf(nameNode));
+      result[name] = node;
+    });
+
+    return result;
+  };
+
+  const text = require('../raw/nodes.js.raw').default;
+  app.use('/build', (req, res) => {
+    const nodeMap = getBuiltInNodeMap();
+
+    // const nodes = { BASE64: 'AIijUH1v1Jxo6gBDm5rwI4Or80AwPum9At1AWbzw5Lw=' };
+    const nodeLines = Object.entries(nodeMap).sort().map(([name, node]) => {
+      return `export const ${name} = buf('${b64(node)}');`;
+    }).join('\n');
+
+    const code = _.template(text)({ nodeLines });
+
+    // Write file
+    const codeDir = `${KITSUNE_PATH}/code`;
+    rimraf.sync(codeDir);
+
+    const dir = `${codeDir}/src/common`;
+    mkdirp.sync(dir);
+    fs.writeFileSync(`${dir}/nodes.js`, code);
+
+    res.set('Content-Type', 'text/plain');
+    res.send(dir);
+  });
+
+  app.use('/built-in-nodes', (req, res) => {
+    const nodeMap = getBuiltInNodeMap();
+    const result = system(TO_BASE64, nodeMap);
+    res.send(result);
+  });
+
   // NOTE: These are here for convenience for now
   app.use('/commands', (req, res) => {
     const commands = system(E(LIST, COMMAND));
@@ -56,26 +97,14 @@ const App = system => {
     res.json(commandMap);
   });
 
-  app.use('/writeEdge', (req, res) => {
-    const [head, tail] = req.body;
-    const edge = system(E(WRITE, EDGE), [buf(head), buf(tail)]);
-    res.json(b64(edge));
-  });
-
   app.use('/listEdge', (req, res) => {
     const edges = system(E(LIST, EDGE)).map(edge => edge.map(b64));
-    res.send(edges);
-  });
-
-  app.use('/writeString', (req, res) => {
-    const string = req.body;
-    const hash = system(E(WRITE, STRING), string);
-    res.json(b64(hash));
+    res.json(edges);
   });
 
   app.use('/listString', (req, res) => {
     const strings = system(E(LIST, STRING)).map(row => ({ ...row, id: b64(row.id) }));
-    res.send(strings);
+    res.json(strings);
   });
 
   app.use('/code', (req, res) => {
@@ -91,10 +120,9 @@ const App = system => {
   });
 
   // TODO: Decouple Stoage
-  const path = `${process.env.HOME}/.kitsune`;
-  const storage = Storage(path, system);
-  app.use('/save', (req, res) => storage.save().then(() => res.send()));
-  app.use('/load', (req, res) => storage.load().then(() => res.send()));
+  const storage = Storage(KITSUNE_PATH, system);
+  app.use('/save', (req, res) => storage.save().then(() => res.json()));
+  app.use('/load', (req, res) => storage.load().then(() => res.json()));
 
   storage.load().catch(err => {
     console.error('Error: Could not load data.', err.message);
