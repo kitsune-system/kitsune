@@ -33,14 +33,14 @@ docker:
     - docker build -t "kitsunesystem/kitsune:$CI_COMMIT_SHA" .
     - docker push "kitsunesystem/kitsune:$CI_COMMIT_SHA"
 
-kubernetes:
-  stage: deploy
-  image:
-    name: lachlanevenson/k8s-kubectl
-    entrypoint: [""]
-  environment:
-    name: production
-    url: http://api.kitsune-system.org
-  script:
-    - apk add gettext
-    - cat kube.yml | envsubst | kubectl apply -f -
+# kubernetes:
+#   stage: deploy
+#   image:
+#     name: lachlanevenson/k8s-kubectl
+#     entrypoint: [""]
+#   environment:
+#     name: production
+#     url: http://api.kitsune-system.org
+#   script:
+#     - apk add gettext
+#     - cat kube.yml | envsubst | kubectl apply -f -
