@@ -51,6 +51,8 @@ rules:
     - never
 
 overrides:
-  files: '*.spec.js'
+  files:
+    - '*.spec.js'
+    - '*.spec.int.js'
   rules:
     no-unused-expressions: off

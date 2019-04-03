@@ -11,7 +11,7 @@ Object.entries(N).forEach(([key, value]) => {
 });
 
 const nodeMapId = app(E(N.WRITE, N.MAP_N), nodeMap);
-app(E(N.WRITE, N.EDGE), [N.BUILT_IN_NODES, nodeMapId]);
+app(N.VARIABLE_SET, [N.BUILT_IN_NODES, nodeMapId]);
 
 // Config
 const {

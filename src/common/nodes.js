@@ -6,6 +6,7 @@ export const BUILT_IN_NODES = buf('tM/g7jdtJbdcGwlxr7JRkqQFZvrgxjuj4re4W7aPOtA='
 export const CODE = buf('azYkwxJ3FZH7GuMq0z34AAgKDBBFEopUH/qfpdY5l8U=');
 export const COMMAND = buf('2thvxzmTasKTgQrlZkN4Yq4/dCTkemSadDKshbBHi/Q=');
 export const CONVERT = buf('CrJ0zaWBEZMVf8HEDBuBJ4R8vIFSg78szRddzl1FEXU=');
+export const DESTROY = buf('GdMeesaxawq0J2uBEHdytTXNJxbcA0y9kKcyDjVjUh0=');
 export const EDGE = buf('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
 export const GET = buf('VrJ1NfyNBVvnZetBWZ1wXcEDotZsSUtl4PRkuNezFVU=');
 export const HEAD = buf('rVkGcT3cbljIYjNVAwd7NDYzrgsELAQyju9PwhaDVPI=');
@@ -22,4 +23,6 @@ export const SUPPORTS_COMMAND = buf('jY9q3mtCo4e1OJG0MlPGSP4CbGeaT22slihqoXVdDEQ
 export const TAIL = buf('6+Ksu9TM316USCs7pm59QsmXygArxBZs0sT/JGovr5Q=');
 export const TO_BASE64 = buf('ezu55hKK6ABAMdUGIaD6JMW3RRn+Vgi06LSDQ8dTpJc=');
 export const TO_BINARY = buf('JUJdFYuHMqsazm7HhSyYWMSVKnvxdVzoxdvIqqCXuMI=');
+export const VARIABLE_GET = buf('WCFIOmPitmoeRYk+2F6tnqs06kGm+m6e9CHY6rbzNz8=');
+export const VARIABLE_SET = buf('j07UYfE6s282tTL3rpBGAQhOSBB9jMXjVvKAlkcE9Xc=');
 export const WRITE = buf('OopQyyACUbZJrQc+uRI50cq25wOY6H50F0m54im0dHE=');

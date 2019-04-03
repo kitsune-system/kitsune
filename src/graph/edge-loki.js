@@ -1,7 +1,7 @@
 import Loki from 'lokijs';
 
 import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../common/hash';
-import { EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../common/nodes';
+import { DESTROY, EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../common/nodes';
 
 export const DB = () => {
   const db = new Loki();
@@ -42,6 +42,13 @@ export const EdgeCommands = edges => ({
 
     const result = edges.by('id', b64(node));
     return result ? resultToEdge(result) : null;
+  },
+
+  [b64(E(DESTROY, EDGE))]: node => {
+    if(typeof node === 'string')
+      throw new Error('`node` must be a buffer, not a string');
+
+    edges.findAndRemove({ id: b64(node) });
   },
 
   [b64(E(LIST, EDGE))]: () => edges.find().map(resultToEdge),

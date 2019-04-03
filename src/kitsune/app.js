@@ -15,6 +15,7 @@ import StringCommands from '../data/string-loki';
 import { DB, EdgeCommands } from '../graph/edge-loki';
 import MapCommands from '../struct/map';
 import SetCommands from '../struct/set';
+import VariableCommands from '../struct/variable';
 
 const db = DB();
 const [edges, strings] = ['edges', 'strings']
@@ -41,6 +42,9 @@ const app = System({
 
   // TODO: Replace
   [b64(TO_BASE64)]: nodes => {
+    if(nodes === null)
+      return null;
+
     let result;
     if(Array.isArray(nodes))
       result = nodes.map(b64);
@@ -55,6 +59,9 @@ const app = System({
   },
 
   [b64(TO_BINARY)]: nodes => {
+    if(nodes === null)
+      return null;
+
     let result;
     if(Array.isArray(nodes))
       result = nodes.map(buf);
@@ -79,6 +86,7 @@ const addCommands = (system, commands) => {
 addCommands(app, CodeCommands(app));
 addCommands(app, MapCommands(app));
 addCommands(app, SetCommands(app));
+addCommands(app, VariableCommands(app));
 
 app.add(b64(MAP_V), map(app));
 app.add(b64(PIPE), pipe(app));

@@ -1,3 +1,5 @@
+import { expect } from 'chai';
+
 import buildClient from './common/client';
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E,
@@ -80,5 +82,38 @@ describe('integration specs', () => {
       [TO_BINARY], [TO_BASE64],
     );
     map.should.deep.equal(map);
+  });
+
+  it('should be able to DESTROY EDGE', async() => {
+    const id = 'sgUEYh5v7efV9OF74D+ga8DgNzeEbwWWdEmj3yg6hkQ=';
+
+    const node = await client.writeEdge(b64(READ), b64(WRITE));
+    node.should.equal(id);
+
+    let edge = await client.readEdge(id);
+    expect(edge).to.be.deep.equal([b64(READ), b64(WRITE), id]);
+
+    await client.destroyEdge(id);
+
+    edge = await client.readEdge(id);
+    expect(edge).to.be.null;
+  });
+
+  it('should be able to SET and GET VARIABLES', async() => {
+    const varNode = buf('+SIWMqU3rEvxfk9DhWzLFpbSu4JbEE8jQxxDoiZvBjo=');
+    const valNodeA = buf('B+InkESxiB2N0HaLl/B6Ppko+aA38z4fW6AvYhbZrT4=');
+    const valNodeB = buf('AkWArZ95nq1vXOoq/GppBzR4TIXaUnfc+KOuJxoE87s=');
+
+    let edge = await client.setVar(varNode, valNodeA);
+    edge.should.equal(b64(E(varNode, valNodeA)));
+
+    let myVal = await client.getVar(b64(varNode));
+    myVal.should.equal(b64(valNodeA));
+
+    edge = await client.setVar(varNode, valNodeB);
+    edge.should.equal(b64(E(varNode, valNodeB)));
+
+    myVal = await client.getVar(varNode);
+    myVal.should.equal(b64(valNodeB));
   });
 });

@@ -28,7 +28,7 @@ const commands = system => ({
     keys.forEach(key => {
       const tails = system(E(LIST, TAIL), E(node, key));
       if(tails.length !== 1)
-        throw new Error(`\`tails\` was supposed to be 1; was: ${tails}`);
+        throw new Error(`\`tails\` length was supposed to be 1; was: ${tails.length}`);
 
       result[b64(key)] = buf(tails[0]);
     });

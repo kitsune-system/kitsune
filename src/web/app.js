@@ -13,7 +13,7 @@ import {
 } from '../common/hash';
 import {
   BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N,
-  READ, STRING, SUPPORTS_COMMAND, TAIL, TO_BASE64,
+  READ, STRING, SUPPORTS_COMMAND, TO_BASE64, VARIABLE_GET,
 } from '../common/nodes';
 import { KITSUNE_PATH } from '../kitsune/config';
 import Storage from '../kitsune/storage';
@@ -45,8 +45,7 @@ const App = system => {
   });
 
   const getBuiltInNodeMap = () => {
-    // TODO: Convert to GET variable call
-    const mapNode = system(E(LIST, TAIL), BUILT_IN_NODES)[0];
+    const mapNode = system(VARIABLE_GET, BUILT_IN_NODES);
     const map = system(E(READ, MAP_N), mapNode);
 
     const result = {};
