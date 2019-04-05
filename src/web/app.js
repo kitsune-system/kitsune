@@ -1,20 +1,20 @@
-import _ from 'lodash';
-
 import cors from 'cors';
-import fs from 'fs';
 import bodyParser from 'body-parser';
 import express from 'express';
-import mkdirp from 'mkdirp';
+import _ from 'lodash';
 import rimraf from 'rimraf';
+
+import { easyWrite } from '../kitsune/files';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
   hashEdge as E,
 } from '../common/hash';
 import {
-  BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N,
-  READ, STRING, SUPPORTS_COMMAND, TO_BASE64, VARIABLE_GET,
+  BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N, READ, STRING,
+  SUPPORTS_COMMAND, TO_BASE64, VARIABLE_GET, VARIABLE_SET, WRITE,
 } from '../common/nodes';
+import * as N from '../common/nodes';
 import { KITSUNE_PATH } from '../kitsune/config';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
@@ -46,6 +46,9 @@ const App = system => {
 
   const getBuiltInNodeMap = () => {
     const mapNode = system(VARIABLE_GET, BUILT_IN_NODES);
+    if(mapNode === null)
+      return {};
+
     const map = system(E(READ, MAP_N), mapNode);
 
     const result = {};
@@ -61,7 +64,6 @@ const App = system => {
   app.use('/build', (req, res) => {
     const nodeMap = getBuiltInNodeMap();
 
-    // const nodes = { BASE64: 'AIijUH1v1Jxo6gBDm5rwI4Or80AwPum9At1AWbzw5Lw=' };
     const nodeLines = Object.entries(nodeMap).sort().map(([name, node]) => {
       return `export const ${name} = buf('${b64(node)}');`;
     }).join('\n');
@@ -73,11 +75,23 @@ const App = system => {
     rimraf.sync(codeDir);
 
     const dir = `${codeDir}/src/common`;
-    mkdirp.sync(dir);
-    fs.writeFileSync(`${dir}/nodes.js`, code);
+    easyWrite(`${dir}/nodes.js`, code);
 
     res.set('Content-Type', 'text/plain');
     res.send(dir);
+  });
+
+  app.use('/init', (req, res) => {
+    const nodeMap = {};
+    Object.entries(N).forEach(([key, value]) => {
+      const stringNode = system(E(WRITE, STRING), key);
+      nodeMap[b64(stringNode)] = value;
+    });
+
+    const nodeMapId = system(E(WRITE, MAP_N), nodeMap);
+    system(VARIABLE_SET, [BUILT_IN_NODES, nodeMapId]);
+
+    res.sendStatus(200);
   });
 
   app.use('/built-in-nodes', (req, res) => {

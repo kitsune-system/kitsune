@@ -14,7 +14,7 @@ import './spec-common';
 const client = buildClient('http://localhost:8080');
 
 describe('integration specs', () => {
-  it('`/random` should return 32 bytes string', async() => {
+  it('RANDOM should return 32 bytes string', async() => {
     const result = await client.random();
     Buffer.from(buf(result)).length.should.equal(32);
   });
@@ -115,5 +115,25 @@ describe('integration specs', () => {
 
     myVal = await client.getVar(varNode);
     myVal.should.equal(b64(valNodeB));
+  });
+
+  it('should be able to READ and WRITE a LIST', async() => {
+    const list = [
+      'SesKsezJ9L67JVvbZ+NWve+8yDK5Isy6GVuCtq7wNV4=',
+      '8bCbJoxOn8PujH9uLWX8xqb+xw6XBLEzobQ/aiahYnY=',
+      'WT1q120nPK7V3uJkOu+1XHYclnPawrB95tybJwGQBks=',
+    ];
+
+    let listNode = await client.writeList(list);
+    listNode.should.equal('Pwyn6+nPw2AxIpaXHun28RmXw2JoAiTA9//hUMS8tTM=');
+
+    let myList = await client.readList(listNode);
+    myList.should.deep.equal(list);
+
+    listNode = await client.writeList(list.slice().reverse());
+    listNode.should.equal('QSLHYUgYV9EC5ZVYy0HItdhNPMvzIlUlA0usWB7ezxU=');
+
+    myList = await client.readList(listNode);
+    myList.should.deep.equal(list.slice().reverse());
   });
 });

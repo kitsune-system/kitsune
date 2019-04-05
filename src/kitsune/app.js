@@ -13,6 +13,7 @@ import { CommonSystem as System } from '../system/builder';
 import CodeCommands from '../code/native';
 import StringCommands from '../data/string-loki';
 import { DB, EdgeCommands } from '../graph/edge-loki';
+import ListCommands from '../struct/list';
 import MapCommands from '../struct/map';
 import SetCommands from '../struct/set';
 import VariableCommands from '../struct/variable';
@@ -84,6 +85,7 @@ const addCommands = (system, commands) => {
 };
 
 addCommands(app, CodeCommands(app));
+addCommands(app, ListCommands(app));
 addCommands(app, MapCommands(app));
 addCommands(app, SetCommands(app));
 addCommands(app, VariableCommands(app));

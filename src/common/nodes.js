@@ -11,6 +11,7 @@ export const EDGE = buf('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
 export const GET = buf('VrJ1NfyNBVvnZetBWZ1wXcEDotZsSUtl4PRkuNezFVU=');
 export const HEAD = buf('rVkGcT3cbljIYjNVAwd7NDYzrgsELAQyju9PwhaDVPI=');
 export const LIST = buf('B0uC9VnQvcC9I7TubvULT/BV9T3gZqa/xn5HBBfZ0r0=');
+export const LIST_N = buf('4QSz4n2p6jkmOdV73q+qJi6KFyErNflcEAZe3+J4dIs=');
 export const MAP_N = buf('4fXleUmgAKEInL1j7LBttHmXPys4rNJLtrx6jFBW8cg=');
 export const MAP_V = buf('Pj49hhtbwrg14s2nHt9QoDsquvWBm2zFoDVGKfZ4f7g=');
 export const NATIVE_NAME = buf('5XtkSqo5nMpeo1Mq4ytpeH9JbgtjBihz0LcbciZv4Ug=');
