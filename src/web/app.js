@@ -2,7 +2,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
 import _ from 'lodash';
-import rimraf from 'rimraf';
 
 import { easyWrite } from '../kitsune/files';
 
@@ -15,7 +14,7 @@ import {
   SUPPORTS_COMMAND, TO_BASE64, VARIABLE_GET, VARIABLE_SET, WRITE,
 } from '../common/nodes';
 import * as N from '../common/nodes';
-import { KITSUNE_PATH } from '../kitsune/config';
+import { CODE_PATH, KITSUNE_PATH } from '../kitsune/config';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
@@ -71,10 +70,7 @@ const App = system => {
     const code = _.template(text)({ nodeLines });
 
     // Write file
-    const codeDir = `${KITSUNE_PATH}/code`;
-    rimraf.sync(codeDir);
-
-    const dir = `${codeDir}/src/common`;
+    const dir = `${CODE_PATH}/src/common`;
     easyWrite(`${dir}/nodes.js`, code);
 
     res.set('Content-Type', 'text/plain');

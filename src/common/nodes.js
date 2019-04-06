@@ -10,6 +10,7 @@ export const DESTROY = buf('GdMeesaxawq0J2uBEHdytTXNJxbcA0y9kKcyDjVjUh0=');
 export const EDGE = buf('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
 export const GET = buf('VrJ1NfyNBVvnZetBWZ1wXcEDotZsSUtl4PRkuNezFVU=');
 export const HEAD = buf('rVkGcT3cbljIYjNVAwd7NDYzrgsELAQyju9PwhaDVPI=');
+export const LINE_TO_STDOUT = buf('UXU9B8uJ99bmzmSBfkLDgJJdAIn3G9nVzrJSybVZ1nQ=');
 export const LIST = buf('B0uC9VnQvcC9I7TubvULT/BV9T3gZqa/xn5HBBfZ0r0=');
 export const LIST_N = buf('4QSz4n2p6jkmOdV73q+qJi6KFyErNflcEAZe3+J4dIs=');
 export const MAP_N = buf('4fXleUmgAKEInL1j7LBttHmXPys4rNJLtrx6jFBW8cg=');
