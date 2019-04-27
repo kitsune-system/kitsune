@@ -3,18 +3,8 @@
   "version": "1.0.0",
   "author": "Edward Nicholes Jr.",
   "license": "GPL-3.0-only",
-  "scripts": {
-    "build": "webpack",
-    "build:watch": "NODE_ENV=development webpack --watch",
-    "clean": "rm -rf ./dist",
-    "debug": "NODE_ENV=development webpack && node --inspect-brk dist/main",
-    "serve": "NODE_ENV=development webpack && node --require=source-map-support/register dist/main",
-    "test": "NODE_ENV=test webpack && mocha dist/spec.js",
-    "test:watch": "NODE_ENV=test mocha-webpack --watch src/index.spec.js",
-    "test:int": "NODE_ENV=integration-test webpack && mocha dist/spec.int.js",
-    "test:int:watch": "NODE_ENV=integration-test mocha-webpack --watch src/index.spec.int.js"
-  },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "js-sha3": "^0.8.0",
@@ -25,18 +15,7 @@
   },
   "devDependencies": {
     "axios": "^0.18.0",
-    "body-parser": "^1.18.3",
     "chai": "^4.2.0",
-    "eslint": "^5.12.0",
-    "eslint-config-xo-space": "^0.20.0",
-    "eslint-loader": "^2.1.1",
-    "mocha": "^5.2.0",
-    "mocha-webpack": "^2.0.0-beta.0",
-    "raw-loader": "^2.0.0",
-    "rimraf": "^2.6.3",
-    "source-map-support": "^0.5.10",
-    "webpack": "^4.28.4",
-    "webpack-cli": "^3.2.1",
-    "webpack-node-externals": "^1.7.2"
+    "rimraf": "^2.6.3"
   }
 }

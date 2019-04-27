@@ -3,19 +3,21 @@ image: node:11-alpine
 stages:
   - build
   - publish
-  - deploy
+  # - deploy
 
 test:
   stage: build
   script:
     - npm install
-    - npm run test
+    - npm install -g sakuradite
+    - sakuradite test
 
 build:
   stage: build
   script:
     - npm install
-    - npm run build
+    - npm install -g sakuradite
+    - sakuradite build
   artifacts:
     paths:
       - dist/main.js

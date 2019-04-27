@@ -1,6 +1,7 @@
 import { bufferToBase64 as b64, deepHashEdge as E, random } from '../common/hash';
 import { GET, NATIVE_NAME, RANDOM } from '../common/nodes';
-import { DB, EdgeCommands, StringCommands } from '../graph/edge-loki';
+import { DB, EdgeCommands } from '../graph/edge-loki';
+import StringCommands from '../data/string-loki';
 import { CommonSystem as System } from '../system/builder';
 
 import { getNativeName } from './translate';

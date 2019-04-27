@@ -9,8 +9,6 @@ import {
   SET, TAIL, TO_BASE64, TO_BINARY, WRITE,
 } from './common/nodes';
 
-import './spec-common';
-
 const client = buildClient('http://localhost:8080');
 
 describe('integration specs', () => {
