@@ -77,6 +77,7 @@ const System = ({ id, baseSystem, onNotFound } = {}) => {
 
     systemMap[commandId] = func;
   };
+
   system.command = command;
 
   command(hasCommand, ([commandId]) => systemMap[commandId] !== undefined);

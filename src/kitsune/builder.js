@@ -1,10 +1,41 @@
+import { bufferToBase64 as b64, deepHashEdge as E, random } from '../common/hash';
+import { GET, NATIVE_NAME, RANDOM } from '../common/nodes';
+import { DB, EdgeCommands, StringCommands } from '../graph/edge-loki';
+import { CommonSystem as System } from '../system/builder';
+
 import { getNativeName } from './translate';
 
-import { bufferToBase64 as b64, hashEdge as E, random } from '../common/hash';
-import { GET, NATIVE_NAME, RANDOM } from '../common/nodes';
-import { CommonSystem as System } from '../system/builder';
-import { DB, EdgeCommands } from '../graph/edge-loki';
+export const builder = config => {
+  const cache = {};
 
+  const resolver = name => {
+    // Check cache
+    if(name in cache)
+      return cache[name];
+
+    let value = config[name];
+
+    if(typeof value === 'function')
+      value = value(resolver);
+
+    cache[name] = value;
+    return value;
+  };
+
+  return resolver;
+};
+
+const config = {
+  db: () => DB(),
+  edges: build => build('db').getCollection('edges'),
+  strings: build => build('db').getCollection('strings'),
+  edgeCommands: build => EdgeCommands(build('edges')),
+  stringCommands: build => StringCommands(build('strings')),
+};
+
+export { config };
+
+// Deprectaed below
 const moduleCommandMap = {
   random: () => ({ [b64(RANDOM)]: random }),
   nativeName: () => ({ [b64(E(GET, NATIVE_NAME))]: getNativeName }),

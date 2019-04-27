@@ -18,13 +18,6 @@ import MapCommands from '../struct/map';
 import SetCommands from '../struct/set';
 import VariableCommands from '../struct/variable';
 
-const db = DB();
-const [edges, strings] = ['edges', 'strings']
-  .map(name => db.getCollection(name));
-
-const edgeCommands = EdgeCommands(edges);
-const stringCommands = StringCommands(strings);
-
 const map = system => ({ input, mapCommand }) => input.map(item => system(buf(mapCommand), item));
 
 const pipe = system => ({ input, commandList }) => {
@@ -34,6 +27,10 @@ const pipe = system => ({ input, commandList }) => {
 
   return input;
 };
+
+const db = DB();
+const [edges, strings] = ['edges', 'strings']
+  .map(name => db.getCollection(name));
 
 const app = System({
   [b64(E(CONVERT, E(BASE64, BINARY)))]: buf,
@@ -75,14 +72,14 @@ const app = System({
       throw new Error(`Can't convert ${nodes}`);
     return result;
   },
-
-  ...edgeCommands,
-  ...stringCommands,
 });
 
 const addCommands = (system, commands) => {
   Object.entries(commands).forEach(([key, value]) => system.add(key, value));
 };
+
+addCommands(app, EdgeCommands(edges));
+addCommands(app, StringCommands(strings));
 
 addCommands(app, CodeCommands(app));
 addCommands(app, ListCommands(app));

@@ -90,4 +90,5 @@ const build = baseURL => {
   const request = buildAxios(baseURL);
   return KitsuneClient(request);
 };
+
 export default build;
