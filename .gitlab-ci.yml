@@ -9,15 +9,13 @@ test:
   stage: build
   script:
     - npm install
-    - npm install -g sakuradite
-    - sakuradite test
+    - ./node_modules/.bin/sakuradite test
 
 build:
   stage: build
   script:
     - npm install
-    - npm install -g sakuradite
-    - sakuradite build
+    - ./node_modules/.bin/sakuradite build
   artifacts:
     paths:
       - dist/main.js
