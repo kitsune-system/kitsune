@@ -3,6 +3,28 @@ import {
 } from '../common/hash';
 import { COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
 
+export const BinaryMap = (base = {}) => {
+  return (binaryKey, value) => {
+    if(!binaryKey)
+      return base;
+
+    const keyStr = b64(binaryKey);
+    if(!value)
+      return base[keyStr];
+
+    base[keyStr] = value;
+  };
+};
+
+export const CommandSystem = commandObj => {
+  const system = BinaryMap(commandObj);
+
+  system(SUPPORTS_COMMAND, commandId => b64(commandId) in system());
+  system(E(LIST, COMMAND), () => Object.keys(system()).map(key => buf(key)));
+
+  return system;
+};
+
 export const BasicSystem = commandObj => {
   const commands = { ...commandObj };
 
@@ -16,7 +38,7 @@ export const BasicSystem = commandObj => {
   };
 
   system.commands = commands;
-  system.add = (command, func) => (commands[command] = func);
+  system.add = (commandId, func) => (commands[commandId] = func);
 
   return system;
 };
@@ -24,10 +46,8 @@ export const BasicSystem = commandObj => {
 export const CommonSystem = commandObj => {
   const system = BasicSystem(commandObj);
 
-  system.add(b64(SUPPORTS_COMMAND), commandId =>
-    b64(commandId) in system.commands);
-  system.add(b64(E(LIST, COMMAND)), () =>
-    Object.keys(system.commands).map(key => buf(key)));
+  system.add(b64(SUPPORTS_COMMAND), commandId => b64(commandId) in system.commands);
+  system.add(b64(E(LIST, COMMAND)), () => Object.keys(system.commands).map(key => buf(key)));
 
   return system;
 };
