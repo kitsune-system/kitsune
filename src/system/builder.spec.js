@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 
-import { BinaryMap, CommandSystem } from './builder';
+import { BinaryMap, CommonSystem } from './builder';
+import { deepHashEdge as E } from '../common/hash';
+import { COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
 
 describe('BinaryMap', () => {
   it('should work', () => {
@@ -26,14 +28,18 @@ describe('BinaryMap', () => {
   });
 });
 
-describe('CommandSystem', () => {
+describe('CommonSystem', () => {
   it('should work', () => {
-    const system = CommandSystem({
+    const system = CommonSystem({
       ADD: (a, b) => a + b,
     });
     system('SUBTRACT', (a, b) => a - b);
 
     system('ADD')(123, 456).should.equal(579);
     system('SUBTRACT')(456, 123).should.equal(333);
+
+    system(SUPPORTS_COMMAND)('ADD').should.deep.equal(true);
+    system(SUPPORTS_COMMAND)('MISSING').should.deep.equal(false);
+    system(E(LIST, COMMAND))().length.should.equal(4);
   });
 });
