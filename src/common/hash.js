@@ -7,7 +7,12 @@ const sha256 = sha3.sha3_256;
 
 const edgeMap = {};
 
-export const random = (size = 256) => crypto.randomBytes(Math.ceil(size / 8));
+export const random = () => randomBase();
+
+export const randomBase = (size = 256) => {
+  const len = Math.ceil(size / 8);
+  return crypto.randomBytes(len);
+};
 
 export const base64ToBuffer = base64 => {
   if(!base64)

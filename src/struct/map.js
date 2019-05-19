@@ -8,14 +8,14 @@ const hashMap = map => {
   return hashList([MAP_N, ...kvList]);
 };
 
-const commands = system => ({
+const Commands = system => ({
   [b64(E(WRITE, MAP_N))]: map => {
     const hash = hashMap(map);
 
     const kvList = Object.entries(map).map(([key, value]) => [buf(key), value]);
     kvList.forEach(([key, value]) => {
-      const edge = system(E(WRITE, EDGE), [hash, key]);
-      system(E(WRITE, EDGE), [edge, value]);
+      const edge = system(E(WRITE, EDGE))([hash, key]);
+      system(E(WRITE, EDGE))([edge, value]);
     });
 
     return hash;
@@ -24,9 +24,9 @@ const commands = system => ({
   [b64(E(READ, MAP_N))]: node => {
     const result = {};
 
-    const keys = system(E(LIST, TAIL), node);
+    const keys = system(E(LIST, TAIL))(node);
     keys.forEach(key => {
-      const tails = system(E(LIST, TAIL), E(node, key));
+      const tails = system(E(LIST, TAIL))(E(node, key));
       if(tails.length !== 1)
         throw new Error(`\`tails\` length was supposed to be 1; was: ${tails.length}`);
 
@@ -37,4 +37,4 @@ const commands = system => ({
   },
 });
 
-export default commands;
+export default Commands;

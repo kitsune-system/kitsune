@@ -1,17 +1,15 @@
 import {
   bufferToBase64 as b64, deepHashEdge as E, hashList,
 } from '../common/hash';
-import {
-  EDGE, LIST_N, READ, VARIABLE_GET, WRITE,
-} from '../common/nodes';
+import { EDGE, LIST_N, READ, VARIABLE_GET, WRITE } from '../common/nodes';
 
-const commands = system => ({
+const Commands = system => ({
   [b64(E(WRITE, LIST_N))]: list => {
     const hash = hashList([LIST_N, ...list]);
 
     let container = hash;
     list.forEach(item => {
-      container = system(E(WRITE, EDGE), [container, item]);
+      container = system(E(WRITE, EDGE))([container, item]);
     });
 
     return hash;
@@ -22,7 +20,7 @@ const commands = system => ({
 
     let next = listNode;
     while(next) {
-      const value = system(VARIABLE_GET, next);
+      const value = system(VARIABLE_GET)(next);
       if(value) {
         result.push(value);
         next = E(next, value);
@@ -34,4 +32,4 @@ const commands = system => ({
   },
 });
 
-export default commands;
+export default Commands;

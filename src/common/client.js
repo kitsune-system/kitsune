@@ -19,7 +19,12 @@ export const KitsuneClient = request => {
 
   client.wrap = (command, input, before = [], after = []) => {
     const commandList = [...before, command, ...after].map(b64);
-    return client(PIPE, { input, commandList });
+    const args = { commandList };
+
+    if(input)
+      args.input = input;
+
+    return client(PIPE, args);
   };
 
   client.random = () => client.wrap(

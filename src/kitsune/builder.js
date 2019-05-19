@@ -1,12 +1,18 @@
-import { bufferToBase64 as b64, deepHashEdge as E, random } from '../common/hash';
-import { GET, NATIVE_NAME, RANDOM } from '../common/nodes';
-import { DB, EdgeCommands } from '../graph/edge-loki';
-import StringCommands from '../data/string-loki';
-import { CommonSystem as System } from '../system/builder';
+import Loki from 'lokijs';
 
-import { getNativeName } from './translate';
+import MiscCommands from './misc.js';
 
-export const builder = config => {
+import { buildConfig as stringBuildConfig } from '../data/string-loki';
+import { buildConfig as edgeBuildConfig } from '../graph/edge-loki';
+
+import ListCommands from '../struct/list';
+import MapCommands from '../struct/map';
+import SetCommands from '../struct/set';
+import VariableCommands from '../struct/variable';
+
+import { CommonSystem } from '../system/builder';
+
+export const Builder = config => {
   const cache = {};
 
   const resolver = name => {
@@ -14,51 +20,64 @@ export const builder = config => {
     if(name in cache)
       return cache[name];
 
+    if(!(name in config))
+      throw new Error(`No name in builder config for: ${name}`);
+
     let value = config[name];
 
-    if(typeof value === 'function')
-      value = value(resolver);
+    let afterFn = null;
+    if(typeof value === 'function') {
+      const after = fn => (afterFn = fn);
+      value = value(resolver, after);
+    }
 
     cache[name] = value;
+
+    // Run afterFn is it's been set
+    if(typeof afterFn === 'function')
+      afterFn(resolver);
+
     return value;
   };
 
   return resolver;
 };
 
-const config = {
-  db: () => DB(),
-  edges: build => build('db').getCollection('edges'),
-  strings: build => build('db').getCollection('strings'),
-  edgeCommands: build => EdgeCommands(build('edges')),
-  stringCommands: build => StringCommands(build('strings')),
-};
+export const config = {
+  lokiDB: () => new Loki(),
 
-export { config };
+  miscCommands: build => MiscCommands(build('system')),
 
-// Deprectaed below
-const moduleCommandMap = {
-  random: () => ({ [b64(RANDOM)]: random }),
-  nativeName: () => ({ [b64(E(GET, NATIVE_NAME))]: getNativeName }),
-  edge: () => {
-    const db = DB();
-    const edges = db.getCollection('edges');
-    return EdgeCommands(edges);
+  ...edgeBuildConfig,
+  ...stringBuildConfig,
+  listCommands: build => ListCommands(build('system')),
+  setCommands: build => SetCommands(build('system')),
+  mapCommands: build => MapCommands(build('system')),
+  variableCommands: build => VariableCommands(build('system')),
+
+  commandList: [
+    'miscCommands',
+
+    'edgeCommands',
+    'stringCommands',
+
+    'listCommands',
+    'setCommands',
+    'mapCommands',
+    'variableCommands',
+  ],
+  commands: build => build('commandList')
+    .reduce((agg, buildName) => ({ ...agg, ...build(buildName) }), {}),
+
+  system: (build, after) => {
+    const system = CommonSystem();
+
+    after(build => {
+      const commands = build('commands');
+      Object.entries(commands)
+        .forEach(([commandId, fn]) => system(commandId, fn));
+    });
+
+    return system;
   },
 };
-
-const build = (...modules) => {
-  let commands;
-
-  modules.forEach(module => {
-    if(!(module in moduleCommandMap))
-      throw new Error(`No such module in moduleCommandMap: ${module}`);
-
-    const moduleCommands = moduleCommandMap[module]();
-    commands = { ...commands, ...moduleCommands };
-  });
-
-  return System(commands);
-};
-
-export default build;

@@ -1,4 +1,4 @@
-import { random } from './hash';
+import { randomBase } from './hash';
 
 export const truncateByte = (value, size) => {
   const mask = Math.pow(2, size) - 1;
@@ -42,6 +42,6 @@ export const measureSize = hash => {
 };
 
 export const randomHash = (size = 256) => {
-  const hash = random(size);
+  const hash = randomBase(size);
   return markSize(hash, size);
 };

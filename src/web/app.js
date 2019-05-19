@@ -35,24 +35,24 @@ const App = system => {
     const b64CommandId = decodeURIComponent(url.slice(1));
     const commandId = buf(b64CommandId);
 
-    const isSupported = system(SUPPORTS_COMMAND, commandId);
+    const isSupported = system(SUPPORTS_COMMAND)(commandId);
     if(isSupported) {
-      const output = system(commandId, body);
+      const output = system(commandId)(body);
       res.json(output);
     } else
       next();
   });
 
   const getBuiltInNodeMap = () => {
-    const mapNode = system(VARIABLE_GET, BUILT_IN_NODES);
+    const mapNode = system(VARIABLE_GET)(BUILT_IN_NODES);
     if(mapNode === null)
       return {};
 
-    const map = system(E(READ, MAP_N), mapNode);
+    const map = system(E(READ, MAP_N))(mapNode);
 
     const result = {};
     Object.entries(map).forEach(([nameNode, node]) => {
-      const name = system(E(READ, STRING), buf(nameNode));
+      const name = system(E(READ, STRING))(buf(nameNode));
       result[name] = node;
     });
 

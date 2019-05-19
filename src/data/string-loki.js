@@ -3,7 +3,7 @@ import { LIST, READ, STRING, WRITE } from '../common/nodes';
 
 const cleanResult = result => ({ id: result.id, string: result.string });
 
-const StringCommands = strings => ({
+export const Commands = strings => ({
   [b64(E(WRITE, STRING))]: string => {
     if(typeof string !== 'string')
       throw new Error('`string` must be a string');
@@ -29,4 +29,10 @@ const StringCommands = strings => ({
   [b64(E(LIST, STRING))]: () => strings.find().map(cleanResult),
 });
 
-export default StringCommands;
+export const buildConfig = {
+  stringCollection: build => build('lokiDB').addCollection('strings', {
+    unique: ['id'],
+    indicies: ['string'],
+  }),
+  stringCommands: build => Commands(build('stringCollection')),
+};

@@ -1,5 +1,5 @@
 import {
-  bufferToBase64 as b64, deepHashEdge, hashEdge, hashString as hash, random,
+  bufferToBase64 as b64, deepHashEdge, hashEdge, hashString as hash, randomBase,
 } from './hash';
 import { RANDOM, READ, WRITE } from './nodes';
 
@@ -31,12 +31,12 @@ describe('hash', () => {
 
   describe('random', () => {
     it('should work', () => {
-      random(4).length.should.equal(1);
-      random(8).length.should.equal(1);
-      random(9).length.should.equal(2);
-      random(16).length.should.equal(2);
-      random(17).length.should.equal(3);
-      random(100).length.should.equal(13);
+      randomBase(4).length.should.equal(1);
+      randomBase(8).length.should.equal(1);
+      randomBase(9).length.should.equal(2);
+      randomBase(16).length.should.equal(2);
+      randomBase(17).length.should.equal(3);
+      randomBase(100).length.should.equal(13);
     });
   });
 });

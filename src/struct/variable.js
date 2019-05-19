@@ -5,20 +5,20 @@ import {
   DESTROY, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
 } from '../common/nodes';
 
-const commands = system => ({
+const Commands = system => ({
   [b64(VARIABLE_SET)]: ([varNode, valNode]) => {
     // Remove all tails
-    const tails = system(E(LIST, TAIL), varNode);
+    const tails = system(E(LIST, TAIL))(varNode);
     tails.forEach(tail => {
-      system(E(DESTROY, EDGE), E(varNode, tail));
+      system(E(DESTROY, EDGE))(E(varNode, tail));
     });
 
-    const edge = system(E(WRITE, EDGE), [varNode, valNode]);
+    const edge = system(E(WRITE, EDGE))([varNode, valNode]);
     return buf(edge);
   },
 
   [b64(VARIABLE_GET)]: varNode => {
-    const tails = system(E(LIST, TAIL), varNode);
+    const tails = system(E(LIST, TAIL))(varNode);
 
     if(tails.length > 1)
       throw new Error(`Variable had more than one tail: ${b64(varNode)} -> ${tails.map(b64)}`);
@@ -27,4 +27,4 @@ const commands = system => ({
   },
 });
 
-export default commands;
+export default Commands;

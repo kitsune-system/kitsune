@@ -1,27 +1,9 @@
-import Loki from 'lokijs';
-
 import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../common/hash';
 import { DESTROY, EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../common/nodes';
 
-export const DB = () => {
-  const db = new Loki();
-
-  db.addCollection('edges', {
-    unique: ['id'],
-    indicies: ['head', 'tail'],
-  });
-
-  db.addCollection('strings', {
-    unique: ['id'],
-    indicies: ['string'],
-  });
-
-  return db;
-};
-
 const resultToEdge = result => [buf(result.head), buf(result.tail), buf(result.id)];
 
-export const EdgeCommands = edges => ({
+export const Commands = edges => ({
   [b64(E(WRITE, EDGE))]: ([head, tail]) => {
     if(typeof head === 'string' || typeof tail === 'string')
       throw new Error('`head` and `tail` must be buffers, not strings');
@@ -56,3 +38,11 @@ export const EdgeCommands = edges => ({
   [b64(E(LIST, HEAD))]: node => edges.find({ tail: b64(node) }).map(row => buf(row.head)),
   [b64(E(LIST, TAIL))]: node => edges.find({ head: b64(node) }).map(row => buf(row.tail)),
 });
+
+export const buildConfig = {
+  edgeCollection: build => build('lokiDB').addCollection('edges', {
+    unique: ['id'],
+    indicies: ['head', 'tail'],
+  }),
+  edgeCommands: build => Commands(build('edgeCollection')),
+};

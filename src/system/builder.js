@@ -3,6 +3,15 @@ import {
 } from '../common/hash';
 import { COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
 
+export const wrap = binaryMap => (commandId, fn) => {
+  const result = binaryMap(commandId, fn);
+
+  if(commandId !== undefined && fn === undefined && !(b64(commandId) in binaryMap()))
+    throw new Error(`There is no command for id: ${commandId.toString('base64')}`);
+
+  return result;
+};
+
 export const BinaryMap = (base = {}) => {
   return (binaryKey, value) => {
     if(!binaryKey)
@@ -17,7 +26,7 @@ export const BinaryMap = (base = {}) => {
 };
 
 export const CommonSystem = commandObj => {
-  const system = BinaryMap(commandObj);
+  const system = wrap(BinaryMap(commandObj));
 
   system(SUPPORTS_COMMAND, commandId => b64(commandId) in system());
   system(E(LIST, COMMAND), () => Object.keys(system()).map(key => buf(key)));

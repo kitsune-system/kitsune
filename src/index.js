@@ -1,4 +1,4 @@
-import app from './kitsune/app';
+import { Builder, config } from './kitsune/builder';
 import Webapp from './web/app';
 import createAndListen from './web/server';
 
@@ -12,5 +12,6 @@ const {
 
 const insecurePort = KITSUNE_HTTP_PORT || 8080;
 
+const app = Builder(config)('system');
 const webapp = Webapp(app);
 createAndListen(webapp, { serverName, securePort, insecurePort, onStarted });
