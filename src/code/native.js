@@ -1,7 +1,7 @@
 import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
 import { CODE, EDGE, READ, STRING } from '../common/nodes';
 
-const CodeCommands = system => ({
+const Commands = system => ({
   [b64(CODE)]: edgeNode => {
     const edge = system(E(READ, EDGE), edgeNode);
     if(!edge)
@@ -15,4 +15,4 @@ const CodeCommands = system => ({
   [b64(E(CODE, STRING))]: string => JSON.stringify(string),
 });
 
-export default CodeCommands;
+export default Commands;

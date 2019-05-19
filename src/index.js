@@ -4,7 +4,6 @@ import createAndListen from './web/server';
 
 // Config
 const {
-  KITSUNE_ON_STARTED: onStarted,
   KITSUNE_HTTP_PORT,
   KITSUNE_HTTPS_PORT: securePort,
   KITSUNE_SERVER_NAME: serverName,
@@ -14,4 +13,4 @@ const insecurePort = KITSUNE_HTTP_PORT || 8080;
 
 const app = Builder(config)('system');
 const webapp = Webapp(app);
-createAndListen(webapp, { serverName, securePort, insecurePort, onStarted });
+createAndListen(webapp, { serverName, securePort, insecurePort });

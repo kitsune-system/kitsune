@@ -3,21 +3,10 @@ import fs from 'fs';
 import http from 'http';
 import https from 'https';
 
-const createAndListen = (app, { serverName, securePort, insecurePort, onStarted }) => {
+const createAndListen = (app, { serverName, securePort, insecurePort }) => {
   const onListen = () => {
     console.log('Kitsune started!');
-
-    if(onStarted) {
-      console.log(`Running \`${onStarted}\``);
-      exec(onStarted, (error, stdout) => {
-        if(stdout.length) {
-          console.log('=== BEGIN KITSUNE_ON_STARTED ===');
-          console.log(stdout.toString());
-          console.log('=== END KITSUNE_ON_STARTED ===');
-        } else
-          console.log('=== KITSUNE_ON_STARTED SCRIPT OUTPUT WAS EMPTY ===');
-      });
-    }
+    exec('touch $(find -path "./src/*.spec.int.js")');
   };
 
   if(securePort) {
