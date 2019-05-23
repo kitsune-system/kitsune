@@ -2,7 +2,7 @@ const buf = string => Buffer.from(string, 'base64');
 
 export const BASE64 = buf('AIijUH1v1Jxo6gBDm5rwI4Or80AwPum9At1AWbzw5Lw=');
 export const BINARY = buf('ysyP7SFoE+dbewHpNFWKQi4roiTG+xVnYxcIxA2qfGA=');
-export const BIND_COMMAND = buf('ysyP7SFoEv1Jxo6gBDm5rwI4Or80AwPum9At1AWbzw5=');
+export const BIND_COMMAND = buf('OQSNYHFqQaJ7hOXEkdmsyBhCiKHkSrcYrRKotJQ8d2I=');
 export const BUILT_IN_NODES = buf('tM/g7jdtJbdcGwlxr7JRkqQFZvrgxjuj4re4W7aPOtA=');
 export const CODE = buf('azYkwxJ3FZH7GuMq0z34AAgKDBBFEopUH/qfpdY5l8U=');
 export const COMMAND = buf('2thvxzmTasKTgQrlZkN4Yq4/dCTkemSadDKshbBHi/Q=');
