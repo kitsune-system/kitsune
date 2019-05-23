@@ -2,29 +2,44 @@ import {
   base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E,
 } from '../common/hash';
 import {
-  DESTROY, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
+  BIND_COMMAND, DESTROY, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
 } from '../common/nodes';
 
-const Commands = system => ({
-  [b64(VARIABLE_SET)]: ([varNode, valNode]) => {
-    // Remove all tails
-    const tails = system(E(LIST, TAIL))(varNode);
-    tails.forEach(tail => {
-      system(E(DESTROY, EDGE))(E(varNode, tail));
-    });
+import { BinaryMap, BinObj, Commands } from '../kitsune/util';
 
-    const edge = system(E(WRITE, EDGE))([varNode, valNode]);
-    return buf(edge);
-  },
+const VariableCommands = Commands(
+  [
+    VARIABLE_SET,
+    ({ writeEdge, destroyEdge, listTail }) => ([varNode, valNode]) => {
+      // Remove all tails
+      const tails = listTail(varNode);
+      tails.forEach(tail => {
+        destroyEdge(E(varNode, tail));
+      });
 
-  [b64(VARIABLE_GET)]: varNode => {
-    const tails = system(E(LIST, TAIL))(varNode);
+      const edge = writeEdge([varNode, valNode]);
+      return buf(edge);
+    },
+    BinaryMap(BinObj([
+      [BIND_COMMAND, {
+        writeEdge: E(WRITE, EDGE), destroyEdge: E(DESTROY, EDGE),
+        listTail: E(LIST, TAIL),
+      }],
+    ])),
+  ], [
+    VARIABLE_GET,
+    ({ listTail }) => varNode => {
+      const tails = listTail(varNode);
 
-    if(tails.length > 1)
-      throw new Error(`Variable had more than one tail: ${b64(varNode)} -> ${tails.map(b64)}`);
+      if(tails.length > 1)
+        throw new Error(`Variable had more than one tail: ${b64(varNode)} -> ${tails.map(b64)}`);
 
-    return tails.length ? tails[0] : null;
-  },
-});
+      return tails.length ? tails[0] : null;
+    },
+    BinaryMap(BinObj([
+      [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
+    ])),
+  ],
+);
 
-export default Commands;
+export default VariableCommands;

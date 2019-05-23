@@ -1,8 +1,6 @@
-import { expect } from 'chai';
-
 import buildClient from './common/client';
 import { base64ToBuffer as buf, bufferToBase64 as b64 } from './common/hash';
-import { PIPE, RANDOM, MAP_V, READ, WRITE } from './common/nodes';
+import { PIPE, RANDOM, MAP_V } from './common/nodes';
 
 const client = buildClient('http://localhost:8080');
 describe('integration specs', () => {
@@ -29,20 +27,5 @@ describe('integration specs', () => {
       mapCommand: '4Y/SXeyS8y1YP4n+oercdBwh+FhDmhwTDWBdOsrjmQc=',
     });
     result.should.deep.equal([RANDOM, PIPE, MAP_V].map(b64));
-  });
-
-  it('should be able to DESTROY EDGE', async() => {
-    const id = 'sgUEYh5v7efV9OF74D+ga8DgNzeEbwWWdEmj3yg6hkQ=';
-
-    const node = await client.writeEdge(b64(READ), b64(WRITE));
-    node.should.equal(id);
-
-    let edge = await client.readEdge(id);
-    expect(edge).to.be.deep.equal([b64(READ), b64(WRITE), id]);
-
-    await client.destroyEdge(id);
-
-    edge = await client.readEdge(id);
-    expect(edge).to.be.null;
   });
 });

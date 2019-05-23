@@ -1,10 +1,12 @@
 import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../common/hash';
 import { DESTROY, EDGE, HEAD, LIST, READ, TAIL, WRITE } from '../common/nodes';
 
+import { Commands } from '../kitsune/util';
+
 const resultToEdge = result => [buf(result.head), buf(result.tail), buf(result.id)];
 
-export const Commands = edges => ({
-  [b64(E(WRITE, EDGE))]: ([head, tail]) => {
+export const EdgeCommands = edges => Commands(
+  [E(WRITE, EDGE), ([head, tail]) => {
     if(typeof head === 'string' || typeof tail === 'string')
       throw new Error('`head` and `tail` must be buffers, not strings');
 
@@ -16,33 +18,33 @@ export const Commands = edges => ({
       edges.insert({ id, head: b64(head), tail: b64(tail) });
 
     return node;
-  },
+  }],
 
-  [b64(E(READ, EDGE))]: node => {
+  [E(READ, EDGE), node => {
     if(typeof node === 'string')
       throw new Error('`node` must be a buffer, not a string');
 
     const result = edges.by('id', b64(node));
     return result ? resultToEdge(result) : null;
-  },
+  }],
 
-  [b64(E(DESTROY, EDGE))]: node => {
+  [E(DESTROY, EDGE), node => {
     if(typeof node === 'string')
       throw new Error('`node` must be a buffer, not a string');
 
     edges.findAndRemove({ id: b64(node) });
-  },
+  }],
 
-  [b64(E(LIST, EDGE))]: () => edges.find().map(resultToEdge),
+  [E(LIST, EDGE), () => edges.find().map(resultToEdge)],
 
-  [b64(E(LIST, HEAD))]: node => edges.find({ tail: b64(node) }).map(row => buf(row.head)),
-  [b64(E(LIST, TAIL))]: node => edges.find({ head: b64(node) }).map(row => buf(row.tail)),
-});
+  [E(LIST, HEAD), node => edges.find({ tail: b64(node) }).map(row => buf(row.head))],
+  [E(LIST, TAIL), node => edges.find({ head: b64(node) }).map(row => buf(row.tail))],
+);
 
 export const buildConfig = {
   edgeCollection: build => build('lokiDB').addCollection('edges', {
     unique: ['id'],
     indicies: ['head', 'tail'],
   }),
-  edgeCommands: build => Commands(build('edgeCollection')),
+  edgeCommands: build => EdgeCommands(build('edgeCollection')),
 };

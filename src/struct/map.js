@@ -1,40 +1,52 @@
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E, hashList,
 } from '../common/hash';
-import { EDGE, LIST, READ, MAP_N, TAIL, WRITE } from '../common/nodes';
+import { BIND_COMMAND, EDGE, LIST, READ, MAP_N, TAIL, WRITE } from '../common/nodes';
+
+import { BinaryMap, BinObj, Commands } from '../kitsune/util';
 
 const hashMap = map => {
   const kvList = Object.entries(map).map(([key, value]) => [buf(key), value]).sort();
   return hashList([MAP_N, ...kvList]);
 };
 
-const Commands = system => ({
-  [b64(E(WRITE, MAP_N))]: map => {
-    const hash = hashMap(map);
+const MapCommands = Commands(
+  [
+    E(WRITE, MAP_N),
+    ({ writeEdge }) => map => {
+      const hash = hashMap(map);
 
-    const kvList = Object.entries(map).map(([key, value]) => [buf(key), value]);
-    kvList.forEach(([key, value]) => {
-      const edge = system(E(WRITE, EDGE))([hash, key]);
-      system(E(WRITE, EDGE))([edge, value]);
-    });
+      const kvList = Object.entries(map).map(([key, value]) => [buf(key), value]);
+      kvList.forEach(([key, value]) => {
+        const edge = writeEdge([hash, key]);
+        writeEdge([edge, value]);
+      });
 
-    return hash;
-  },
+      return hash;
+    },
+    BinaryMap(BinObj([
+      [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
+    ])),
+  ], [
+    E(READ, MAP_N),
+    ({ listTail }) => node => {
+      const result = {};
 
-  [b64(E(READ, MAP_N))]: node => {
-    const result = {};
+      const keys = listTail(node);
+      keys.forEach(key => {
+        const tails = listTail(E(node, key));
+        if(tails.length !== 1)
+          throw new Error(`\`tails\` length was supposed to be 1; was: ${tails.length}`);
 
-    const keys = system(E(LIST, TAIL))(node);
-    keys.forEach(key => {
-      const tails = system(E(LIST, TAIL))(E(node, key));
-      if(tails.length !== 1)
-        throw new Error(`\`tails\` length was supposed to be 1; was: ${tails.length}`);
+        result[b64(key)] = buf(tails[0]);
+      });
 
-      result[b64(key)] = buf(tails[0]);
-    });
+      return result;
+    },
+    BinaryMap(BinObj([
+      [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
+    ])),
+  ]
+);
 
-    return result;
-  },
-});
-
-export default Commands;
+export default MapCommands;

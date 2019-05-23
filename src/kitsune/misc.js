@@ -1,4 +1,5 @@
 import { getNativeName } from './translate';
+import { Commands } from './util';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
@@ -21,14 +22,14 @@ const pipe = system => ({ input, commandList }) => {
   return input;
 };
 
-export const Commands = system => ({
-  [b64(E(CONVERT, E(BASE64, BINARY)))]: buf,
-  [b64(E(CONVERT, E(BINARY, BASE64)))]: b64,
-  [b64(E(GET, NATIVE_NAME))]: getNativeName,
-  [b64(RANDOM)]: () => b64(random()),
+export const MiscCommands = system => Commands(
+  [E(CONVERT, E(BASE64, BINARY)), buf],
+  [E(CONVERT, E(BINARY, BASE64)), b64],
+  [E(GET, NATIVE_NAME), getNativeName],
+  [RANDOM, () => b64(random())],
 
   // TODO: Replace
-  [b64(TO_BASE64)]: nodes => {
+  [TO_BASE64, nodes => {
     if(!nodes)
       return null;
 
@@ -43,9 +44,9 @@ export const Commands = system => ({
     } else
       throw new Error(`Can't convert ${nodes}`);
     return result;
-  },
+  }],
 
-  [b64(TO_BINARY)]: nodes => {
+  [TO_BINARY, nodes => {
     if(nodes === null)
       return null;
 
@@ -60,10 +61,10 @@ export const Commands = system => ({
     } else
       throw new Error(`Can't convert ${nodes}`);
     return result;
-  },
+  }],
 
-  [b64(MAP_V)]: map(system),
-  [b64(PIPE)]: pipe(system),
-});
+  [MAP_V, map(system)], // TODO: Bind system
+  [PIPE, pipe(system)], // TODO: Bind system
+);
 
-export default Commands;
+export default MiscCommands;

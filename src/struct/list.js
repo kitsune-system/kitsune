@@ -1,35 +1,45 @@
-import {
-  bufferToBase64 as b64, deepHashEdge as E, hashList,
-} from '../common/hash';
-import { EDGE, LIST_N, READ, VARIABLE_GET, WRITE } from '../common/nodes';
+import { deepHashEdge as E, hashList } from '../common/hash';
+import { EDGE, LIST_N, READ, BIND_COMMAND, VARIABLE_GET, WRITE } from '../common/nodes';
 
-const Commands = system => ({
-  [b64(E(WRITE, LIST_N))]: list => {
-    const hash = hashList([LIST_N, ...list]);
+import { BinaryMap, BinObj, Commands } from '../kitsune/util';
 
-    let container = hash;
-    list.forEach(item => {
-      container = system(E(WRITE, EDGE))([container, item]);
-    });
+const ListCommands = Commands(
+  [
+    E(WRITE, LIST_N),
+    ({ writeEdge }) => list => {
+      const hash = hashList([LIST_N, ...list]);
 
-    return hash;
-  },
+      let container = hash;
+      list.forEach(item => {
+        container = writeEdge([container, item]);
+      });
 
-  [b64(E(READ, LIST_N))]: listNode => {
-    const result = [];
+      return hash;
+    },
+    BinaryMap(BinObj([
+      [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
+    ])),
+  ], [
+    E(READ, LIST_N),
+    ({ variableGet }) => listNode => {
+      const result = [];
 
-    let next = listNode;
-    while(next) {
-      const value = system(VARIABLE_GET)(next);
-      if(value) {
-        result.push(value);
-        next = E(next, value);
-      } else
-        next = null;
-    }
+      let next = listNode;
+      while(next) {
+        const value = variableGet(next);
+        if(value) {
+          result.push(value);
+          next = E(next, value);
+        } else
+          next = null;
+      }
 
-    return result;
-  },
-});
+      return result;
+    },
+    BinaryMap(BinObj([
+      [BIND_COMMAND, { variableGet: VARIABLE_GET }],
+    ])),
+  ],
+);
 
-export default Commands;
+export default ListCommands;

@@ -1,6 +1,9 @@
 import { expect } from 'chai';
 
-import { Builder } from './builder';
+import { Builder, config } from './builder';
+
+import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
+import { COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
 
 describe('Builder', () => {
   it('should build', () => {
@@ -38,5 +41,16 @@ describe('Builder', () => {
     const [adam, eve] = ['adam', 'eve'].map(build);
     adam.spouse.should.equal(eve);
     eve.spouse.should.equal(adam);
+  });
+
+  it('SystemCommands', () => {
+    const system = Builder(config)('system');
+
+    system(SUPPORTS_COMMAND)(E(LIST, COMMAND)).should.be.true;
+    system(SUPPORTS_COMMAND)(E(COMMAND, LIST)).should.be.false;
+
+    system(E(LIST, COMMAND))().map(b64).should.contain(
+      ...[SUPPORTS_COMMAND, E(LIST, COMMAND)].map(b64)
+    );
   });
 });
