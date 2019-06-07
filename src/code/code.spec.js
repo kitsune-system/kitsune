@@ -1,20 +1,38 @@
 /* eslint-disable */
 import { bufferToBase64 as b64, deepHashEdge as E, hashList } from '../common/hash';
 
-import { BIND_COMMAND, EDGE, GET, STRING, NATIVE_NAME, RANDOM, READ, WRITE } from '../common/nodes';
+import {
+  BIND_COMMAND, EDGE, GET, STRING, LIST_N, NATIVE_NAME,
+  MAP_N, RANDOM, READ, SET, WRITE
+} from '../common/nodes';
 import { Builder, config, extend, systemModules } from '../kitsune/builder';
-import { BinaryMap, BinObj, Commands, meta } from '../kitsune/util';
+import { ArgCountSwitch, BinaryMap, BinObj, Commands, meta } from '../kitsune/util';
 
 const hash = string => hashList([string]);
 
 const BUILD = hash('build');
 const BUFFER = hash('buffer');
+const CODE = hash('code');
+const CONDITION = hash('condition');
+const TYPE = hash('type');
 
 const TEST = hash('test');
 const TEST2 = hash('test2');
 const IS = hash('is');
 const INPUT_TYPE = hash('input-type');
 const OUTPUT_TYPE = hash('output-type');
+
+const IF = hash('if');
+const IS = hash('is');
+const WHILE = hash('while');
+const SYSTEM_CALL = hash('system-call');
+const VARIABLE_REF = hash('variable_ref');
+
+const BLOCK = hash('block');
+const BOOLEAN = hash('boolean');
+
+const ANYTHING = hash('anything');
+const NOTHING = hash('nothing');
 
 const IF = hash('if');
 const WHILE = hash('while');
@@ -27,9 +45,16 @@ const BOOLEAN = hash('boolean');
 const ANYTHING = hash('anything');
 const NOTHING = hash('nothing');
 
+const UNKNOWN = hash('unknown');
+
 const WriteRead = system => {
-  const write = (type, value) => {
+  const writeType = (type, value) => {
     const node = system(E(WRITE, type))(value);
+    return node;
+  };
+
+  const write = (type, value) => {
+    const node = writeType(type, value);
     return system(E(WRITE, EDGE))([type, node]);
   };
 
@@ -50,22 +75,77 @@ const WriteRead = system => {
   return [write, read, readType];
 };
 
-describe('code', () => {
-  it.skip('should work', () => {
+const indent = (str, size=2) => {
+  let indent = '';
+    for(let i=0; i<size; i++) indent += ' ';
+
+  return str.split('\n').map(line => line.length ? indent + line : line).join('\n');
+};
+
+describe.only('code', () => {
+  it('should work', () => {
     const system = Builder(config)('system');
 
     const [write, read] = WriteRead(system);
     const human = system(E(GET, NATIVE_NAME));
 
-    system(BUILD, value => b64(value));
+    const conditionNode = system(E(WRITE, EDGE))([TEST, hash('valueA')]);
+    const blockNode = system(E(WRITE, EDGE))([TEST2, hash('valueB')]);
 
-    const ifVal = BinObj(
-      [IF, [
-        [BOOLEAN, TEST],
-        [BLOCK, TEST2],
-      ]]
+    const ifInner = BinObj(
+      [CONDITION, conditionNode],
+      [BLOCK, blockNode],
     );
-    console.log('X', ifVal);
+    const ifInnerNode = system(E(WRITE, MAP_N))(ifInner);
+    const ifNode = system(E(WRITE, EDGE))([IF, ifInnerNode]);
+
+    const [type, node] = system(E(READ, EDGE))(ifNode);
+    const map = system(E(READ, MAP_N))(node);
+
+    system(CODE, edgeNode => {
+      const [type, node] = system(E(READ, EDGE))(edgeNode);
+      return system(E(CODE, type))(node);
+    });
+
+    system(E(CODE, IF), ifNode => {
+      const ifMap = BinaryMap(system(E(READ, MAP_N))(ifNode));
+
+      const conditionNode = ifMap(CONDITION);
+      const conditionCode = system(CODE)(conditionNode);
+
+      const blockNode = ifMap(BLOCK);
+      const blockCode = system(CODE)(blockNode);
+
+      const code =
+        `if(${conditionCode.code}) {\n` +
+          indent(blockCode.code) +
+        '}';
+      return {
+        concerns: [
+          ...conditionCode.concerns,
+          ...blockCode.concerns,
+        ],
+        code };
+    });
+
+    system(E(CODE, TEST), node => {
+      return { concerns: [TEST], code: `x < 10` };
+    });
+
+    system(E(CODE, TEST2), node => {
+      return {
+        concerns: [TEST2],
+        code:
+          `console.log('It\'s less than 10...');\n` +
+          `console.log('...and you can take that to the bank.');\n`
+      };
+    });
+
+    const ifCode = system(CODE)(ifNode);
+    console.log('Concerns:');
+    console.log(ifCode.concerns);
+    console.log('Code:');
+    console.log(ifCode.code);
   });
 
   it.skip('misc', () => {
