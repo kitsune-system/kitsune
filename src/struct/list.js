@@ -16,9 +16,9 @@ const ListCommands = Commands(
 
       return hash;
     },
-    BinaryMap(BinObj([
+    BinaryMap(BinObj(
       [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
-    ])),
+    )),
   ], [
     E(READ, LIST_N),
     ({ variableGet }) => listNode => {
@@ -36,9 +36,9 @@ const ListCommands = Commands(
 
       return result;
     },
-    BinaryMap(BinObj([
+    BinaryMap(BinObj(
       [BIND_COMMAND, { variableGet: VARIABLE_GET }],
-    ])),
+    )),
   ],
 );
 

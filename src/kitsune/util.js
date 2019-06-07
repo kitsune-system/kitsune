@@ -7,8 +7,6 @@ export const tag = (fn, tags) => {
   return fn;
 };
 
-export const meta = (fn, metaMap) => tag(fn, { meta: metaMap });
-
 export const ArgCountSwitch = (...handlers) => {
   const fn = (...args) => {
     const count = args.length;
@@ -45,15 +43,22 @@ export const BinaryMap = (base = {}) => {
 
 export const BinMap = BinaryMap;
 
-export const BinaryObject = array => {
+export const BinaryObject = (...entries) => {
   const result = {};
-  array.forEach(([key, value]) => {
+  entries.forEach(([key, value]) => {
     result[b64(key)] = value;
   });
   return result;
 };
 
 export const BinObj = BinaryObject;
+
+export const meta = (fn, metaMap) => {
+  if(fn.meta)
+    metaMap = BinaryMap({ ...fn.meta(), ...metaMap() });
+
+  return tag(fn, { meta: metaMap });
+};
 
 export const Commands = (...commands) => {
   const result = BinaryMap();
@@ -74,6 +79,10 @@ export const CommandInstaller = (system, systemModules, commandFn) => {
   const wrap = fn => wrapFns.push(fn);
 
   const install = commandId => {
+    // Do nothing if command is already installed
+    if(b64(commandId) in system())
+      return system(commandId);
+
     let fn = commandFn(commandId);
 
     if(!fn)
@@ -98,6 +107,7 @@ export const CommandInstaller = (system, systemModules, commandFn) => {
     }
 
     system(commandId, fn);
+    return fn;
   };
 
   return install;

@@ -65,7 +65,7 @@ export const extend = binaryMap => {
   return binaryMap;
 };
 
-export const systemModules = BinaryMap(BinObj([
+export const systemModules = BinaryMap(BinObj(
   [BIND_COMMAND, ({ install, system, value, buildArgs }) => {
     const boundFns = {};
 
@@ -83,7 +83,7 @@ export const systemModules = BinaryMap(BinObj([
   //   console.log('YUP it\'s input type:', args);
   //   return args.fn;
   // }],
-]));
+));
 
 export const config = {
   lokiDB: () => new Loki(),
@@ -124,12 +124,14 @@ export const config = {
     return result;
   },
 
+  systemModules: () => systemModules,
+
   system: (build, after) => {
     const system = extend(BinaryMap());
 
     after(build => {
       const commands = build('commands');
-      const install = CommandInstaller(system, systemModules, commands);
+      const install = CommandInstaller(system, build('systemModules'), commands);
 
       commands(node => install(node));
     });

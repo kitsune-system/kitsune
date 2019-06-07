@@ -13,15 +13,15 @@ const SetCommands = Commands(
       set.forEach(node => writeEdge([hash, node]));
       return hash;
     },
-    BinaryMap(BinObj([
+    BinaryMap(BinObj(
       [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
-    ])),
+    )),
   ], [
     E(READ, SET),
     ({ listTail }) => node => listTail(node),
-    BinaryMap(BinObj([
+    BinaryMap(BinObj(
       [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
-    ])),
+    )),
   ],
 );
 

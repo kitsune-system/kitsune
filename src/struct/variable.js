@@ -20,12 +20,12 @@ const VariableCommands = Commands(
       const edge = writeEdge([varNode, valNode]);
       return buf(edge);
     },
-    BinaryMap(BinObj([
+    BinaryMap(BinObj(
       [BIND_COMMAND, {
         writeEdge: E(WRITE, EDGE), destroyEdge: E(DESTROY, EDGE),
         listTail: E(LIST, TAIL),
       }],
-    ])),
+    )),
   ], [
     VARIABLE_GET,
     ({ listTail }) => varNode => {
@@ -36,9 +36,9 @@ const VariableCommands = Commands(
 
       return tails.length ? tails[0] : null;
     },
-    BinaryMap(BinObj([
+    BinaryMap(BinObj(
       [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
-    ])),
+    )),
   ],
 );
 
