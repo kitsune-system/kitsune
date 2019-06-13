@@ -17,5 +17,8 @@
     "axios": "^0.18.0",
     "rimraf": "^2.6.3",
     "sakuradite": "^1.0.2"
+  },
+  "sakuradite": {
+    "type": "app"
   }
 }

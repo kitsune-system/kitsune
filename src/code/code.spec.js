@@ -18,15 +18,11 @@ const TYPE = hash('type');
 
 const TEST = hash('test');
 const TEST2 = hash('test2');
-const IS = hash('is');
 const INPUT_TYPE = hash('input-type');
 const OUTPUT_TYPE = hash('output-type');
 
 const IF = hash('if');
 const IS = hash('is');
-const WHILE = hash('while');
-const SYSTEM_CALL = hash('system-call');
-const VARIABLE_REF = hash('variable_ref');
 
 const BLOCK = hash('block');
 const BOOLEAN = hash('boolean');
@@ -34,16 +30,9 @@ const BOOLEAN = hash('boolean');
 const ANYTHING = hash('anything');
 const NOTHING = hash('nothing');
 
-const IF = hash('if');
 const WHILE = hash('while');
 const SYSTEM_CALL = hash('system-call');
 const VARIABLE_REF = hash('variable_ref');
-
-const BLOCK = hash('block');
-const BOOLEAN = hash('boolean');
-
-const ANYTHING = hash('anything');
-const NOTHING = hash('nothing');
 
 const UNKNOWN = hash('unknown');
 
