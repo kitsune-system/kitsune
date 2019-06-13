@@ -14,9 +14,9 @@
     "strip-indent": "^2.0.0"
   },
   "devDependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "rimraf": "^2.6.3",
-    "sakuradite": "^1.0.2"
+    "sakuradite": "^1.1.0"
   },
   "sakuradite": {
     "type": "app"
