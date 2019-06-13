@@ -1,5 +1,5 @@
 import {
-  truncateByte, ensureBit, capByte, markSize, measureSize, randomHash,
+  truncateByte, ensureBit, capByte, markSize, measureSize,
 } from './sized-hash';
 
 describe('sized-hash', () => {
@@ -88,15 +88,6 @@ describe('sized-hash', () => {
       measureSize(hexHash('09abcdef')).should.equal(28);
       measureSize(hexHash('19abcdef')).should.equal(29);
       measureSize(hexHash('49abcdef')).should.equal(31);
-    });
-  });
-
-  describe('randomHash', () => {
-    it('should work', () => {
-      for(let x = 0; x < 32; x++) {
-        const hash = randomHash(x);
-        measureSize(hash).should.equal(x);
-      }
     });
   });
 });

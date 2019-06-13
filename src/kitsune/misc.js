@@ -1,14 +1,13 @@
 import { getNativeName } from './translate';
 import { Commands } from './util';
 
-import {
-  base64ToBuffer as buf, bufferToBase64 as b64,
-  hashEdge as E, random,
-} from '../common/hash';
+import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E }
+  from '../common/hash';
 import {
   BASE64, BINARY, CONVERT, GET, NATIVE_NAME, RANDOM,
   TO_BASE64, TO_BINARY, MAP_V, PIPE,
 } from '../common/nodes';
+import { random } from './random';
 
 const map = system => ({ input, mapCommand }) => input.map(
   item => system(buf(mapCommand))(item)

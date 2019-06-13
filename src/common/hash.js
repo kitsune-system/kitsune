@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import sha3 from 'js-sha3';
 
 import { EDGE, STRING } from './nodes';
@@ -6,13 +5,6 @@ import { EDGE, STRING } from './nodes';
 const sha256 = sha3.sha3_256;
 
 const edgeMap = {};
-
-export const random = () => randomBase();
-
-export const randomBase = (size = 256) => {
-  const len = Math.ceil(size / 8);
-  return crypto.randomBytes(len);
-};
 
 export const base64ToBuffer = base64 => {
   if(!base64)
