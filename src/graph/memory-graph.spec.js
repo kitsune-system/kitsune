@@ -1,13 +1,6 @@
 import MemoryGraph from './memory-graph';
 
 describe.skip('MemoryGraph', () => {
-  it('layered graph', () => {
-    const graphA = MemoryGraph();
-    const graphB = MemoryGraph();
-
-    console.log(graphA, graphB);
-  });
-
   it('should work', () => {
     const graph = MemoryGraph();
 
