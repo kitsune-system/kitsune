@@ -71,7 +71,7 @@ const indent = (str, size=2) => {
   return str.split('\n').map(line => line.length ? indent + line : line).join('\n');
 };
 
-describe.only('code', () => {
+describe('code', () => {
   it('should work', () => {
     const system = Builder(config)('system');
 
