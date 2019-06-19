@@ -1,6 +1,4 @@
-const idFn = (head, tail) => `[${head}:${tail}]`;
-
-const MemoryGraph = () => {
+const MemoryGraph = idFn => {
   let count = 0;
 
   const edgeMap = {};
@@ -24,11 +22,13 @@ const MemoryGraph = () => {
     tailMap[tail] = tailIdx;
 
     count++;
+
+    return id;
   };
 
   graph.erase = id => {
     if(!(id in edgeMap))
-      throw new Error(`No such edge for id: ${id}`);
+      return undefined;
 
     const [head, tail] = edgeMap[id];
     delete edgeMap[id];
@@ -37,14 +37,16 @@ const MemoryGraph = () => {
     tailMap[tail].delete(head);
 
     count--;
+
+    return [head, tail];
   };
 
   graph.count = () => count;
   graph.list = () => Object.values(edgeMap);
 
   graph.read = id => edgeMap[id];
-  graph.heads = tail => tailMap[tail] || new Set();
-  graph.tails = head => headMap[head] || new Set();
+  graph.heads = tail => new Set(tailMap[tail]);
+  graph.tails = head => new Set(headMap[head]);
 
   return graph;
 };

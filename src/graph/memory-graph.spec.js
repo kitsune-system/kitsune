@@ -1,30 +1,34 @@
+import { expect } from 'chai';
+
 import MemoryGraph from './memory-graph';
+import { idFn } from './util.spec';
 
-describe.skip('MemoryGraph', () => {
+describe('MemoryGraph', () => {
   it('should work', () => {
-    const graph = MemoryGraph();
+    const graph = MemoryGraph(idFn);
 
-    for(let i = 0; i < 500; i++) {
-      const head = Math.floor(Math.random() * 250);
-      const tail = Math.floor(Math.random() * 250);
+    for(let i = 0; i < 20; i++) {
+      const head = (i % 7) + 3;
+      const tail = i % 13;
       const edge = [head, tail];
       graph.write(edge);
     }
 
-    console.log(graph.count());
-    const edge = graph.list()[25];
+    graph.count().should.equal(20);
+
+    const edge = graph.list()[10];
+    edge.should.deep.equal([6, 10]);
+
     const id = `[${edge[0]}:${edge[1]}]`;
-    console.log(graph.read(id));
-    console.log('======================');
-    console.log(graph.heads('0'));
-    console.log(graph.heads('10'));
-    console.log(graph.tails('20'));
-    console.log(graph.tails('30'));
-    console.log('======================');
+    graph.read(id).should.deep.equal(edge);
+
+    Array.from(graph.heads('2')).should.have.members([4, 5]);
+    Array.from(graph.heads('11')).should.have.members([7]);
 
     graph.erase(id);
 
-    console.log(Object.keys(graph));
-    console.log(graph.count());
+    graph.count().should.equal(19);
+
+    expect(graph.read('[123:456]')).to.be.undefined;
   });
 });

@@ -9,7 +9,6 @@ const mergeCall = (graphs, fnName) => id => {
 const GraphUnion = graphs => {
   const union = {};
 
-  union.count = () => graphs.reduce((count, graph) => count + graph.count(), 0);
   union.read = id => {
     for(const graph of graphs) {
       const edge = graph.read(id);
