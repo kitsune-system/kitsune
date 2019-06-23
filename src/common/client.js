@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
 import {
-  BASE64, BINARY, CONVERT, DESTROY, EDGE, LIST_N, MAP_N, PIPE,
+  BASE64, BINARY, CONVERT, ERASE, EDGE, LIST_N, MAP_N, PIPE,
   RANDOM, READ, STRING, TO_BASE64, TO_BINARY, VARIABLE_GET, VARIABLE_SET, WRITE,
 } from '../common/nodes';
 
@@ -41,7 +41,7 @@ export const KitsuneClient = request => {
   );
 
   client.destroyEdge = edgeNode => client.wrap(
-    E(DESTROY, EDGE), edgeNode, [B642BIN], [],
+    E(ERASE, EDGE), edgeNode, [B642BIN], [],
   );
 
   // LIST
@@ -91,9 +91,7 @@ const buildAxios = baseURL => {
 };
 
 // EXPORT
-const build = baseURL => {
+export const build = baseURL => {
   const request = buildAxios(baseURL);
   return KitsuneClient(request);
 };
-
-export default build;

@@ -1,11 +1,10 @@
+import { BinaryMap, toBinObj, b64, buf } from '../common';
+import { deepHashEdge as E } from '../common/hash';
 import {
-  base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E,
-} from '../common/hash';
-import {
-  BIND_COMMAND, DESTROY, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
+  BIND_COMMAND, ERASE, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
 } from '../common/nodes';
 
-import { BinaryMap, BinObj, Commands } from '../kitsune/util';
+import { Commands } from '../kitsune/util';
 
 const VariableCommands = Commands(
   [
@@ -20,9 +19,9 @@ const VariableCommands = Commands(
       const edge = writeEdge([varNode, valNode]);
       return buf(edge);
     },
-    BinaryMap(BinObj(
+    BinaryMap(toBinObj(
       [BIND_COMMAND, {
-        writeEdge: E(WRITE, EDGE), destroyEdge: E(DESTROY, EDGE),
+        writeEdge: E(WRITE, EDGE), destroyEdge: E(ERASE, EDGE),
         listTail: E(LIST, TAIL),
       }],
     )),
@@ -36,7 +35,7 @@ const VariableCommands = Commands(
 
       return tails.length ? tails[0] : null;
     },
-    BinaryMap(BinObj(
+    BinaryMap(toBinObj(
       [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
     )),
   ],

@@ -1,25 +1,33 @@
+import { E, b64 } from '../common';
+import { pseudoRandom } from '../common/hash';
+import { RANDOM } from '../common/nodes';
+
 import GraphUnion from './graph-union';
 import MemoryGraph from './memory-graph';
-import { idFn } from './util.spec';
 
-describe('GraphUnion', () => {
-  it('should work', () => {
-    const graphA = MemoryGraph(idFn);
-    graphA.write(['1', '2']);
-    graphA.write(['3', '4']);
-    graphA.write(['5', '6']);
+it('GraphUnion', () => {
+  const random = pseudoRandom(RANDOM);
+  const nodes = [];
+  for(let i = 0; i < 7; i++)
+    nodes.push(random());
 
-    const graphB = MemoryGraph(idFn);
-    graphB.write(['1', '3']);
-    graphB.write(['5', '6']);
+  const graphA = MemoryGraph();
+  graphA.write([nodes[1], nodes[2]]);
+  graphA.write([nodes[3], nodes[4]]);
+  graphA.write([nodes[5], nodes[6]]);
 
-    const graphC = MemoryGraph(idFn);
-    graphC.write(['1', '4']);
+  const graphB = MemoryGraph();
+  graphB.write([nodes[1], nodes[3]]);
+  graphB.write([nodes[5], nodes[6]]);
 
-    const union = GraphUnion([graphA, graphB, graphC]);
+  const graphC = MemoryGraph();
+  graphC.write([nodes[1], nodes[4]]);
 
-    union.read('[1:4]').should.deep.equal(['1', '4']);
-    Array.from(union.heads('4')).should.have.members(['1', '3']);
-    Array.from(union.tails('1')).should.have.members(['2', '3', '4']);
-  });
+  const union = GraphUnion([graphA, graphB, graphC]);
+
+  union.read(E(nodes[1], nodes[4])).should.deep.equal([nodes[1], nodes[4]]);
+  Array.from(union.heads(nodes[4]).toSet())
+    .should.have.members([nodes[1], nodes[3]].map(b64));
+  Array.from(union.tails(nodes[1]).toSet())
+    .should.have.members([nodes[2], nodes[3], nodes[4]].map(b64));
 });

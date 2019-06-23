@@ -1,5 +1,5 @@
 import {
-  bufferToBase64 as b64, deepHashEdge, hashEdge, hashString as hash,
+  bufferToBase64 as b64, deepHashEdge, hashEdge, hashString as hash, pseudoRandom,
 } from './hash';
 import { RANDOM, READ, WRITE } from './nodes';
 
@@ -27,5 +27,15 @@ describe('hash', () => {
 
       deep.equals(normal).should.be.true;
     });
+  });
+
+  it('pseudoRandom', () => {
+    const random = pseudoRandom(RANDOM);
+
+    b64(random()).should.equal('MF7Yc6gRuVWrfWR0Cs9VKAoqTcVsMfdWeXmcjAE3goU=');
+    b64(random()).should.equal('ZE5nfIvBE892Mh0ZiMAF6bYN13Ec8xovE2S15y9XrjU=');
+    b64(random()).should.equal('PFdJkeCnbCZzBF+bLC0Fb7vCRwbFKfv8hBwz6wH7yjk=');
+    b64(random()).should.equal('j36ZUZQjVbthdwf3jL5eubGhZTYY/93+AbGyTivU2TY=');
+    b64(random()).should.equal('uo587Bpkiy1hLGJ+JIwO4QZxrHKrdcVA3gY1FyWyb/c=');
   });
 });

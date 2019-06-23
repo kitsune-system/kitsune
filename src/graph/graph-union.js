@@ -1,5 +1,7 @@
+import { BinarySet } from '../common';
+
 const mergeCall = (graphs, fnName) => id => {
-  const result = new Set();
+  const result = BinarySet();
   graphs.forEach(graph => {
     graph[fnName](id).forEach(node => result.add(node));
   });

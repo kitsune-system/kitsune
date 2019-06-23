@@ -7,7 +7,7 @@ export const BUILT_IN_NODES = buf('tM/g7jdtJbdcGwlxr7JRkqQFZvrgxjuj4re4W7aPOtA='
 export const CODE = buf('azYkwxJ3FZH7GuMq0z34AAgKDBBFEopUH/qfpdY5l8U=');
 export const COMMAND = buf('2thvxzmTasKTgQrlZkN4Yq4/dCTkemSadDKshbBHi/Q=');
 export const CONVERT = buf('CrJ0zaWBEZMVf8HEDBuBJ4R8vIFSg78szRddzl1FEXU=');
-export const DESTROY = buf('GdMeesaxawq0J2uBEHdytTXNJxbcA0y9kKcyDjVjUh0=');
+export const ERASE = buf('GdMeesaxawq0J2uBEHdytTXNJxbcA0y9kKcyDjVjUh0=');
 export const EDGE = buf('9NeOSRxG9JCQMxyjn8ne/oTHxiaQRfWp4mf96DRzpa0=');
 export const GET = buf('VrJ1NfyNBVvnZetBWZ1wXcEDotZsSUtl4PRkuNezFVU=');
 export const HEAD = buf('rVkGcT3cbljIYjNVAwd7NDYzrgsELAQyju9PwhaDVPI=');

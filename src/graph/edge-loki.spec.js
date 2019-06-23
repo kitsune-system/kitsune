@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { bufferToBase64 as b64, hashEdge as E } from '../common/hash';
-import { EDGE, WRITE, READ, DESTROY } from '../common/nodes';
+import { EDGE, WRITE, READ, ERASE } from '../common/nodes';
 import { Builder, config } from '../kitsune/builder';
 
 describe('edge-loki', () => {
@@ -12,14 +12,14 @@ describe('edge-loki', () => {
     b64(edge).should.equal(b64(E(READ, WRITE)));
   });
 
-  it('should be able to DESTROY EDGE', async() => {
+  it('should be able to ERASE EDGE', async() => {
     const system = Builder(config)('system');
 
     const edgeNode = system(E(WRITE, EDGE))([READ, WRITE]);
     let edge = system(E(READ, EDGE))(edgeNode);
     expect(edge.map(b64)).to.be.deep.equal([READ, WRITE, edgeNode].map(b64));
 
-    system(E(DESTROY, EDGE))(edgeNode);
+    system(E(ERASE, EDGE))(edgeNode);
 
     edge = system(E(READ, EDGE))(edgeNode);
     expect(edge).to.be.null;

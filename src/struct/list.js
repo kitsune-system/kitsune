@@ -1,7 +1,8 @@
-import { deepHashEdge as E, hashList } from '../common/hash';
+import { BinaryMap, E, toBinObj } from '../common';
+import { hashList } from '../common/hash';
 import { EDGE, LIST_N, READ, BIND_COMMAND, VARIABLE_GET, WRITE } from '../common/nodes';
 
-import { BinaryMap, BinObj, Commands } from '../kitsune/util';
+import { Commands } from '../kitsune/util';
 
 const ListCommands = Commands(
   [
@@ -16,7 +17,7 @@ const ListCommands = Commands(
 
       return hash;
     },
-    BinaryMap(BinObj(
+    BinaryMap(toBinObj(
       [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
     )),
   ], [
@@ -36,7 +37,7 @@ const ListCommands = Commands(
 
       return result;
     },
-    BinaryMap(BinObj(
+    BinaryMap(toBinObj(
       [BIND_COMMAND, { variableGet: VARIABLE_GET }],
     )),
   ],

@@ -1,34 +1,44 @@
 import { expect } from 'chai';
 
+import { E, b64 } from '../common';
+import { pseudoRandom } from '../common/hash';
+import { RANDOM } from '../common/nodes';
+
 import MemoryGraph from './memory-graph';
-import { idFn } from './util.spec';
 
-describe('MemoryGraph', () => {
-  it('should work', () => {
-    const graph = MemoryGraph(idFn);
+it('MemoryGraph', () => {
+  const random = pseudoRandom(RANDOM);
+  const nodes = [];
+  for(let i = 0; i < 5; i++)
+    nodes.push(random());
 
-    for(let i = 0; i < 20; i++) {
-      const head = (i % 7) + 3;
-      const tail = i % 13;
-      const edge = [head, tail];
-      graph.write(edge);
-    }
+  const graph = MemoryGraph();
 
-    graph.count().should.equal(20);
+  for(let i = 0; i < 20; i++) {
+    const head = nodes[i % 5];
+    const tail = nodes[Math.floor(i * 13 / 7) % 5];
 
-    const edge = graph.list()[10];
-    edge.should.deep.equal([6, 10]);
+    const edge = [head, tail];
+    graph.write(edge);
+  }
 
-    const id = `[${edge[0]}:${edge[1]}]`;
-    graph.read(id).should.deep.equal(edge);
+  graph.count().should.equal(16);
 
-    Array.from(graph.heads('2')).should.have.members([4, 5]);
-    Array.from(graph.heads('11')).should.have.members([7]);
+  const edge = graph.list()[2];
+  edge.map(b64).should.deep.equal([nodes[2], nodes[3]].map(b64));
 
-    graph.erase(id);
+  const id = E(edge[0], edge[1]);
+  graph.read(id).should.deep.equal(edge);
 
-    graph.count().should.equal(19);
+  Array.from(graph.heads(nodes[0]).toSet())
+    .should.have.members([nodes[0], nodes[3], nodes[1], nodes[4]].map(b64));
+  Array.from(graph.heads(nodes[1]).toSet())
+    .should.have.members([nodes[1], nodes[4], nodes[2]].map(b64));
 
-    expect(graph.read('[123:456]')).to.be.undefined;
-  });
+  const removedEdge = graph.erase(id);
+  removedEdge.map(b64).should.deep.equal([nodes[2], nodes[3]].map(b64));
+
+  graph.count().should.equal(15);
+
+  expect(graph.read(RANDOM)).to.be.undefined;
 });

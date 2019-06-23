@@ -1,4 +1,4 @@
-import buildClient from './common/client';
+import { build as buildClient } from './common/client';
 import { base64ToBuffer as buf, bufferToBase64 as b64 } from './common/hash';
 import { PIPE, RANDOM, MAP_V } from './common/nodes';
 

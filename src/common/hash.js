@@ -4,7 +4,7 @@ import { EDGE, STRING } from './nodes';
 
 const sha256 = sha3.sha3_256;
 
-const edgeMap = {};
+export const edgeMap = {};
 
 export const base64ToBuffer = base64 => {
   if(!base64)
@@ -15,9 +15,13 @@ export const base64ToBuffer = base64 => {
 
 export const bufferToBase64 = buffer => {
   if(!buffer)
-    throw new Error('`base64` must not be null');
+    throw new Error('`buffer` must not be null');
 
   return buffer.toString('base64');
+};
+
+export const recordEdge = (id, head, tail) => {
+  edgeMap[bufferToBase64(id)] = [bufferToBase64(head), bufferToBase64(tail)];
 };
 
 export const readEdge = node => edgeMap[bufferToBase64(node)];
@@ -51,6 +55,7 @@ export const hashEdge = (...args) => {
 
   const edge = hashList([EDGE, head, tail]);
   edgeMap[bufferToBase64(edge)] = [bufferToBase64(head), bufferToBase64(tail)];
+  recordEdge(edge, head, tail);
   return edge;
 };
 
@@ -63,4 +68,9 @@ export const deepHashEdge = (...args) => {
     tail = deepHashEdge(...tail);
 
   return hashEdge(head, tail);
+};
+
+export const pseudoRandom = seed => () => {
+  seed = hashList([seed]);
+  return seed;
 };

@@ -1,4 +1,4 @@
-import { base64ToBuffer as buf, bufferToBase64 as b64 } from '../common/hash';
+import { BinaryMap, b64 } from '../common';
 
 export const tag = (fn, tags) => {
   Object.entries(tags).forEach(([key, value]) => {
@@ -6,52 +6,6 @@ export const tag = (fn, tags) => {
   });
   return fn;
 };
-
-export const ArgCountSwitch = (...handlers) => {
-  const fn = (...args) => {
-    const count = args.length;
-    const handle = handlers[count];
-
-    if(typeof handle !== 'function')
-      throw new Error(`No handler for arg count: ${count}`);
-
-    return handle(...args);
-  };
-
-  fn.handlers = handlers;
-
-  return fn;
-};
-
-export const BinaryMap = (base = {}) => {
-  return ArgCountSwitch(
-    () => base,
-    binaryKey => {
-      // In binaryKey is a function, iterate over the map
-      if(typeof binaryKey === 'function') {
-        return Object.entries(base).map(entry => {
-          return binaryKey(buf(entry[0]), entry[1]);
-        });
-      }
-
-      // Otherwise, normal `get()` use
-      return base[b64(binaryKey)];
-    },
-    (binaryKey, value) => (base[b64(binaryKey)] = value),
-  );
-};
-
-export const BinMap = BinaryMap;
-
-export const BinaryObject = (...entries) => {
-  const result = {};
-  entries.forEach(([key, value]) => {
-    result[b64(key)] = value;
-  });
-  return result;
-};
-
-export const BinObj = BinaryObject;
 
 export const meta = (fn, metaMap) => {
   if(fn.meta)

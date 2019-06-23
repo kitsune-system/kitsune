@@ -1,19 +1,20 @@
 import Loki from 'lokijs';
 
-import MiscCommands from './misc.js';
-
-import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../common/hash';
+import { BinaryMap, E, b64, buf, toBinObj } from '../common';
 import { BIND_COMMAND, COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
 
 import { buildConfig as stringBuildConfig } from '../data/string-loki';
 import { buildConfig as edgeBuildConfig } from '../graph/edge-loki';
+import LokiGraph from '../graph/loki-graph';
 
-import { BinaryMap, BinObj, Commands, CommandInstaller } from '../kitsune/util';
+import { Commands, CommandInstaller } from '../kitsune/util';
 
 import ListCommands from '../struct/list';
 import MapCommands from '../struct/map';
 import SetCommands from '../struct/set';
 import VariableCommands from '../struct/variable';
+
+import MiscCommands from './misc.js';
 
 export const Builder = config => {
   const cache = {};
@@ -65,7 +66,7 @@ export const extend = binaryMap => {
   return binaryMap;
 };
 
-export const systemModules = BinaryMap(BinObj(
+export const systemModules = BinaryMap(toBinObj(
   [BIND_COMMAND, ({ install, system, value, buildArgs }) => {
     const boundFns = {};
 
@@ -87,6 +88,7 @@ export const systemModules = BinaryMap(BinObj(
 
 export const config = {
   lokiDB: () => new Loki(),
+  graph: build => LokiGraph(build('edgeCollection')),
 
   systemCommands: build => SystemCommands(build('system')),
   miscCommands: build => MiscCommands(build('system')),

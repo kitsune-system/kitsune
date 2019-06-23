@@ -1,25 +1,42 @@
-const MemoryGraph = idFn => {
+import { BinaryMap, BinarySet, E } from '../common';
+
+const MemoryGraph = () => {
   let count = 0;
 
-  const edgeMap = {};
-  const headMap = {};
-  const tailMap = {};
+  const edgeMap = BinaryMap();
+  const headMap = BinaryMap();
+  const tailMap = BinaryMap();
 
   const graph = {};
+
+  graph.read = id => edgeMap(id);
+
+  graph.heads = tail => {
+    const set = tailMap(tail);
+    return set ? set.clone() : BinarySet();
+  };
+
+  graph.tails = head => {
+    const set = headMap(head);
+    return set ? set.clone() : BinarySet();
+  };
 
   graph.write = edge => {
     const [head, tail] = edge;
 
-    const id = idFn(head, tail);
-    edgeMap[id] = edge;
+    const id = E(head, tail);
+    if(edgeMap(id))
+      return id;
 
-    const headIdx = headMap[head] || new Set();
+    edgeMap(id, edge);
+
+    const headIdx = headMap(head) || BinarySet();
     headIdx.add(tail);
-    headMap[head] = headIdx;
+    headMap(head, headIdx);
 
-    const tailIdx = tailMap[tail] || new Set();
+    const tailIdx = tailMap(tail) || BinarySet();
     tailIdx.add(head);
-    tailMap[tail] = tailIdx;
+    tailMap(tail, tailIdx);
 
     count++;
 
@@ -27,14 +44,14 @@ const MemoryGraph = idFn => {
   };
 
   graph.erase = id => {
-    if(!(id in edgeMap))
+    if(!edgeMap(id))
       return undefined;
 
-    const [head, tail] = edgeMap[id];
-    delete edgeMap[id];
+    const [head, tail] = edgeMap(id);
+    edgeMap.delete(id);
 
-    headMap[head].delete(tail);
-    tailMap[tail].delete(head);
+    headMap(head).delete(tail);
+    tailMap(tail).delete(head);
 
     count--;
 
@@ -42,11 +59,11 @@ const MemoryGraph = idFn => {
   };
 
   graph.count = () => count;
-  graph.list = () => Object.values(edgeMap);
-
-  graph.read = id => edgeMap[id];
-  graph.heads = tail => new Set(tailMap[tail]);
-  graph.tails = head => new Set(headMap[head]);
+  graph.list = () => {
+    const result = [];
+    edgeMap((id, edge) => result.push(edge));
+    return result;
+  };
 
   return graph;
 };

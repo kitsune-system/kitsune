@@ -1,9 +1,8 @@
-import {
-  base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E, hashList,
-} from '../common/hash';
+import { BinaryMap, E, b64, buf, toBinObj } from '../common';
+import { hashList } from '../common/hash';
 import { BIND_COMMAND, EDGE, LIST, READ, MAP_N, TAIL, WRITE } from '../common/nodes';
 
-import { BinaryMap, BinObj, Commands } from '../kitsune/util';
+import { Commands } from '../kitsune/util';
 
 const hashMap = map => {
   const kvList = Object.entries(map).map(([key, value]) => [buf(key), value]).sort();
@@ -24,7 +23,7 @@ const MapCommands = Commands(
 
       return hash;
     },
-    BinaryMap(BinObj(
+    BinaryMap(toBinObj(
       [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
     )),
   ], [
@@ -43,7 +42,7 @@ const MapCommands = Commands(
 
       return result;
     },
-    BinaryMap(BinObj(
+    BinaryMap(toBinObj(
       [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
     )),
   ]

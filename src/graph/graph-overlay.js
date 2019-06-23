@@ -1,13 +1,15 @@
+import { E } from '../common';
+
 import MemoryGraph from './memory-graph';
 
-const GraphOverlay = (baseGraph, { idFn } = {}) => {
-  const writeGraph = MemoryGraph(idFn);
-  const eraseGraph = MemoryGraph(idFn);
+const GraphOverlay = baseGraph => {
+  const writeGraph = MemoryGraph();
+  const eraseGraph = MemoryGraph();
 
   const graph = {};
 
   graph.write = edge => {
-    const id = idFn(...edge);
+    const id = E(...edge);
 
     eraseGraph.erase(id);
     writeGraph.write(edge);

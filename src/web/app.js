@@ -7,7 +7,7 @@ import { easyWrite } from '../kitsune/files';
 
 import {
   base64ToBuffer as buf, bufferToBase64 as b64,
-  hashEdge as E,
+  hashEdge as E, edgeMap,
 } from '../common/hash';
 import {
   BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N, READ, STRING,
@@ -119,6 +119,10 @@ const App = system => {
   app.use('/code', (req, res) => {
     const code = system(CODE, buf(req.body));
     res.json(code);
+  });
+
+  app.use('/code-edges', (req, res) => {
+    res.send(edgeMap);
   });
 
   const prefix = '/expand/';
