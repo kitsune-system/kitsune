@@ -1,8 +1,7 @@
-import WebSocket from 'ws';
-
 import { Builder, config } from './kitsune/builder';
 import Webapp from './web/app';
 import createAndListen from './web/server';
+import WebSocketServer from './web/web-socket';
 
 // Config
 const {
@@ -13,23 +12,13 @@ const {
 
 const insecurePort = KITSUNE_HTTP_PORT || 8080;
 
-const app = Builder(config)('system');
-const webapp = Webapp(app);
+const system = Builder(config)('system');
+const webapp = Webapp(system);
 
 const { server, listen } = createAndListen(webapp, {
   serverName, securePort, insecurePort,
 });
 
-const wss = new WebSocket.Server({ server });
-wss.on('connection', ws => {
-  console.log('CONNECTION');
-
-  ws.on('message', msg => {
-    console.log('MESSAGE:', msg);
-    console.log(`Msg: ${msg}`);
-  });
-
-  ws.send('something');
-});
+WebSocketServer(server);
 
 listen();
