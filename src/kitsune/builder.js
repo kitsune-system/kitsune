@@ -14,6 +14,10 @@ import MapCommands from '../struct/map';
 import SetCommands from '../struct/set';
 import VariableCommands from '../struct/variable';
 
+import Webapp from '../web/app';
+import createAndListen from '../web/server';
+import WebSocketServer from '../web/web-socket';
+
 import MiscCommands from './misc.js';
 
 export const Builder = config => {
@@ -39,6 +43,7 @@ export const Builder = config => {
 
     // Run afterFn is it's been set
     if(typeof afterFn === 'function')
+
       afterFn(resolver);
 
     return value;
@@ -139,5 +144,29 @@ export const config = {
     });
 
     return system;
+  },
+
+  webapp: build => Webapp(build('system')),
+
+  env: process.env,
+  securePort: build => build('env').KITSUNE_HTTPS_PORT,
+
+  serverName: build => build('env').KITSUNE_SERVER_NAME,
+  insecurePort: build => build('env').KITSUNE_HTTP_PORT || 8080,
+
+  serverAndListen: build => createAndListen(build('webapp'), {
+    serverName: build('serverName'),
+    securePort: build('securePort'),
+    insecurePort: build('insecurePort'),
+  }),
+
+  server: build => build('serverAndListen').server,
+  webSocketServer: build => WebSocketServer(build('server')),
+
+  runFn: build => () => {
+    // Ensure WebSocketServer is bound to server
+    build('webSocketServer');
+
+    build('serverAndListen').listen();
   },
 };
