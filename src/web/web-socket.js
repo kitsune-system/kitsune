@@ -1,8 +1,8 @@
 import WebSocket from 'ws';
 
-const WebSocketServer = server => {
+const WebSocketServer = ({ server, handler }) => {
   let idCounter = 0;
-  const sessions = new Map();
+  const sessions = {};
 
   const wss = new WebSocket.Server({ server });
 
@@ -10,29 +10,31 @@ const WebSocketServer = server => {
     console.log('CLIENT CONNECTED');
 
     const id = ++idCounter;
-    sessions.set(ws, { id, count: 0 });
+    const send = msg => ws.send(JSON.stringify(msg));
 
-    const sessionCount = sessions.size;
+    const session = {
+      id, ws, send,
+      count: 0,
+    };
+
+    sessions[id] = session;
+
     ws.on('message', msg => {
       console.log('MESSAGE:', msg);
 
-      const session = sessions.get(ws);
-
-      session.count++;
-
-      ws.send(`Session Count: ${sessionCount}`);
-      ws.send(JSON.stringify(session, null, 2));
+      const res = handler(msg, session);
+      send(res);
     });
 
     ws.on('close', () => {
       console.log('CLIENT DISCONNECTED');
-      sessions.delete(ws);
+      delete sessions[id];
     });
 
-    ws.send('something');
+    send('something');
   });
 
-  return wss;
+  return id => sessions[id];
 };
 
 export default WebSocketServer;

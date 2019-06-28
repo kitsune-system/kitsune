@@ -43,7 +43,6 @@ export const Builder = config => {
 
     // Run afterFn is it's been set
     if(typeof afterFn === 'function')
-
       afterFn(resolver);
 
     return value;
@@ -149,9 +148,9 @@ export const config = {
   webapp: build => Webapp(build('system')),
 
   env: process.env,
-  securePort: build => build('env').KITSUNE_HTTPS_PORT,
 
   serverName: build => build('env').KITSUNE_SERVER_NAME,
+  securePort: build => build('env').KITSUNE_HTTPS_PORT,
   insecurePort: build => build('env').KITSUNE_HTTP_PORT || 8080,
 
   serverAndListen: build => createAndListen(build('webapp'), {
@@ -161,7 +160,17 @@ export const config = {
   }),
 
   server: build => build('serverAndListen').server,
-  webSocketServer: build => WebSocketServer(build('server')),
+  webSocketServer: build => WebSocketServer({
+    server: build('server'),
+    handler: (msg, session) => {
+      session.count = Math.floor(Math.random() * 100);
+
+      const res = { ...session };
+      delete res.ws;
+
+      return res;
+    },
+  }),
 
   runFn: build => () => {
     // Ensure WebSocketServer is bound to server
