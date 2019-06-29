@@ -1,8 +1,10 @@
+import { Builder } from 'kitsune-common';
+
 import {
   base64ToBuffer as buf, bufferToBase64 as b64, deepHashEdge as E,
 } from '../common/hash';
 import { WRITE, LIST_N, READ } from '../common/nodes';
-import { Builder, config } from '../kitsune/builder';
+import { config } from '../kitsune/builder';
 
 describe('LIST', () => {
   it('should be able to READ and WRITE a LIST', () => {

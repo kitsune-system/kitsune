@@ -4,6 +4,7 @@
   "author": "Edward Nicholes Jr.",
   "license": "GPL-3.0-only",
   "dependencies": {
+    "@kitsune-system/kitsune-common": "^1.0.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",

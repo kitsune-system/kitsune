@@ -1,6 +1,8 @@
+import { Builder } from 'kitsune-common';
+
 import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
 import { BASE64, BINARY, CONVERT } from '../common/nodes';
-import { Builder, config } from '../kitsune/builder';
+import { config } from '../kitsune/builder';
 
 describe('Misc Commands', () => {
   it('should work', () => {

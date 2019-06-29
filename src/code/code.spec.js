@@ -1,4 +1,6 @@
 /* eslint-disable */
+import { Builder } from 'kitsune-common';
+
 import { BinaryMap, E, b64, toBinObj } from '../common';
 import { hashList } from '../common/hash';
 
@@ -7,7 +9,7 @@ import {
   MAP_N, RANDOM, READ, SET, WRITE
 } from '../common/nodes';
 
-import { Builder, config, extend, systemModules } from '../kitsune/builder';
+import { config, extend, systemModules } from '../kitsune/builder';
 import { Commands, meta } from '../kitsune/util';
 
 const hash = string => hashList([string]);

@@ -1,6 +1,8 @@
+import { Builder } from 'kitsune-common';
+
 import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
 import { READ, HEAD, WRITE, TAIL, RANDOM, CODE, MAP_N } from '../common/nodes';
-import { Builder, config } from '../kitsune/builder';
+import { config } from '../kitsune/builder';
 
 describe('MAP_N', () => {
   it('should be able to write and read MAP_Ns', () => {

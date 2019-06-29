@@ -1,8 +1,9 @@
 import { expect } from 'chai';
+import { Builder } from 'kitsune-common';
 
 import { bufferToBase64 as b64, hashEdge as E } from '../common/hash';
 import { EDGE, WRITE, READ, ERASE } from '../common/nodes';
-import { Builder, config } from '../kitsune/builder';
+import { config } from '../kitsune/builder';
 
 describe('edge-loki', () => {
   it('should be able to WRITE EDGE', () => {
