@@ -1,4 +1,4 @@
-import { Builder } from 'kitsune-common';
+import { Builder } from '@kitsune-system/kitsune-common';
 
 import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
 import { BASE64, BINARY, CONVERT } from '../common/nodes';

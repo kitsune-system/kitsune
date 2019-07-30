@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Builder } from 'kitsune-common';
+import { Builder } from '@kitsune-system/kitsune-common';
 
 import { BinaryMap, E, b64, toBinObj } from '../common';
 import { hashList } from '../common/hash';

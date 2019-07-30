@@ -9,7 +9,16 @@ import {
 const BIN2B64 = E(CONVERT, [BINARY, BASE64]);
 const B642BIN = E(CONVERT, [BASE64, BINARY]);
 
-export const KitsuneClient = request => {
+export const KitsuneClient = (request, webSocket) => {
+  webSocket.addEventListener('open', () => {
+    console.log('Connected to WebSocket server...');
+    webSocket.send('Hello');
+  });
+  webSocket.addEventListener('message', event => {
+    const msg = JSON.parse(event.data);
+    console.log('From Server:', msg);
+  });
+
   const client = (command, input) => {
     if(typeof input !== 'object')
       input = JSON.stringify(input);
@@ -91,7 +100,15 @@ const buildAxios = baseURL => {
 };
 
 // EXPORT
-export const build = baseURL => {
-  const request = buildAxios(baseURL);
-  return KitsuneClient(request);
+export const build = config => {
+  const wsProto = config.secure ? 'wss://' : 'ws://';
+  const webProto = config.secure ? 'httsp://' : 'http://';
+
+  const wsUrl = wsProto + config.kitsuneHost;
+  const webUrl = webProto + config.kitsuneHost;
+
+  const request = buildAxios(webUrl);
+  const webSocket = new WebSocket(wsUrl);
+
+  return KitsuneClient(request, webSocket);
 };

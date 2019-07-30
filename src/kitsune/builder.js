@@ -132,7 +132,9 @@ export const config = {
   webSocketServer: build => WebSocketServer({
     server: build('server'),
     handler: (msg, session) => {
-      session.count = Math.floor(Math.random() * 100);
+      console.log('MSG', msg);
+
+      session.count++;
 
       const res = { ...session };
       delete res.ws;
