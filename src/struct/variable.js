@@ -1,8 +1,8 @@
-import { BinaryMap, toBinObj, b64, buf } from '../common';
-import { deepHashEdge as E } from '../common/hash';
+import { Map } from '@gamedevfox/katana';
 import {
+  deepHashEdge as E,
   BIND_COMMAND, ERASE, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
-} from '../common/nodes';
+} from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
 
@@ -17,27 +17,27 @@ const VariableCommands = Commands(
       });
 
       const edge = writeEdge([varNode, valNode]);
-      return buf(edge);
+      return edge;
     },
-    BinaryMap(toBinObj(
-      [BIND_COMMAND, {
+    Map({
+      [BIND_COMMAND]: {
         writeEdge: E(WRITE, EDGE), destroyEdge: E(ERASE, EDGE),
         listTail: E(LIST, TAIL),
-      }],
-    )),
+      },
+    }),
   ], [
     VARIABLE_GET,
     ({ listTail }) => varNode => {
       const tails = listTail(varNode);
 
       if(tails.length > 1)
-        throw new Error(`Variable had more than one tail: ${b64(varNode)} -> ${tails.map(b64)}`);
+        throw new Error(`Variable had more than one tail: ${varNode} -> ${tails}`);
 
       return tails.length ? tails[0] : null;
     },
-    BinaryMap(toBinObj(
-      [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
-    )),
+    Map({
+      [BIND_COMMAND]: { listTail: E(LIST, TAIL) },
+    }),
   ],
 );
 

@@ -1,9 +1,8 @@
-import { easyWrite, readJson } from './files';
-
 import {
-  base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E,
-} from '../common/hash';
-import { EDGE, LIST, STRING, WRITE } from '../common/nodes';
+  deepHashEdge as E, EDGE, LIST, STRING, WRITE,
+} from '@kitsune-system/common';
+
+import { easyWrite, readJson } from './files';
 
 const Storage = (path, system) => {
   const edgePath = `${path}/edges`;
@@ -14,7 +13,7 @@ const Storage = (path, system) => {
       const edges = system(E(LIST, EDGE));
       const strings = system(E(LIST, STRING));
 
-      const simpleEdges = edges.map(edge => [b64(edge[0]), b64(edge[1])]);
+      const simpleEdges = edges.map(edge => [edge[0], edge[1]]);
       const simpleStrings = strings.map(row => row.string);
 
       return Promise.all([
@@ -25,7 +24,7 @@ const Storage = (path, system) => {
     load: () => {
       const edgeP = readJson(edgePath).then(data => {
         data.forEach(edge => {
-          system(E(WRITE, EDGE), [buf(edge[0]), buf(edge[1])]);
+          system(E(WRITE, EDGE), [edge[0], edge[1]]);
         });
       });
 

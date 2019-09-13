@@ -1,15 +1,16 @@
-import { Builder } from '@kitsune-system/kitsune-common';
+import { Builder } from '@gamedevfox/katana';
+import { RANDOM } from '@kitsune-system/common';
 
-import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
-import { BASE64, BINARY, CONVERT } from '../common/nodes';
 import { config } from '../kitsune/builder';
 
 describe('Misc Commands', () => {
   it('should work', () => {
-    const system = Builder(config)('system');
+    const builder = Builder(config);
+    const system = builder('system');
 
-    const base64Str = 'QGCg0X7v9YFBDFt2X9P4cQfQdOozrrgo+zxQIttMl5I=';
-    const buffer = system(E(CONVERT, E(BASE64, BINARY)))(base64Str);
-    b64(buffer).should.equal(base64Str);
+    const random = system(RANDOM)();
+
+    random.should.be.a('string');
+    Buffer.from(random, 'base64').length.should.equal(32);
   });
 });

@@ -1,4 +1,4 @@
-import { BinaryMap, b64 } from '../common';
+import { Map } from '@gamedevfox/katana';
 
 export const tag = (fn, tags) => {
   Object.entries(tags).forEach(([key, value]) => {
@@ -9,13 +9,13 @@ export const tag = (fn, tags) => {
 
 export const meta = (fn, metaMap) => {
   if(fn.meta)
-    metaMap = BinaryMap({ ...fn.meta(), ...metaMap() });
+    metaMap = Map({ ...fn.meta(), ...metaMap() });
 
   return tag(fn, { meta: metaMap });
 };
 
 export const Commands = (...commands) => {
-  const result = BinaryMap();
+  const result = Map();
 
   commands.forEach(([commandId, fn, metaMap]) => {
     const metaFn = metaMap ? meta(fn, metaMap) : fn;
@@ -34,13 +34,13 @@ export const CommandInstaller = (system, systemModules, commandFn) => {
 
   const install = commandId => {
     // Do nothing if command is already installed
-    if(b64(commandId) in system())
+    if(commandId in system())
       return system(commandId);
 
     let fn = commandFn(commandId);
 
     if(!fn)
-      throw new Error(`Can't find command for id: ${b64(commandId)}`);
+      throw new Error(`Can't find command for id: ${commandId}`);
 
     // Execute modules on command before adding to system
     if(typeof fn.meta === 'function') {

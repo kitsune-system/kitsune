@@ -1,4 +1,4 @@
-import { E } from '../common';
+import { deepHashEdge as E } from '@kitsune-system/common';
 
 import MemoryGraph from './memory-graph';
 

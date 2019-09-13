@@ -1,16 +1,14 @@
-import { getNativeName } from './translate';
+import {
+  hashEdge as E, GET, NATIVE_NAME, RANDOM, MAP_V, PIPE,
+} from '@kitsune-system/common';
+
+import { NODES } from '../kitsune/nodes';
+
+import { random } from './random';
 import { Commands } from './util';
 
-import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E }
-  from '../common/hash';
-import {
-  BASE64, BINARY, CONVERT, GET, NATIVE_NAME, RANDOM,
-  TO_BASE64, TO_BINARY, MAP_V, PIPE,
-} from '../common/nodes';
-import { random } from './random';
-
 const map = system => ({ input, mapCommand }) => input.map(
-  item => system(buf(mapCommand))(item)
+  item => system(mapCommand)(item)
 );
 
 const pipe = system => ({ input, commandList }) => {
@@ -22,45 +20,8 @@ const pipe = system => ({ input, commandList }) => {
 };
 
 export const MiscCommands = system => Commands(
-  [E(CONVERT, E(BASE64, BINARY)), buf],
-  [E(CONVERT, E(BINARY, BASE64)), b64],
-  [E(GET, NATIVE_NAME), getNativeName],
-  [RANDOM, () => b64(random())],
-
-  // TODO: Replace
-  [TO_BASE64, nodes => {
-    if(!nodes)
-      return null;
-
-    let result;
-    if(Array.isArray(nodes))
-      result = nodes.map(b64);
-    else if(nodes.buffer)
-      result = b64(nodes);
-    else if(typeof nodes === 'object') {
-      result = {};
-      Object.entries(nodes).forEach(([key, value]) => (result[key] = b64(value)));
-    } else
-      throw new Error(`Can't convert ${nodes}`);
-    return result;
-  }],
-
-  [TO_BINARY, nodes => {
-    if(nodes === null)
-      return null;
-
-    let result;
-    if(Array.isArray(nodes))
-      result = nodes.map(buf);
-    else if(typeof nodes === 'string')
-      result = buf(nodes);
-    else if(typeof nodes === 'object') {
-      result = {};
-      Object.entries(nodes).forEach(([key, value]) => (result[key] = buf(value)));
-    } else
-      throw new Error(`Can't convert ${nodes}`);
-    return result;
-  }],
+  [E(GET, NATIVE_NAME), node => NODES[node]],
+  [RANDOM, () => random()],
 
   [MAP_V, map(system)], // TODO: Bind system
   [PIPE, pipe(system)], // TODO: Bind system

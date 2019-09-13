@@ -1,20 +1,16 @@
+import {
+  deepHashEdge as E, edgeMap,
+  BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N, READ, STRING,
+  SUPPORTS_COMMAND, VARIABLE_GET, VARIABLE_SET, WRITE,
+} from '@kitsune-system/common';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import express from 'express';
 import _ from 'lodash';
 
-import { easyWrite } from '../kitsune/files';
-
-import {
-  base64ToBuffer as buf, bufferToBase64 as b64,
-  hashEdge as E, edgeMap,
-} from '../common/hash';
-import {
-  BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N, READ, STRING,
-  SUPPORTS_COMMAND, TO_BASE64, VARIABLE_GET, VARIABLE_SET, WRITE,
-} from '../common/nodes';
-import * as N from '../common/nodes';
 import { CODE_PATH, KITSUNE_PATH } from '../kitsune/config';
+import { easyWrite } from '../kitsune/files';
+import { NODES } from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
 import { expand } from '../kitsune/translate';
 
@@ -32,8 +28,7 @@ const App = system => {
       return;
     }
 
-    const b64CommandId = decodeURIComponent(url.slice(1));
-    const commandId = buf(b64CommandId);
+    const commandId = decodeURIComponent(url.slice(1));
 
     const isSupported = system(SUPPORTS_COMMAND)(commandId);
     if(isSupported) {
@@ -52,7 +47,7 @@ const App = system => {
 
     const result = {};
     Object.entries(map).forEach(([nameNode, node]) => {
-      const name = system(E(READ, STRING))(buf(nameNode));
+      const name = system(E(READ, STRING))(nameNode);
       result[name] = node;
     });
 
@@ -64,7 +59,7 @@ const App = system => {
     const nodeMap = getBuiltInNodeMap();
 
     const nodeLines = Object.entries(nodeMap).sort().map(([name, node]) => {
-      return `export const ${name} = buf('${b64(node)}');`;
+      return `export const ${name} = '${node}';`;
     }).join('\n');
 
     const code = _.template(text)({ nodeLines });
@@ -79,9 +74,9 @@ const App = system => {
 
   app.use('/init', (req, res) => {
     const nodeMap = {};
-    Object.entries(N).forEach(([key, value]) => {
+    Object.entries(NODES).forEach(([key, value]) => {
       const stringNode = system(E(WRITE, STRING), key);
-      nodeMap[b64(stringNode)] = value;
+      nodeMap[stringNode] = value;
     });
 
     const nodeMapId = system(E(WRITE, MAP_N), nodeMap);
@@ -92,8 +87,7 @@ const App = system => {
 
   app.use('/built-in-nodes', (req, res) => {
     const nodeMap = getBuiltInNodeMap();
-    const result = system(TO_BASE64, nodeMap);
-    res.send(result);
+    res.send(nodeMap);
   });
 
   // NOTE: These are here for convenience for now
@@ -101,23 +95,23 @@ const App = system => {
     const commands = system(E(LIST, COMMAND));
 
     const commandMap = {};
-    commands.forEach(node => (commandMap[b64(node)] = expand(node)));
+    commands.forEach(node => (commandMap[node] = expand(node)));
 
     res.json(commandMap);
   });
 
   app.use('/listEdge', (req, res) => {
-    const edges = system(E(LIST, EDGE)).map(edge => edge.map(b64));
+    const edges = system(E(LIST, EDGE)).map(edge => edge);
     res.json(edges);
   });
 
   app.use('/listString', (req, res) => {
-    const strings = system(E(LIST, STRING)).map(row => ({ ...row, id: b64(row.id) }));
+    const strings = system(E(LIST, STRING)).map(row => ({ ...row, id: row.id }));
     res.json(strings);
   });
 
   app.use('/code', (req, res) => {
-    const code = system(CODE, buf(req.body));
+    const code = system(CODE, req.body);
     res.json(code);
   });
 
@@ -127,7 +121,7 @@ const App = system => {
 
   const prefix = '/expand/';
   app.use(`${prefix}*`, (req, res) => {
-    const node = buf(req.url.replace(prefix, ''));
+    const node = req.url.replace(prefix, '');
     const name = expand(node);
     res.json(name);
   });

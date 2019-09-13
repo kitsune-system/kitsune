@@ -1,7 +1,9 @@
 import Loki from 'lokijs';
 
-import { BinaryMap, E, b64, buf, toBinObj } from '../common';
-import { BIND_COMMAND, COMMAND, LIST, SUPPORTS_COMMAND } from '../common/nodes';
+import { Map } from '@gamedevfox/katana';
+import {
+  deepHashEdge as E, BIND_COMMAND, COMMAND, LIST, SUPPORTS_COMMAND,
+} from '@kitsune-system/common';
 
 import { buildConfig as stringBuildConfig } from '../data/string-loki';
 import { buildConfig as edgeBuildConfig } from '../graph/edge-loki';
@@ -22,29 +24,16 @@ import MiscCommands from './misc.js';
 
 const SystemCommands = system => Commands(
   // TODO: Bind system to these two
-  [SUPPORTS_COMMAND, commandId => b64(commandId) in system()],
-  [E(LIST, COMMAND), () => Object.keys(system()).map(key => buf(key))],
+  [SUPPORTS_COMMAND, commandId => commandId in system()],
+  [E(LIST, COMMAND), () => Object.keys(system()).map(key => key)],
 );
 
-export const extend = binaryMap => {
-  const baseHandler = binaryMap.handlers[1];
-
-  binaryMap.handlers[1] = commandId => {
-    if(!(b64(commandId) in binaryMap()))
-      throw new Error(`There is no command for id: ${commandId.toString('base64')}`);
-
-    return baseHandler(commandId);
-  };
-
-  return binaryMap;
-};
-
-export const systemModules = BinaryMap(toBinObj(
-  [BIND_COMMAND, ({ install, system, value, buildArgs }) => {
+export const systemModules = Map({
+  [BIND_COMMAND]: ({ install, system, value, buildArgs }) => {
     const boundFns = {};
 
     Object.entries(value).forEach(([fnName, fnNode]) => {
-      const hasCommand = b64(fnNode) in system();
+      const hasCommand = fnNode in system();
       if(!hasCommand) // If missing, try to install
         install(fnNode);
 
@@ -52,12 +41,12 @@ export const systemModules = BinaryMap(toBinObj(
     });
 
     buildArgs(boundFns);
-  }],
-  // [INPUT_TYPE, args => {
+  },
+  // [INPUT_TYPE]: args => {
   //   console.log('YUP it\'s input type:', args);
   //   return args.fn;
-  // }],
-));
+  // },
+});
 
 export const config = {
   lokiDB: () => new Loki(),
@@ -88,7 +77,7 @@ export const config = {
   ],
 
   commands: build => {
-    const result = BinaryMap();
+    const result = Map();
 
     const commandList = build('commandList');
     commandList.forEach(buildName => {
@@ -102,7 +91,7 @@ export const config = {
   systemModules: () => systemModules,
 
   system: (build, after) => {
-    const system = extend(BinaryMap());
+    const system = Map();
 
     after(build => {
       const commands = build('commands');

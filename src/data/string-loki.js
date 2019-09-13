@@ -1,5 +1,6 @@
-import { bufferToBase64 as b64, hashEdge as E, hashString } from '../common/hash';
-import { LIST, READ, STRING, WRITE } from '../common/nodes';
+import {
+  deepHashEdge as E, hashString, LIST, READ, STRING, WRITE,
+} from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
 
@@ -12,7 +13,7 @@ export const StringCommands = strings => Commands(
 
     const node = hashString(string);
 
-    const id = b64(node);
+    const id = node;
     const exists = (strings.by('id', id) !== undefined);
     if(!exists)
       strings.insert({ id, string });
@@ -24,7 +25,7 @@ export const StringCommands = strings => Commands(
     if(typeof node === 'string')
       throw new Error('`node` must be a buffer, not a string');
 
-    const result = strings.by('id', b64(node));
+    const result = strings.by('id', node);
     return result.string;
   }],
 

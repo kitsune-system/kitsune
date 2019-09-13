@@ -1,32 +1,32 @@
-import { base64ToBuffer as buf, bufferToBase64 as b64, hashEdge as E } from '../common/hash';
+import { deepHashEdge as E } from '@kitsune-system/common';
 
-const resultToEdge = result => [buf(result.head), buf(result.tail), buf(result.id)];
+const resultToEdge = result => [result.head, result.tail, result.id];
 
 const LokiGraph = edges => {
   const graph = {};
 
   graph.read = id => {
-    const result = edges.by('id', b64(id));
+    const result = edges.by('id', id);
     return result ? resultToEdge(result) : null;
   };
 
-  graph.heads = tail => edges.find({ tail: b64(tail) }).map(row => buf(row.head));
-  graph.tails = head => edges.find({ head: b64(head) }).map(row => buf(row.tail));
+  graph.heads = tail => edges.find({ tail }).map(row => row.head);
+  graph.tails = head => edges.find({ head }).map(row => row.tail);
 
   graph.write = edge => {
     const [head, tail] = edge;
 
     const node = E(head, tail);
 
-    const id = b64(node);
+    const id = node;
     const exists = (edges.by('id', id) !== undefined);
     if(!exists)
-      edges.insert({ id, head: b64(head), tail: b64(tail) });
+      edges.insert({ id, head, tail });
 
     return node;
   };
 
-  graph.erase = id => edges.findAndRemove({ id: b64(id) });
+  graph.erase = id => edges.findAndRemove({ id });
 
   graph.list = () => edges.find().map(resultToEdge);
 

@@ -1,6 +1,8 @@
-import { BinaryMap, E, toBinObj } from '../common';
-import { hashList } from '../common/hash';
-import { BIND_COMMAND, EDGE, LIST, READ, SET, TAIL, WRITE } from '../common/nodes';
+import { Map } from '@gamedevfox/katana';
+import {
+  deepHashEdge as E, hashList,
+  BIND_COMMAND, EDGE, LIST, READ, SET, TAIL, WRITE,
+} from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
 
@@ -14,15 +16,15 @@ const SetCommands = Commands(
       set.forEach(node => writeEdge([hash, node]));
       return hash;
     },
-    BinaryMap(toBinObj(
-      [BIND_COMMAND, { writeEdge: E(WRITE, EDGE) }],
-    )),
+    Map({
+      [BIND_COMMAND]: { writeEdge: E(WRITE, EDGE) },
+    }),
   ], [
     E(READ, SET),
     ({ listTail }) => node => listTail(node),
-    BinaryMap(toBinObj(
-      [BIND_COMMAND, { listTail: E(LIST, TAIL) }],
-    )),
+    Map({
+      [BIND_COMMAND]: { listTail: E(LIST, TAIL) },
+    }),
   ],
 );
 

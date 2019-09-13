@@ -1,18 +1,20 @@
-import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
-import { CODE, EDGE, READ, STRING } from '../common/nodes';
+import {
+  deepHashEdge as E,
+  CODE, EDGE, READ, STRING,
+} from '@kitsune-system/common';
 
 const Commands = system => ({
-  [b64(CODE)]: edgeNode => {
+  [CODE]: edgeNode => {
     const edge = system(E(READ, EDGE), edgeNode);
     if(!edge)
-      throw new Error(`Edge ${b64(edgeNode)} could not be found.`);
+      throw new Error(`Edge ${edgeNode} could not be found.`);
 
     const [type, node] = edge;
     const value = system(E(READ, type), node);
     return system(E(CODE, type), value);
   },
 
-  [b64(E(CODE, STRING))]: string => JSON.stringify(string),
+  [E(CODE, STRING)]: string => JSON.stringify(string),
 });
 
 export default Commands;

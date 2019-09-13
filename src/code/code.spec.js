@@ -1,13 +1,10 @@
 /* eslint-disable */
-import { Builder } from '@kitsune-system/kitsune-common';
-
-import { BinaryMap, E, b64, toBinObj } from '../common';
-import { hashList } from '../common/hash';
-
+import { Map } from '@gamedevfox/katana';
 import {
+  Builder, deepHashEdge as E, hashList,
   BIND_COMMAND, EDGE, GET, STRING, LIST_N, NATIVE_NAME,
-  MAP_N, RANDOM, READ, SET, WRITE
-} from '../common/nodes';
+  MAP_N, RANDOM, READ, SET, WRITE,
+} from '@kitsune-system/common';
 
 import { config, extend, systemModules } from '../kitsune/builder';
 import { Commands, meta } from '../kitsune/util';
@@ -56,7 +53,7 @@ const WriteRead = system => {
     const edge = readEdge(valueNode);
 
     if(!edge)
-      throw new Error(`No value edge for node: ${b64(valueNode)}`);
+      throw new Error(`No value edge for node: ${valueNode}`);
 
     const [type, node] = edge;
     const value = system(E(READ, type))(node);
@@ -85,10 +82,10 @@ describe.skip('code', () => {
     const conditionNode = system(E(WRITE, EDGE))([TEST, hash('valueA')]);
     const blockNode = system(E(WRITE, EDGE))([TEST2, hash('valueB')]);
 
-    const ifInner = toBinObj(
-      [CONDITION, conditionNode],
-      [BLOCK, blockNode],
-    );
+    const ifInner = {
+      [CONDITION]: conditionNode,
+      [BLOCK]: blockNode,
+    };
     const ifInnerNode = system(E(WRITE, MAP_N))(ifInner);
     const ifNode = system(E(WRITE, EDGE))([IF, ifInnerNode]);
 
@@ -101,7 +98,7 @@ describe.skip('code', () => {
     });
 
     system(E(CODE, IF), ifNode => {
-      const ifMap = BinaryMap(system(E(READ, MAP_N))(ifNode));
+      const ifMap = Map(system(E(READ, MAP_N))(ifNode));
 
       const conditionNode = ifMap(CONDITION);
       const conditionCode = system(CODE)(conditionNode);
@@ -150,7 +147,7 @@ describe.skip('code', () => {
 
       return input => {
         if(!isType(input))
-          throw new Error(`Input doesn't match type \`${b64(value)}\`: ${input}`);
+          throw new Error(`Input doesn't match type \`${value}\`: ${input}`);
 
         return fn(input);
       };
@@ -163,7 +160,7 @@ describe.skip('code', () => {
         const output = fn(input);
 
         if(!isType(output))
-          throw new Error(`Output doesn't match type \`${b64(value)}\`: ${input}`);
+          throw new Error(`Output doesn't match type \`${value}\`: ${input}`);
 
         return output;
       };
@@ -171,11 +168,11 @@ describe.skip('code', () => {
 
     commands(TEST, meta(
       ({ random }) => name => `Hello ${name}, here's a hash: ${random()}`,
-      BinaryMap(toBinObj(
-        [BIND_COMMAND, { random: RANDOM }],
-        [INPUT_TYPE, STRING],
-        [OUTPUT_TYPE, STRING],
-      ))
+      Map({
+        [BIND_COMMAND]: { random: RANDOM },
+        [INPUT_TYPE]: STRING,
+        [OUTPUT_TYPE]: STRING,
+      })
     ));
     commands(E(IS, STRING), input => typeof input === 'string');
 

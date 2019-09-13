@@ -4,12 +4,13 @@
   "author": "Edward Nicholes Jr.",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@kitsune-system/kitsune-common": "^1.0.0",
+    "@gamedevfox/katana": "^1.2.2",
+    "@kitsune-system/common": "^1.1.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "js-sha3": "^0.8.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "lokijs": "^1.5.6",
     "mkdirp": "^0.5.1",
     "strip-indent": "^2.0.0",
@@ -17,8 +18,7 @@
   },
   "devDependencies": {
     "axios": "^0.19.0",
-    "rimraf": "^2.6.3",
-    "sakuradite": "^1.2.0"
+    "rimraf": "^2.6.3"
   },
   "sakuradite": {
     "type": "app"

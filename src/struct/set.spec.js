@@ -1,7 +1,8 @@
-import { Builder } from '@kitsune-system/kitsune-common';
+import { Builder } from '@gamedevfox/katana';
+import {
+  deepHashEdge as E, WRITE, SET, LIST, READ,
+} from '@kitsune-system/common';
 
-import { bufferToBase64 as b64, deepHashEdge as E } from '../common/hash';
-import { WRITE, SET, LIST, READ } from '../common/nodes';
 import { config } from '../kitsune/builder';
 
 describe('SET', () => {
@@ -10,14 +11,15 @@ describe('SET', () => {
 
     // WRITE SET
     let node = system(E(WRITE, SET))([LIST, READ, WRITE]);
-    b64(node).should.equal('A1AV/fWQVhsG0APSgDRnQYnnqr2wdjcJfKGfBhYLD/g=');
+    node.should.equal('A1AV/fWQVhsG0APSgDRnQYnnqr2wdjcJfKGfBhYLD/g=');
 
     // ORDER DOESN'T MATTER
     node = system(E(WRITE, SET))([WRITE, LIST, READ]);
-    b64(node).should.equal('A1AV/fWQVhsG0APSgDRnQYnnqr2wdjcJfKGfBhYLD/g=');
+    node.should.equal('A1AV/fWQVhsG0APSgDRnQYnnqr2wdjcJfKGfBhYLD/g=');
 
     // READ SET
+    // TODO: Use a real set
     const set = system(E(READ, SET))(node);
-    set.map(b64).sort().should.deep.equal([LIST, READ, WRITE].map(b64).sort());
+    set.sort().should.deep.equal([LIST, READ, WRITE].sort());
   });
 });

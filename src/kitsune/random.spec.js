@@ -2,11 +2,11 @@ import { randomBase } from './random';
 
 describe('random', () => {
   it('should work', () => {
-    randomBase(4).length.should.equal(1);
-    randomBase(8).length.should.equal(1);
-    randomBase(9).length.should.equal(2);
-    randomBase(16).length.should.equal(2);
-    randomBase(17).length.should.equal(3);
-    randomBase(100).length.should.equal(13);
+    Buffer.from(randomBase(4), 'base64').length.should.equal(1);
+    Buffer.from(randomBase(8), 'base64').length.should.equal(1);
+    Buffer.from(randomBase(9), 'base64').length.should.equal(2);
+    Buffer.from(randomBase(16), 'base64').length.should.equal(2);
+    Buffer.from(randomBase(17), 'base64').length.should.equal(3);
+    Buffer.from(randomBase(100), 'base64').length.should.equal(13);
   });
 });

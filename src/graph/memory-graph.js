@@ -1,42 +1,42 @@
-import { BinaryMap, BinarySet, E } from '../common';
+import { deepHashEdge as E } from '@kitsune-system/common';
 
 const MemoryGraph = () => {
   let count = 0;
 
-  const edgeMap = BinaryMap();
-  const headMap = BinaryMap();
-  const tailMap = BinaryMap();
+  const edgeMap = {};
+  const headMap = {};
+  const tailMap = {};
 
   const graph = {};
 
-  graph.read = id => edgeMap(id);
+  graph.read = id => edgeMap[id];
 
   graph.heads = tail => {
-    const set = tailMap(tail);
-    return set ? set.clone() : BinarySet();
+    const set = tailMap[tail];
+    return set ? new Set(set) : new Set();
   };
 
   graph.tails = head => {
-    const set = headMap(head);
-    return set ? set.clone() : BinarySet();
+    const set = headMap[head];
+    return set ? new Set(set) : new Set();
   };
 
   graph.write = edge => {
     const [head, tail] = edge;
 
     const id = E(head, tail);
-    if(edgeMap(id))
+    if(edgeMap[id])
       return id;
 
-    edgeMap(id, edge);
+    edgeMap[id] = edge;
 
-    const headIdx = headMap(head) || BinarySet();
+    const headIdx = headMap[head] || new Set();
     headIdx.add(tail);
-    headMap(head, headIdx);
+    headMap[head] = headIdx;
 
-    const tailIdx = tailMap(tail) || BinarySet();
+    const tailIdx = tailMap[tail] || new Set();
     tailIdx.add(head);
-    tailMap(tail, tailIdx);
+    tailMap[tail] = tailIdx;
 
     count++;
 
@@ -44,14 +44,14 @@ const MemoryGraph = () => {
   };
 
   graph.erase = id => {
-    if(!edgeMap(id))
+    if(!edgeMap[id])
       return undefined;
 
-    const [head, tail] = edgeMap(id);
-    edgeMap.delete(id);
+    const [head, tail] = edgeMap[id];
+    delete edgeMap[id];
 
-    headMap(head).delete(tail);
-    tailMap(tail).delete(head);
+    delete headMap[head][tail];
+    delete tailMap[tail][head];
 
     count--;
 
@@ -59,11 +59,7 @@ const MemoryGraph = () => {
   };
 
   graph.count = () => count;
-  graph.list = () => {
-    const result = [];
-    edgeMap((id, edge) => result.push(edge));
-    return result;
-  };
+  graph.list = () => Object.values(edgeMap);
 
   return graph;
 };

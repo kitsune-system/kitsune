@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import { E, b64 } from '../common';
-import { pseudoRandom } from '../common/hash';
-import { RANDOM } from '../common/nodes';
+import {
+  deepHashEdge as E, pseudoRandom, RANDOM,
+} from '@kitsune-system/common';
 
 import MemoryGraph from './memory-graph';
 
@@ -25,18 +25,18 @@ it('MemoryGraph', () => {
   graph.count().should.equal(16);
 
   const edge = graph.list()[2];
-  edge.map(b64).should.deep.equal([nodes[2], nodes[3]].map(b64));
+  edge.should.deep.equal([nodes[2], nodes[3]]);
 
   const id = E(edge[0], edge[1]);
   graph.read(id).should.deep.equal(edge);
 
-  Array.from(graph.heads(nodes[0]).toSet())
-    .should.have.members([nodes[0], nodes[3], nodes[1], nodes[4]].map(b64));
-  Array.from(graph.heads(nodes[1]).toSet())
-    .should.have.members([nodes[1], nodes[4], nodes[2]].map(b64));
+  Array.from(graph.heads(nodes[0]))
+    .should.have.members([nodes[0], nodes[3], nodes[1], nodes[4]]);
+  Array.from(graph.heads(nodes[1]))
+    .should.have.members([nodes[1], nodes[4], nodes[2]]);
 
   const removedEdge = graph.erase(id);
-  removedEdge.map(b64).should.deep.equal([nodes[2], nodes[3]].map(b64));
+  removedEdge.should.deep.equal([nodes[2], nodes[3]]);
 
   graph.count().should.equal(15);
 
