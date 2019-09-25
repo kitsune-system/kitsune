@@ -1,32 +1,17 @@
-import Loki from 'lokijs';
-
 import { Map } from '@gamedevfox/katana';
-import {
-  deepHashEdge as E, BIND_COMMAND, COMMAND, LIST, SUPPORTS_COMMAND,
-} from '@kitsune-system/common';
+import { BIND_COMMAND } from '@kitsune-system/common';
+import Loki from 'lokijs';
 
 import { buildConfig as stringBuildConfig } from '../data/string-loki';
 import { buildConfig as edgeBuildConfig } from '../graph/edge-loki';
 import LokiGraph from '../graph/loki-graph';
-
-import { Commands, CommandInstaller } from '../kitsune/util';
-
-import ListCommands from '../struct/list';
-import MapCommands from '../struct/map';
-import SetCommands from '../struct/set';
-import VariableCommands from '../struct/variable';
-
 import Webapp from '../web/app';
 import createAndListen from '../web/server';
 import WebSocketServer from '../web/web-socket';
 
-import MiscCommands from './misc.js';
-
-const SystemCommands = system => Commands(
-  // TODO: Bind system to these two
-  [SUPPORTS_COMMAND, commandId => commandId in system()],
-  [E(LIST, COMMAND), () => Object.keys(system()).map(key => key)],
-);
+import { buildConfig as commandBuildConfig } from './commands';
+import * as env from './env';
+import { CommandInstaller } from './util';
 
 export const systemModules = Map({
   [BIND_COMMAND]: ({ install, system, value, buildArgs }) => {
@@ -49,48 +34,20 @@ export const systemModules = Map({
 });
 
 export const config = {
+  ...env,
+
   lokiDB: () => new Loki(),
   graph: build => LokiGraph(build('edgeCollection')),
-
-  systemCommands: build => SystemCommands(build('system')),
-  miscCommands: build => MiscCommands(build('system')),
 
   ...edgeBuildConfig,
   ...stringBuildConfig,
 
-  listCommands: () => ListCommands,
-  setCommands: () => SetCommands,
-  mapCommands: () => MapCommands,
-  variableCommands: () => VariableCommands,
-
-  commandList: [
-    'systemCommands',
-    'miscCommands',
-
-    'edgeCommands',
-    'stringCommands',
-
-    'listCommands',
-    'setCommands',
-    'mapCommands',
-    'variableCommands',
-  ],
-
-  commands: build => {
-    const result = Map();
-
-    const commandList = build('commandList');
-    commandList.forEach(buildName => {
-      const commands = build(buildName);
-      commands((node, fn) => result(node, fn));
-    });
-
-    return result;
-  },
+  ...commandBuildConfig,
 
   systemModules: () => systemModules,
 
-  system: (build, after) => {
+  // TODO: Use `core` name instead of `system`
+  core: (build, after) => {
     const system = Map();
 
     after(build => {
@@ -102,20 +59,18 @@ export const config = {
 
     return system;
   },
+  system: build => build('core'),
 
-  webapp: build => Webapp(build('system')),
+  webapp: build => Webapp(build('core')),
 
-  env: process.env,
+  serverAndListen: build => {
+    const config = ['SERVER_NAME', 'SECURE_PORT', 'INSECURE_PORT'].reduce((config, name) => {
+      config[name] = build(name);
+      return config;
+    }, {});
 
-  serverName: build => build('env').KITSUNE_SERVER_NAME,
-  securePort: build => build('env').KITSUNE_HTTPS_PORT,
-  insecurePort: build => build('env').KITSUNE_HTTP_PORT || 8080,
-
-  serverAndListen: build => createAndListen(build('webapp'), {
-    serverName: build('serverName'),
-    securePort: build('securePort'),
-    insecurePort: build('insecurePort'),
-  }),
+    return createAndListen(build('webapp'), config);
+  },
 
   server: build => build('serverAndListen').server,
   webSocketServer: build => WebSocketServer({

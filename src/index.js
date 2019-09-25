@@ -1,5 +1,6 @@
-import { Builder } from '@gamedevfox/katana';
-import { config } from './kitsune/builder';
+import { build } from './kitsune';
+import * as env from './kitsune/env';
 
-const run = Builder(config)('runFn');
-run();
+build('runFn')();
+
+console.log('Environment:', { ...env });

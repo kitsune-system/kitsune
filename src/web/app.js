@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   deepHashEdge as E, edgeMap,
   BUILT_IN_NODES, CODE, COMMAND, EDGE, LIST, MAP_N, READ, STRING,
@@ -8,7 +9,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import _ from 'lodash';
 
-import { CODE_PATH, KITSUNE_PATH } from '../kitsune/config';
+import { CODE_PATH, KITSUNE_PATH } from '../kitsune/env';
 import { easyWrite } from '../kitsune/files';
 import { NODES } from '../kitsune/nodes';
 import Storage from '../kitsune/storage';
@@ -39,19 +40,22 @@ const App = system => {
   });
 
   const getBuiltInNodeMap = () => {
-    const mapNode = system(VARIABLE_GET)(BUILT_IN_NODES);
-    if(mapNode === null)
-      return {};
+    // const mapNode = system(VARIABLE_GET)(BUILT_IN_NODES);
+    // if(mapNode === null)
+    //   return {};
+    //
+    // const map = system(E(READ, MAP_N))(mapNode);
+    //
+    // const result = {};
+    // Object.entries(map).forEach(([nameNode, node]) => {
+    //   const name = system(E(READ, STRING))(nameNode);
+    //   result[name] = node;
+    // });
+    //
+    // return result;
 
-    const map = system(E(READ, MAP_N))(mapNode);
-
-    const result = {};
-    Object.entries(map).forEach(([nameNode, node]) => {
-      const name = system(E(READ, STRING))(nameNode);
-      result[name] = node;
-    });
-
-    return result;
+    console.log(NODES);
+    return NODES;
   };
 
   const text = require('../raw/nodes.js.raw').default;
@@ -83,11 +87,6 @@ const App = system => {
     system(VARIABLE_SET, [BUILT_IN_NODES, nodeMapId]);
 
     res.sendStatus(200);
-  });
-
-  app.use('/built-in-nodes', (req, res) => {
-    const nodeMap = getBuiltInNodeMap();
-    res.send(nodeMap);
   });
 
   // NOTE: These are here for convenience for now

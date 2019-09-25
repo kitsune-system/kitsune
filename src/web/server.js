@@ -8,13 +8,13 @@ const onListen = () => {
   exec('touch $(find -path "./src/*.spec.int.js")');
 };
 
-const createAndListen = (app, { serverName, securePort, insecurePort }) => {
+const createAndListen = (app, { SERVER_NAME, SECURE_PORT, INSECURE_PORT }) => {
   let server;
   let listen;
 
-  if(securePort) {
+  if(SECURE_PORT) {
     // Create both secure endpoint and insecure endpoint that redirects
-    console.log(`Starting Kitsune [SECURE] on port ${securePort} ...`);
+    console.log(`Starting Kitsune [SECURE] on port ${SECURE_PORT} ...`);
     server = https.createServer({
       cert: fs.readFileSync('kitsune.crt'),
       key: fs.readFileSync('kitsune.key'),
@@ -23,22 +23,22 @@ const createAndListen = (app, { serverName, securePort, insecurePort }) => {
     // Redirect all traffic to https
     const altServer = http.createServer((req, res) => {
       res.writeHead(301, {
-        Location: `https://${serverName}${req.url}`,
+        Location: `https://${SERVER_NAME}${req.url}`,
       });
       res.end();
     });
 
     listen = () => {
-      server.listen(securePort, onListen);
-      altServer.listen(insecurePort);
+      server.listen(SECURE_PORT, onListen);
+      altServer.listen(INSECURE_PORT);
     };
   } else {
     // Create insecure endpoint
-    console.log(`Starting Kitsune ...insecure... on port ${insecurePort} ...`);
+    console.log(`Starting Kitsune ...insecure... on port ${INSECURE_PORT} ...`);
     server = http.createServer(app);
 
     listen = () => {
-      server.listen(insecurePort, onListen);
+      server.listen(INSECURE_PORT, onListen);
     };
   }
 

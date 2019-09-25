@@ -22,5 +22,4 @@ export const buildConfig = {
     unique: ['id'],
     indicies: ['head', 'tail'],
   }),
-  edgeCommands: build => EdgeCommands(build('graph')),
 };

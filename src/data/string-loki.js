@@ -37,5 +37,4 @@ export const buildConfig = {
     unique: ['id'],
     indicies: ['string'],
   }),
-  stringCommands: build => StringCommands(build('stringCollection')),
 };
