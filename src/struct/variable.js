@@ -1,14 +1,14 @@
 import { Map } from '@gamedevfox/katana';
 import {
   deepHashEdge as E,
-  BIND_COMMAND, ERASE, EDGE, LIST, TAIL, VARIABLE_GET, VARIABLE_SET, WRITE,
+  BIND_COMMAND, ERASE, EDGE, LIST_V, TAIL, GET_VARIABLE, SET_VARIABLE, WRITE,
 } from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
 
-const VariableCommands = Commands(
+export const VariableCommands = Commands(
   [
-    VARIABLE_SET,
+    SET_VARIABLE,
     ({ writeEdge, destroyEdge, listTail }) => ([varNode, valNode]) => {
       // Remove all tails
       const tails = listTail(varNode);
@@ -22,11 +22,11 @@ const VariableCommands = Commands(
     Map({
       [BIND_COMMAND]: {
         writeEdge: E(WRITE, EDGE), destroyEdge: E(ERASE, EDGE),
-        listTail: E(LIST, TAIL),
+        listTail: E(LIST_V, TAIL),
       },
     }),
   ], [
-    VARIABLE_GET,
+    GET_VARIABLE,
     ({ listTail }) => varNode => {
       const tails = listTail(varNode);
 
@@ -36,9 +36,7 @@ const VariableCommands = Commands(
       return tails.length ? tails[0] : null;
     },
     Map({
-      [BIND_COMMAND]: { listTail: E(LIST, TAIL) },
+      [BIND_COMMAND]: { listTail: E(LIST_V, TAIL) },
     }),
   ],
 );
-
-export default VariableCommands;

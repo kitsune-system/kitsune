@@ -4,7 +4,6 @@ import http from 'http';
 import https from 'https';
 
 const onListen = () => {
-  console.log('Kitsune started!');
   exec('touch $(find -path "./src/*.spec.int.js")');
 };
 

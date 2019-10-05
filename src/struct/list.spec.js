@@ -1,13 +1,10 @@
-import { Builder } from '@gamedevfox/katana';
-import {
-  deepHashEdge as E, WRITE, LIST_N, READ,
-} from '@kitsune-system/common';
+import { deepHashEdge as E, WRITE, LIST_N, READ } from '@kitsune-system/common';
 
-import { config } from '../kitsune/builder';
+import { build } from '../kitsune';
 
-describe('LIST', () => {
-  it('should be able to READ and WRITE a LIST', () => {
-    const system = Builder(config)('system');
+describe('LIST_N', () => {
+  it('should be able to READ and WRITE a LIST_N', () => {
+    const system = build('system');
 
     const list = [
       'SesKsezJ9L67JVvbZ+NWve+8yDK5Isy6GVuCtq7wNV4=',

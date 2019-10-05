@@ -1,14 +1,13 @@
-import { Builder } from '@gamedevfox/katana';
 import {
   deepHashEdge as E,
   READ, HEAD, WRITE, TAIL, RANDOM, CODE, MAP_N,
 } from '@kitsune-system/common';
 
-import { config } from '../kitsune/builder';
+import { build } from '../kitsune';
 
 describe('MAP_N', () => {
   it('should be able to write and read MAP_Ns', () => {
-    const system = Builder(config)('system');
+    const system = build('system');
 
     const map = {
       [READ]: HEAD,

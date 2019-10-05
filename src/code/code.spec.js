@@ -2,11 +2,11 @@
 import { Map } from '@gamedevfox/katana';
 import {
   Builder, deepHashEdge as E, hashList,
-  BIND_COMMAND, EDGE, GET, STRING, LIST_N, NATIVE_NAME,
-  MAP_N, RANDOM, READ, SET, WRITE,
+  BIND_COMMAND, EDGE, STRING, LIST_N, LOOKUP_NATIVE_NAME,
+  MAP_N, RANDOM, READ, WRITE,
 } from '@kitsune-system/common';
 
-import { config, extend, systemModules } from '../kitsune/builder';
+import { config, systemModules } from '../kitsune/config';
 import { Commands, meta } from '../kitsune/util';
 
 const hash = string => hashList([string]);
@@ -77,7 +77,7 @@ describe.skip('code', () => {
     const system = Builder(config)('system');
 
     const [write, read] = WriteRead(system);
-    const human = system(E(GET, NATIVE_NAME));
+    const human = system(LOOKUP_NATIVE_NAME);
 
     const conditionNode = system(E(WRITE, EDGE))([TEST, hash('valueA')]);
     const blockNode = system(E(WRITE, EDGE))([TEST2, hash('valueB')]);
@@ -188,7 +188,7 @@ describe.skip('code', () => {
     const system = Builder(config)('system');
     const [write, read] = WriteRead(system);
 
-    const human = system(E(GET, NATIVE_NAME));
+    const human = system(LOOKUP_NATIVE_NAME);
 
     const helloWorldNode = write(STRING, 'Hello World');
     const helloWorld = read(helloWorldNode);

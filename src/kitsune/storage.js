@@ -1,5 +1,5 @@
 import {
-  deepHashEdge as E, EDGE, LIST, STRING, WRITE,
+  deepHashEdge as E, EDGE, LIST_V, STRING, WRITE,
 } from '@kitsune-system/common';
 
 import { easyWrite, readJson } from './files';
@@ -10,8 +10,8 @@ const Storage = (path, system) => {
 
   return {
     save: () => {
-      const edges = system(E(LIST, EDGE));
-      const strings = system(E(LIST, STRING));
+      const edges = system(E(LIST_V, EDGE));
+      const strings = system(E(LIST_V, STRING));
 
       const simpleEdges = edges.map(edge => [edge[0], edge[1]]);
       const simpleStrings = strings.map(row => row.string);

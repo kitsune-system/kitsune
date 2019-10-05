@@ -4,7 +4,7 @@ import {
   deepHashEdge as E, pseudoRandom, RANDOM,
 } from '@kitsune-system/common';
 
-import MemoryGraph from './memory-graph';
+import { MemoryGraph } from './memory-graph';
 
 it('MemoryGraph', () => {
   const random = pseudoRandom(RANDOM);

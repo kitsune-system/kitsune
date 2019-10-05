@@ -1,6 +1,3 @@
-import { build } from './kitsune';
-import * as env from './kitsune/env';
+import { run } from './kitsune';
 
-build('runFn')();
-
-console.log('Environment:', { ...env });
+run();

@@ -1,5 +1,5 @@
 import {
-  deepHashEdge as E, hashString, LIST, READ, STRING, WRITE,
+  deepHashEdge as E, hashString, noOp, LIST_V, READ, STRING, WRITE,
 } from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
@@ -7,7 +7,7 @@ import { Commands } from '../kitsune/util';
 const cleanResult = result => ({ id: result.id, string: result.string });
 
 export const StringCommands = strings => Commands(
-  [E(WRITE, STRING), string => {
+  [E(WRITE, STRING), (string, output = noOp) => {
     if(typeof string !== 'string')
       throw new Error('`string` must be a string');
 
@@ -18,6 +18,7 @@ export const StringCommands = strings => Commands(
     if(!exists)
       strings.insert({ id, string });
 
+    output(node);
     return node;
   }],
 
@@ -29,7 +30,7 @@ export const StringCommands = strings => Commands(
     return result.string;
   }],
 
-  [E(LIST, STRING), () => strings.find().map(cleanResult)],
+  [E(LIST_V, STRING), () => strings.find().map(cleanResult)],
 );
 
 export const buildConfig = {

@@ -1,30 +1,16 @@
 import {
-  hashEdge as E, GET, NATIVE_NAME, RANDOM, MAP_V, PIPE,
+  BUILT_IN_NODES, LOOKUP_NATIVE_NAME, LOOKUP_NATIVE_NODE, RANDOM,
 } from '@kitsune-system/common';
-
 import { NODES } from '../kitsune/nodes';
-
 import { random } from './random';
-import { Commands } from './util';
 
-const map = system => ({ input, mapCommand }) => input.map(
-  item => system(mapCommand)(item)
-);
+const NAMES = {};
+Object.entries(NODES).forEach(([name, nodeId]) => (NAMES[nodeId] = name));
 
-const pipe = system => ({ input, commandList }) => {
-  commandList.forEach(command => {
-    input = system(command)(input);
-  });
+export const coreConfig = {
+  [BUILT_IN_NODES]: { fn: () => (_, output) => output(NODES) },
+  [RANDOM]: { fn: () => (_, output) => output(random()) },
 
-  return input;
+  [LOOKUP_NATIVE_NAME]: { fn: () => (nodeId, output) => output(NAMES[nodeId]) },
+  [LOOKUP_NATIVE_NODE]: { fn: () => (name, output) => output(NODES[name]) },
 };
-
-export const MiscCommands = system => Commands(
-  [E(GET, NATIVE_NAME), node => NODES[node]],
-  [RANDOM, () => random()],
-
-  [MAP_V, map(system)], // TODO: Bind system
-  [PIPE, pipe(system)], // TODO: Bind system
-);
-
-export default MiscCommands;

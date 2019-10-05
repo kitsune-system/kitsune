@@ -2,8 +2,8 @@ import {
   deepHashEdge as E, pseudoRandom, RANDOM,
 } from '@kitsune-system/common';
 
-import GraphOverlay from './graph-overlay';
-import MemoryGraph from './memory-graph';
+import { GraphOverlay } from './graph-overlay';
+import { MemoryGraph } from './memory-graph';
 
 it('GraphOverlay', () => {
   const random = pseudoRandom(RANDOM);

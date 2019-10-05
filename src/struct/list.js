@@ -1,12 +1,12 @@
 import { Map } from '@gamedevfox/katana';
 import {
   deepHashEdge as E, hashList,
-  EDGE, LIST_N, READ, BIND_COMMAND, VARIABLE_GET, WRITE,
+  EDGE, LIST_N, READ, BIND_COMMAND, GET_VARIABLE, WRITE,
 } from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
 
-const ListCommands = Commands([
+export const ListCommands = Commands([
   E(WRITE, LIST_N),
   ({ writeEdge }) => list => {
     const hash = hashList([LIST_N, ...list]);
@@ -23,12 +23,12 @@ const ListCommands = Commands([
   }),
 ], [
   E(READ, LIST_N),
-  ({ variableGet }) => listNode => {
+  ({ getVariable }) => listNode => {
     const result = [];
 
     let next = listNode;
     while(next) {
-      const value = variableGet(next);
+      const value = getVariable(next);
       if(value) {
         result.push(value);
         next = E(next, value);
@@ -39,8 +39,6 @@ const ListCommands = Commands([
     return result;
   },
   Map({
-    [BIND_COMMAND]: { variableGet: VARIABLE_GET },
+    [BIND_COMMAND]: { getVariable: GET_VARIABLE },
   }),
 ]);
-
-export default ListCommands;

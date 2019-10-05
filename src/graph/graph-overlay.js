@@ -1,8 +1,8 @@
 import { deepHashEdge as E } from '@kitsune-system/common';
 
-import MemoryGraph from './memory-graph';
+import { MemoryGraph } from './memory-graph';
 
-const GraphOverlay = baseGraph => {
+export const GraphOverlay = baseGraph => {
   const writeGraph = MemoryGraph();
   const eraseGraph = MemoryGraph();
 
@@ -50,5 +50,3 @@ const GraphOverlay = baseGraph => {
 
   return graph;
 };
-
-export default GraphOverlay;

@@ -2,8 +2,8 @@ import {
   deepHashEdge as E, pseudoRandom, RANDOM,
 } from '@kitsune-system/common';
 
-import GraphUnion from './graph-union';
-import MemoryGraph from './memory-graph';
+import { GraphUnion } from './graph-union';
+import { MemoryGraph } from './memory-graph';
 
 it('GraphUnion', () => {
   const random = pseudoRandom(RANDOM);

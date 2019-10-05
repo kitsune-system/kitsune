@@ -6,7 +6,7 @@ const mergeCall = (graphs, fnName) => id => {
   return result;
 };
 
-const GraphUnion = graphs => {
+export const GraphUnion = graphs => {
   const union = {};
 
   union.read = id => {
@@ -24,5 +24,3 @@ const GraphUnion = graphs => {
 
   return union;
 };
-
-export default GraphUnion;

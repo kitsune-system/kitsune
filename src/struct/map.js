@@ -1,7 +1,7 @@
 import { Map } from '@gamedevfox/katana';
 import {
   deepHashEdge as E, hashList,
-  BIND_COMMAND, EDGE, LIST, READ, MAP_N, TAIL, WRITE,
+  BIND_COMMAND, EDGE, LIST_V, READ, MAP_N, TAIL, WRITE,
 } from '@kitsune-system/common';
 
 import { Commands } from '../kitsune/util';
@@ -11,7 +11,7 @@ const hashMap = map => {
   return hashList([MAP_N, ...kvList]);
 };
 
-const MapCommands = Commands(
+export const MapCommands = Commands(
   [
     E(WRITE, MAP_N),
     ({ writeEdge }) => map => {
@@ -45,9 +45,7 @@ const MapCommands = Commands(
       return result;
     },
     Map({
-      [BIND_COMMAND]: { listTail: E(LIST, TAIL) },
+      [BIND_COMMAND]: { listTail: E(LIST_V, TAIL) },
     }),
   ]
 );
-
-export default MapCommands;

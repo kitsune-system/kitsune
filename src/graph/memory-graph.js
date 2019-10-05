@@ -1,6 +1,6 @@
 import { deepHashEdge as E } from '@kitsune-system/common';
 
-const MemoryGraph = () => {
+export const MemoryGraph = () => {
   let count = 0;
 
   const edgeMap = {};
@@ -63,5 +63,3 @@ const MemoryGraph = () => {
 
   return graph;
 };
-
-export default MemoryGraph;
