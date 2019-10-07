@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 
-const WebSocketServer = ({ server, handler }) => {
+export const WebSocketServer = ({ server, handler }) => {
   let idCounter = 0;
   const sessions = {};
 
@@ -21,5 +21,3 @@ const WebSocketServer = ({ server, handler }) => {
 
   return id => sessions[id];
 };
-
-export default WebSocketServer;

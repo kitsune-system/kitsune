@@ -1,14 +1,14 @@
 import { RANDOM } from '@kitsune-system/common';
 
-import { build } from '../kitsune';
+import { coreConfig } from './misc';
 
-describe('Misc Commands', () => {
-  it('should work', () => {
-    const system = build('system');
+describe.only('Misc Commands', () => {
+  it('should work', done => {
+    coreConfig[RANDOM].fn()(null, random => {
+      random.should.be.a('string');
+      Buffer.from(random, 'base64').length.should.equal(32);
 
-    const random = system(RANDOM)();
-
-    random.should.be.a('string');
-    Buffer.from(random, 'base64').length.should.equal(32);
+      done();
+    });
   });
 });

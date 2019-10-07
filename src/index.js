@@ -1,3 +1,7 @@
-import { run } from './kitsune';
+import { Core } from '@kitsune-system/common';
 
-run();
+import { coreConfig, RUN } from './kitsune';
+
+Core(coreConfig, core => {
+  core(RUN, run => run());
+});

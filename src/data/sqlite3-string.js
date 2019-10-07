@@ -5,54 +5,44 @@ import { deepHashEdge as E, hashString, READ, WRITE, STRING } from '@kitsune-sys
 import mkdirp from 'mkdirp';
 import sqlite3 from 'sqlite3';
 
-const STRING_DB = 'STRING_DB';
-
-let dbValue;
+const STRING_DB = 'CoCIvqtheW3QWXYt0CvzjWvSdjAUA3G1bu8N8xTwWt4=';
 
 export const coreConfig = {
   [STRING_DB]: {
     fn: () => (_, output) => {
-      if(dbValue)
-        output(dbValue);
-      else {
-        // TODO: Fix this so that's it's not build multiple times
+      console.log('INIT String DB');
 
-        // TODO: Fix this to use KITSUNE_PATH instead
-        const dataPath = join(homedir(), '.kitsune');
-        mkdirp(dataPath);
+      // TODO: Fix this to use KITSUNE_PATH instead
+      const dataPath = join(homedir(), '.kitsune');
+      mkdirp(dataPath);
 
-        dbValue = new sqlite3.Database(join(dataPath, 'string.sqlite3'));
+      const db = new sqlite3.Database(join(dataPath, 'string.sqlite3'));
 
-        dbValue.run(`CREATE TABLE IF NOT EXISTS string (
-          id TEXT PRIMARY KEY,
-          string TEXT NOT NULL
-        )`, () => output(dbValue));
-      }
+      db.run(`CREATE TABLE IF NOT EXISTS string (
+        id TEXT PRIMARY KEY,
+        string TEXT NOT NULL
+      )`, () => output(db));
     },
   },
   [E(WRITE, STRING)]: {
     fn: ({ db }) => (string, output) => {
-      db(null, db => {
-        const id = hashString(string);
+      const id = hashString(string);
 
-        db.run(
-          'INSERT INTO string VALUES (?, ?) ON CONFLICT(id) DO NOTHING',
-          id, string,
-          () => output(id)
-        );
-      });
+      db.run(
+        'INSERT INTO string VALUES (?, ?) ON CONFLICT(id) DO NOTHING',
+        id, string,
+        () => output(id)
+      );
     },
-    bind: { db: STRING_DB },
+    inject: { db: STRING_DB },
   },
   [E(READ, STRING)]: {
     fn: ({ db }) => (id, output) => {
-      db(null, db => {
-        db.get(
-          'SELECT string FROM string WHERE id = ?', id,
-          (_, result) => output(result)
-        );
-      });
+      db.get(
+        'SELECT string FROM string WHERE id = ?', id,
+        (_, result) => output(result)
+      );
     },
-    bind: { db: STRING_DB },
+    inject: { db: STRING_DB },
   },
 };

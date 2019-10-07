@@ -7,13 +7,12 @@ const onListen = () => {
   exec('touch $(find -path "./src/*.spec.int.js")');
 };
 
-const createAndListen = (app, { SERVER_NAME, SECURE_PORT, INSECURE_PORT }) => {
+export const Servers = (app, { SERVER_NAME, SECURE_PORT, INSECURE_PORT }) => {
   let server;
   let listen;
 
   if(SECURE_PORT) {
     // Create both secure endpoint and insecure endpoint that redirects
-    console.log(`Starting Kitsune [SECURE] on port ${SECURE_PORT} ...`);
     server = https.createServer({
       cert: fs.readFileSync('kitsune.crt'),
       key: fs.readFileSync('kitsune.key'),
@@ -28,20 +27,19 @@ const createAndListen = (app, { SERVER_NAME, SECURE_PORT, INSECURE_PORT }) => {
     });
 
     listen = () => {
+      console.log(`Starting Kitsune [SECURE] on port ${SECURE_PORT} ...`);
       server.listen(SECURE_PORT, onListen);
       altServer.listen(INSECURE_PORT);
     };
   } else {
     // Create insecure endpoint
-    console.log(`Starting Kitsune ...insecure... on port ${INSECURE_PORT} ...`);
     server = http.createServer(app);
 
     listen = () => {
+      console.log(`Starting Kitsune ...insecure... on port ${INSECURE_PORT} ...`);
       server.listen(INSECURE_PORT, onListen);
     };
   }
 
   return { server, listen };
 };
-
-export default createAndListen;
