@@ -24,15 +24,17 @@ export const App = system => {
   // System calls
   system(SUPPORTS_COMMAND, supportsCommand => {
     app.use(({ body, url }, res, next) => {
-      const commandId = decodeURIComponent(url.slice(1));
+      const systemId = decodeURIComponent(url.slice(1));
 
-      supportsCommand(commandId, isSupported => {
+      supportsCommand(systemId, isSupported => {
         if(!isSupported) {
           next();
           return;
         }
 
-        system(commandId, command => command(body, output => res.json(output)));
+        system(systemId, subsystem => subsystem(body, output => {
+            res.json(output);
+        }));
       });
     });
   });

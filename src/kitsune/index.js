@@ -1,8 +1,9 @@
+import { noOp } from '@gamedevfox/katana';
 import { CORE } from '@kitsune-system/common';
 
 import { App as Webapp } from '../web/app';
 import { Servers } from '../web/server';
-import { WebSocketServer } from '../web/web-socket';
+import { WebSocketServer } from '../web/web-socket-server';
 import * as env from './env';
 
 import { coreConfig as stringConfig } from '../data/sqlite3-string';
@@ -34,14 +35,10 @@ export const coreConfig = {
     inject: { webapp: 'WEBAPP' },
   },
   WEB_SOCKET_SERVER: {
-    fn: ({ server }) => () => {
-      WebSocketServer({
-        server: server.server,
-        handler: (msg, session) => {
-          console.log('MSG', msg, session);
-        },
-      });
+    fn: ({ core, server }) => (_, output = noOp) => {
+      output(WebSocketServer({ core, server: server.server }));
     },
+    bind: { core: CORE },
     inject: { server: 'SERVER' },
   },
 };

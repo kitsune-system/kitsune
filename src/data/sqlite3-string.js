@@ -10,12 +10,11 @@ const STRING_DB = 'CoCIvqtheW3QWXYt0CvzjWvSdjAUA3G1bu8N8xTwWt4=';
 export const coreConfig = {
   [STRING_DB]: {
     fn: () => (_, output) => {
-      console.log('INIT String DB');
-
       // TODO: Fix this to use KITSUNE_PATH instead
       const dataPath = join(homedir(), '.kitsune');
       mkdirp(dataPath);
 
+      // TODO: Inject path
       const db = new sqlite3.Database(join(dataPath, 'string.sqlite3'));
 
       db.run(`CREATE TABLE IF NOT EXISTS string (
