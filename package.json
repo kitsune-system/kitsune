@@ -18,7 +18,7 @@
     "ws": "^7.0.1"
   },
   "devDependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "rimraf": "^2.6.3"
   },
   "sakuradite": {
